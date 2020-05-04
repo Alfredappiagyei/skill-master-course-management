@@ -1,0 +1,13 @@
+/* .body{
+  background-color: lemonchiffon;
+} */
+
+#header{
+  min-height: 50px;
+  background-color: #333333;
+  color: #fff;
+  font-family: sans-serif;
+  align-items: center;
+  text-align: center;
+  font-size: x-large;
+}
