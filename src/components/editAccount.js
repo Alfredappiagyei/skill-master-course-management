@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {editUser} from '../Store/Actions';
 import  {Link}  from "react-router-dom";
+//  import { UserForm } from "./components/Form";
 
  class Editform extends Component {
   constructor(props) {
@@ -51,11 +52,11 @@ import  {Link}  from "react-router-dom";
         <form onSubmit={this.handleSubmit}   style={{display:"inline-block",   textAlign:"left", margin:"50px 0px 0px 0px"}}  >
          <input type="text" class="form-control" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} style={{width:"300px"}} /><br/>
     
-        <input type="email" class="form-control" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} style={{width:"300px"}}/><br/>
+        <input type="text" class="form-control" name="Industry" placeholder="Email" value={this.state.email} onChange={this.handleChange} style={{width:"300px"}}/><br/>
   
-        <input type="number" class="form-control" name="contact" placeholder="Contact Number" value={this.state.contact} onChange={this.handleChange} style={{width:"300px"}} /><br/>
+        <input type="Location" class="form-control" name="contact" placeholder="Location" value={this.state.contact} onChange={this.handleChange} style={{width:"300px"}} /><br/>
      
-        <input type="text" class="form-control" name="relation" placeholder="Relation" value={this.state.relation} onChange={this.handleChange} style={{width:"300px"}} /><br/>
+        <input type="date" class="form-control" name="relation" placeholder="" value={this.state.relation} onChange={this.handleChange} style={{width:"300px"}} /><br/>
 
         <div>
           <button style={{margin:"50px 100px",}} type="submit" ><b>Apdate User</b></button>

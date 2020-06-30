@@ -10,8 +10,6 @@ export default function Router() {
         <Route exact path='/' component={App} />
         <Route path='/edit/:id' component={editAccount} />
         <Route path='/allcontacts' component={editAccount}/>
-        
-        
         </BrowserRouter>
     )
 }

@@ -6,11 +6,32 @@ const initialState = {
   users: [
       {
           id: "1",
-          name: "Alfred Appiagyei",
-          email: "alfred@gmail.com",
-          contact: "0550130742",
-          relation:"Your best contact manager"
+          name: "Company Name",
+          email: "Real Estate",
+          contact: "Lagos",
+          relation:"Dec 12, 2016"
       },   
+      {
+        id: "2",
+        name: "Company Name",
+        email: "Local Bussiness",
+        contact: "Accra",
+        relation:"Dec 13, 2016"
+    },  
+    {
+      id: "3",
+      name: "Company Name",
+      email: "Speciality Foood",
+      contact: "Texas",
+      relation:"Dec 13, 2016"
+  },   
+  {
+    id: "4",
+    name: "Company Name",
+    email: "E-commerce",
+    contact: "Nirobi",
+    relation:"Dec 14, 2016"
+},    
   ]
 }
 

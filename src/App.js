@@ -5,59 +5,142 @@ import { addUser, deleteUser } from './Store/Actions';
 import { UserForm } from "./components/Form";
 import User from './components/UserInfo'
 import "./App.css";
-import {
-
-  BrowserRouter as Router,
-  // Switch,
-  // Route,
-  Link
-
-} from "react-router-dom";
-
+import  {Link}  from "react-router-dom";
+ 
 export class App extends Component {
-
 
   addNewUser = newUser => {
     this.props.addUser(newUser)
   };
-
-
+ 
   deleteUser = user_id => {
     this.props.deleteUser(user_id);
   }
 
   render() {
     return (
-      <div className="body">
-        <div className="container-fluid">
-          <div className="row" id="header">Contact Mannager</div>
+      
+      <div className="dashboard">
+      <div className="nav">
+      <span class="glyphicon glyphicon-cog"><b>dashboard</b></span>
+
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Add Startup
+          <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a>Dashboard</a></li>
+            <li> <Link to ="/form" style={{color:"black"}}>Add Startup</Link></li>
+            <li><a>Startup Details</a></li>
+          </ul>
         </div>
-        <div className="container">
+      </div>
+
+
+        <div className="container-fluid">
+        <input type="text" id="search1" class="form-control" placeholder="Dashboard" />
           <div className="row">
-            <div className="col-md-4 col-xs-12" style={{margin:"100px 0px", padding:"20px 0px 0px 40px", backgroundColor:"lightblue", borderRadius:"10px"}}>
+            <div className="col-md-3 col-xs-12">
+            <div className="section1">
+              <div className="control-startup">
+               <Link to ="/form" style={{color:"black"}}><span class="glyphicon glyphicon-cog">Dashboard</span></Link>
+              </div>
+              <div className="control-startup">
+              <Link to ="/form" style={{color:"black"}}><span class="glyphicon glyphicon-plus">Add Startup</span></Link>
+              
+              </div>
+              <div className="control-startup">
+              <Link to ="/form" style={{color:"black"}}><span class="glyphicon glyphicon-file">Satrtup Details</span></Link>
+              </div>
+            </div>
+
+            <div className="section2" style={{marginTop:"50px"}}>
             <UserForm addUser={this.addNewUser} />
             </div>
-            <div className="col-md-8 col-xs-12" style={{backgroundColor:"lightblue", padding:"20px 0px 0px 40px", margin:"100px 0px 0px 0px",borderRadius:"10px"}}>
-              <div className="row">
-                <b style={{fontSize:"30px"}}>All Contacts</b><hr/>
-              </div>
-              <div className="row">
-                    
-            {this.props.users.map((people, index) => {
-   return (
-     <User
+            </div>
 
-       key={people.id}
-       id={people.id}
-       name={people.name} 
-       email={people.email}
-       contact={people.contact}
-       relation={people.relation}
-       removeUser={this.deleteUser}
-     />
-   );
- })}
-              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div className="col-md-9 col-xs-12">
+              <div className="row">
+                
+            <div className="all-startups">
+              <div className="all"><h4>All Startups</h4></div>
+            </div>
+           
+
+            <section  style={{width:"100%"}} >
+              <input type="text" id="search2" class="form-control" placeholder="Dashboard" />
+              
+               
+               <div className="row" style={{width:"100%"}}>
+                 <div className="col-md-3"  style={{ paddingRight:"100px"}}><b>Company</b></div>
+                 <div className="col-md-2" ><b>Marketing/Industry</b></div>
+                 <div className="col-md-2"><b>Location</b></div>
+                 <div className="col-md-2"> <b>Joined</b></div>
+                 <div className="col-md-1"> <b>Approved</b></div>
+                 <div className="col-md-1"><b>Action</b></div>
+               </div>
+               <hr/>
+
+
+            
+                
+                   <div className="row" style={{width:"100%", marginLeft:"1px" }}>
+                   {this.props.users.map((people, index) => {
+                  return (               
+                    <User
+                      key={people.id}
+                      id={people.id}
+                      name={people.name} 
+                      email={people.email}
+                      contact={people.contact}
+                      relation={people.relation}
+                      removeUser={this.deleteUser}
+                    />
+                  );
+                })}
+                   </div>
+                   
+                            
+                          
+              
+
+            </section>
+
+ </div>
+               
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
        
             </div>
            
@@ -120,8 +203,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
 //   );
 // })}
 // </div>
-
-
 
 
 
