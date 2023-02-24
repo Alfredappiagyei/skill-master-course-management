@@ -1,0 +1,109 @@
+.dashboard {
+  background-color: gainsboro;
+} 
+ .nav {
+   min-height: 55px;
+   background-color: dimgrey;
+   align-content: center;
+   padding: 15px 50px 5px 0px;
+   
+ }
+ .nav span {
+   font-size: 20px;
+   text-transform: uppercase;
+   margin-left: 70px;
+   color: #fff;
+ }
+ 
+ .dropdown {
+   float: right;
+ }
+ 
+  .section1 {
+    margin: 0px 10px 0px 0px;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0.5,0,0,0.19) , 0 6px 6px rgba(0,0,0,0.23);
+    background-color: snow;
+  }
+ .control-startup {
+   display: block;
+   font-size: 18px;
+   padding: 11px 0px 11px 5px;
+   
+ }
+  .control-startup:hover {
+   background-color: rgba(255, 0, 0, 0.897);
+   color: #fff;
+   
+} 
+
+section {
+  padding: 10px;
+  background-color: snow;
+  border: 0.1px solid grey;
+  box-shadow: 0 10px 20px rgba(0.5,0,0,0.19) , 0 6px 6px rgba(0,0,0,0.23);
+
+}
+ #search1 {
+  margin: 40px 0px;
+   margin-left: 10px;
+   min-height: 50px;
+   background-color: darkgray;
+ }
+   
+
+
+
+ /* col-md-9 */
+ .all-startups {
+   border-radius: 5px;
+   border: 0.1 solid gray;
+ }
+ .all {
+   min-height: 50px;
+   background-color: rgba(255, 0, 0, 0.897);
+   color: #fff;
+   padding: 5px 0px 0px 10px;
+   font-weight: bold;
+ }
+
+ #search2 {
+  margin: 25px 10px 25px 10px;
+ 
+} 
+tr {
+  padding-bottom: 10px;
+}
+
+
+.userinfo {
+  display: flex;
+}
+
+
+
+
+
+
+.button {
+  background-color: #ed1111;
+  color: #FFF;
+  width: 100%;
+  padding: 10px 20px;
+  display: block;
+  height: 39px;
+  border-radius: 20px;
+  margin-top: 30px;
+  transition: all 0.5s ease-in-out;
+  border: none;
+  text-transform: uppercase;
+
+}
+.button:hover {
+  background: #f54040;
+  box-shadow: 0px 4px 35px -5px #5b40f5;
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+}
