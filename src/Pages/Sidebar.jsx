@@ -13,7 +13,7 @@ export default function Sidebar() {
       <Link to="/coursefee"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-euro"></span><p style={{fontWeight:"bold"}}>Course Fees</p></Link>
       <Link to="/paymentmethod"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-credit-card"></span><p style={{fontWeight:"bold"}}>Payment Methods</p></Link>
       <Link to="/location"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-globe"></span><p style={{fontWeight:"bold"}}>Locations</p></Link>
-      <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-level-up"></span><p style={{fontWeight:"bold"}}>Registrations</p></Link>
+      <Link to="/registration"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-level-up"></span><p style={{fontWeight:"bold"}}>Registrations</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-file"></span><p style={{fontWeight:"bold"}}>Invoices</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-saved"></span><p style={{fontWeight:"bold"}}>Bookings</p></Link>
     </div>

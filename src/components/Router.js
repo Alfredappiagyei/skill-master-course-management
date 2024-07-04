@@ -12,6 +12,7 @@ import Course from '../Pages/Course';
 import CourseFee from '../Pages/CourseFee';
 import PaymentMethod from '../Pages/PaymentMethod';
 import Location from '../Pages/Location';
+import Registrations from '../Pages/Registrations';
  
 
 export default function Router() {
@@ -29,6 +30,7 @@ export default function Router() {
         <Route path='/coursefee' element={<CourseFee/>}/>
         <Route path='/paymentmethod' element={<PaymentMethod/>}/>
         <Route path='/location' element={<Location/>}/>
+        <Route path='/registration' element={<Registrations/>}/>
         </Routes>
         </BrowserRouter>
     )
