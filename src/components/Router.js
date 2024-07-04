@@ -13,6 +13,8 @@ import CourseFee from '../Pages/CourseFee';
 import PaymentMethod from '../Pages/PaymentMethod';
 import Location from '../Pages/Location';
 import Registrations from '../Pages/Registrations';
+import Invoices from '../Pages/Invoices';
+import Bookings from '../Pages/Bookings';
  
 
 export default function Router() {
@@ -31,6 +33,8 @@ export default function Router() {
         <Route path='/paymentmethod' element={<PaymentMethod/>}/>
         <Route path='/location' element={<Location/>}/>
         <Route path='/registration' element={<Registrations/>}/>
+        <Route path='/invoices' element={<Invoices/>}/>
+        <Route path='/booking' element={<Bookings/>}/>
         </Routes>
         </BrowserRouter>
     )
