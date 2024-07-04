@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from '../App';
 import EditAccount from './editAccount'
 import Employees from '../Pages/Employees';
+import Client from '../Pages/Client';
 export default function Router() {
     return (
         <BrowserRouter>
@@ -13,6 +14,7 @@ export default function Router() {
         <Route path='/edit/:id' element={<EditAccount/>} />
         <Route path='/allcontacts' element={<EditAccount/>}/>
         <Route path='/employees' element={<Employees/>}/>
+        <Route path='/client' element={<Client/>}/>
         </Routes>
         </BrowserRouter>
     )

@@ -13,13 +13,6 @@ import Employees from "./Pages/Employees";
 
 export class App extends Component {
 
-  addNewUser = newUser => {
-    this.props.addUser(newUser)
-  };
-
-  deleteUser = user_id => {
-    this.props.deleteUser(user_id);
-  }
 
   render() {
     return (

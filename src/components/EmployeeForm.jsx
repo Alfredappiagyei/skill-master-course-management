@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Modal from './Modal';
 import EmployeeTable from '../Tables/EmployeeTable';
 
-class UserForm extends Component {
+class EmployeeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,4 +54,4 @@ class UserForm extends Component {
   }
 }
 
-export default UserForm;
+export default EmployeeForm;

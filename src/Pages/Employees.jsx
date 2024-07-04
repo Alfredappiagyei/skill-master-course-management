@@ -2,10 +2,11 @@ import React, { Component } from "react";
  
 import '../test/css/bootstrap.min.css';
  
-import UserForm from "../components/Form";
+ 
 import "../App.css";
  
 import Sidebar from "./Sidebar";
+import EmployeeForm from "../components/EmployeeForm";
 
 
 export class Employees extends Component {
@@ -37,7 +38,7 @@ export class Employees extends Component {
                 <div className="col-md-12 col-xs-12">
 
                   <div className="section2" style={{ marginTop: "50px" }}>
-                    <UserForm />
+                    <EmployeeForm />
                   </div>
                 </div>
 
