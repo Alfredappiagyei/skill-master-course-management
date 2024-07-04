@@ -47,7 +47,7 @@ const usersReducer = (state = initialState, action) => {
           };
           return { ...state, users: [...state.users, newUser] };
           case "DELETE_USER":
-              const filteredUsers = state.users.filter(user => user.id != action.payload);
+              const filteredUsers = state.users.filter(user => user.id !== action.payload);
               return  {...state, users: filteredUsers}
               case "EDIT_USER":
               const editedUsers = state.users.map(user => {

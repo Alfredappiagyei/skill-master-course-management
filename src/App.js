@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+ 
 import './test/css/bootstrap.min.css';
-import { addUser, deleteUser } from './Store/Actions';
+ 
 
 import "./App.css";
 
 import Employees from "./Pages/Employees";
-import Sidebar from "./Pages/Sidebar";
+ 
 
 
 

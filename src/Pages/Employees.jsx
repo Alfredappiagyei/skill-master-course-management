@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+ 
 import '../test/css/bootstrap.min.css';
-import { addUser, deleteUser } from '../Store/Actions';
+ 
 import UserForm from "../components/Form";
 import "../App.css";
-import { Link } from "react-router-dom";
+ 
 import Sidebar from "./Sidebar";
 
 
