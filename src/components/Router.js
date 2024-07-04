@@ -7,7 +7,9 @@ import EditAccount from './editAccount'
 import Employees from '../Pages/Employees';
 import Client from '../Pages/Client';
 import Delegate from '../Pages/Delegate';
-
+import CourseTypes from '../Pages/CourseTypes';
+import Course from '../Pages/Course';
+ 
 
 export default function Router() {
     return (
@@ -19,6 +21,8 @@ export default function Router() {
         <Route path='/employees' element={<Employees/>}/>
         <Route path='/client' element={<Client/>}/>
         <Route path='/delegate' element={<Delegate/>}/>
+        <Route path='/coursetypes' element={<CourseTypes/>}/>
+        <Route path='/course' element={<Course/>}/>
         </Routes>
         </BrowserRouter>
     )

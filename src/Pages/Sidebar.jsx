@@ -8,8 +8,8 @@ export default function Sidebar() {
       <Link to="/employees"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-user"></span><p style={{fontWeight:"bold"}}>Employees</p></Link>
       <Link to="/client"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-bookmark"></span><p style={{fontWeight:"bold"}}>Clients</p></Link>
       <Link to="/delegate"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-asterisk"></span><p style={{fontWeight:"bold"}}>Delegates</p></Link>
-      <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-pencil"></span><p style={{fontWeight:"bold"}}>Course Types</p></Link>
-      <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-book"></span><p style={{fontWeight:"bold"}}>Courses</p></Link>
+      <Link to="/coursetypes"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-pencil"></span><p style={{fontWeight:"bold"}}>Course Types</p></Link>
+      <Link to="/course"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-book"></span><p style={{fontWeight:"bold"}}>Courses</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-euro"></span><p style={{fontWeight:"bold"}}>Course Fees</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-credit-card"></span><p style={{fontWeight:"bold"}}>Payment Methods</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-globe"></span><p style={{fontWeight:"bold"}}>Locations</p></Link>
