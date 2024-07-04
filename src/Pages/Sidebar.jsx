@@ -7,7 +7,7 @@ export default function Sidebar() {
       <Link to="/form" style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-home"></span> <p style={{fontWeight:"bold"}}>Home</p></Link>
       <Link to="/employees"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-user"></span><p style={{fontWeight:"bold"}}>Employees</p></Link>
       <Link to="/client"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-bookmark"></span><p style={{fontWeight:"bold"}}>Clients</p></Link>
-      <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-asterisk"></span><p style={{fontWeight:"bold"}}>Delegates</p></Link>
+      <Link to="/delegate"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-asterisk"></span><p style={{fontWeight:"bold"}}>Delegates</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-pencil"></span><p style={{fontWeight:"bold"}}>Course Types</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-book"></span><p style={{fontWeight:"bold"}}>Courses</p></Link>
       <Link to="/form"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-euro"></span><p style={{fontWeight:"bold"}}>Course Fees</p></Link>

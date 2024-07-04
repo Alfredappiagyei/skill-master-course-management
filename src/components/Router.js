@@ -6,6 +6,9 @@ import App from '../App';
 import EditAccount from './editAccount'
 import Employees from '../Pages/Employees';
 import Client from '../Pages/Client';
+import Delegate from '../Pages/Delegate';
+
+
 export default function Router() {
     return (
         <BrowserRouter>
@@ -15,6 +18,7 @@ export default function Router() {
         <Route path='/allcontacts' element={<EditAccount/>}/>
         <Route path='/employees' element={<Employees/>}/>
         <Route path='/client' element={<Client/>}/>
+        <Route path='/delegate' element={<Delegate/>}/>
         </Routes>
         </BrowserRouter>
     )
