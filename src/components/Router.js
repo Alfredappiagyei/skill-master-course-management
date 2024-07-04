@@ -9,6 +9,9 @@ import Client from '../Pages/Client';
 import Delegate from '../Pages/Delegate';
 import CourseTypes from '../Pages/CourseTypes';
 import Course from '../Pages/Course';
+import CourseFee from '../Pages/CourseFee';
+import PaymentMethod from '../Pages/PaymentMethod';
+import Location from '../Pages/Location';
  
 
 export default function Router() {
@@ -23,6 +26,9 @@ export default function Router() {
         <Route path='/delegate' element={<Delegate/>}/>
         <Route path='/coursetypes' element={<CourseTypes/>}/>
         <Route path='/course' element={<Course/>}/>
+        <Route path='/coursefee' element={<CourseFee/>}/>
+        <Route path='/paymentmethod' element={<PaymentMethod/>}/>
+        <Route path='/location' element={<Location/>}/>
         </Routes>
         </BrowserRouter>
     )
