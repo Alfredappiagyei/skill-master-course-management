@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
-async function getClients() {
+async function getCourses() {
   let con;
 
   try {
@@ -11,10 +11,10 @@ async function getClients() {
       connectString: "encarta:1522/xepdb1"
     });
 
-    const data = await con.execute('SELECT * FROM client');
+    const data = await con.execute('SELECT * FROM course');
     return data.rows;
   } catch (err) {
-    console.error('Error fetching clients:', err);
+    console.error('Error fetching courses:', err);
     throw err;
   } finally {
     if (con) {
@@ -27,4 +27,4 @@ async function getClients() {
   }
 }
 
-module.exports = { getClients };
+module.exports = { getCourses };

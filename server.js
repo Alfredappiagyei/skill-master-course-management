@@ -4,6 +4,9 @@ const { getEmployees } = require('./src/Tables/employees');
 const { getClients } = require('./src/Tables/clients');
 const { getDelegates } = require('./src/Tables/delegates');
 const { getCourseTypes } = require('./src/Tables/coursetypes');
+const { getCourses } = require('./src/Tables/courses');
+const { getCoursefees } = require('./src/Tables/coursefees');
+
 
 const app = express();
 const port = 3001;
@@ -45,6 +48,26 @@ app.get('/api/coursetypes', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get('/api/courses', async (req, res) => {
+  try {
+    const courses = await getCourses();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/coursefees', async (req, res) => {
+  try {
+    const coursefees = await getCoursefees();
+    res.json(coursefees);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });

@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 export default function CourseFeeTable() {
+  const [coursefees, setCoursefees] = useState([]);
+
+  const handleViewCoursefees = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/coursefees');
+      const data = await response.json();
+      setCoursefees(data);
+    } catch (err) {
+      console.error('Error fetching course fee:', err);
+    }
+  };
+
+  useEffect(() => {
+    handleViewCoursefees();
+  }, []);
+
   return (
    
     <div className="table">
@@ -16,32 +32,23 @@ export default function CourseFeeTable() {
 
 
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Company</b></div>
-          <div className="col-md-2" ><b>Marketing/Industry</b></div>
-          <div className="col-md-2"><b>Location</b></div>
-          <div className="col-md-2"> <b>Joined</b></div>
-          <div className="col-md-1"> <b>Approved</b></div>
-          <div className="col-md-1"><b>Action</b></div>
+          <div className="col-md-3"><b>Course Fee Number</b></div>
+          <div className="col-md-3" ><b>Course Fee Description</b></div>
+          <div className="col-md-3"><b>Fee</b></div>
+          <div className="col-md-3"> <b>Course Number</b></div>
+        
         </div>
         <hr />
-
         <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-        </div>
+            {coursefees.map((coursefee, index) => (
+              <div key={index} className="row" style={{ width: "100%" }}>
+                <div className="col-md-1">{coursefee.COURSEFEENO}</div>
+                <div className="col-md-1">{coursefee.FEEDESCRIPTION}</div>
+                <div className="col-md-2">{coursefee.FEE}</div>
+                <div className="col-md-1">{coursefee.COURSENO}</div>
+              </div>
+            ))}
+          </div>
 
       </section>
     </div>

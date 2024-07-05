@@ -29,10 +29,10 @@ import CourseFeeTable from '../Tables/CourseFeeTable';
        <div style={{ width: "100%", height:"100vh" }}>
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
-             <input type="text" className="form-control" name=" courseFeeNo" placeholder=" courseFeeNo" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="feeDescription" placeholder="feeDescription" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name=" courseFeeNo" placeholder=" Course Fee Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="feeDescription" placeholder="Fee Description" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="fee" placeholder="Course" style={{ width: "300px" }} /><br />
-             <input type="number" className="form-control" name="courseNo" placeholder="courseNo" style={{ width: "300px" }} /><br />
+             <input type="number" className="form-control" name="courseNo" placeholder="Course Number" style={{ width: "300px" }} /><br />
            </form>
          </div>
  

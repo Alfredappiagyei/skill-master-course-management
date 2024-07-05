@@ -32,15 +32,15 @@ import CourseTable from '../Tables/CourseTable';
            <form onSubmit={this.handleSubmit}>
              <input type="text" className="form-control" name="CourseNo" placeholder="Course Number" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="courseName" placeholder="Course Name" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="courseDescription" placeholder="courseDescription" style={{ width: "300px" }} /><br />
-             <input type="email" className="form-control" name="startdate" placeholder="start Date" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="courseDescription" placeholder="Course Description" style={{ width: "300px" }} /><br />
+             <input type="email" className="form-control" name="startdate" placeholder="sSart Date" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="starttime" placeholder="Start Time" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="enddate" placeholder="End Date" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="endtime" placeholder="End Time" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="Maxdelegate" placeholder="Max Delegate" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="Maxdelegate" placeholder="Maximum Delegate" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="Confirmed" placeholder="Comfirmed" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="delivererEmployeeNo" placeholder="delivererEmployeeNo" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="CourseTypeNo" placeholder="CourseTypeNo" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="delivererEmployeeNo" placeholder="Employee Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="CourseTypeNo" placeholder="Course Type Number" style={{ width: "300px" }} /><br />
            </form>
          </div>
  

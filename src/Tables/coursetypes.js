@@ -14,7 +14,7 @@ async function getCourseTypes() {
     const data = await con.execute('SELECT * FROM coursetype');
     return data.rows;
   } catch (err) {
-    console.error('Error fetching employees:', err);
+    console.error('Error fetching course types:', err);
     throw err;
   } finally {
     if (con) {

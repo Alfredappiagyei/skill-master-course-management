@@ -32,7 +32,7 @@ export default function DelegateTable() {
 
         <div className="row" style={{ width: "100%" }}>
           <div className="col-md-1"><b>Delegate Number</b></div>
-          <div className="col-md-1" ><b>Title/Industry</b></div>
+          <div className="col-md-1" ><b>Title</b></div>
           <div className="col-md-1"><b>First Name</b></div>
           <div className="col-md-1"> <b>Last Name</b></div>
           <div className="col-md-1"> <b>Street</b></div>
