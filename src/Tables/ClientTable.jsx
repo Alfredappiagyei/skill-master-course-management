@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 export default function ClientTable() {
+  const [clients, setClients] = useState([]);
+
+  const handleViewClients = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/clients');
+      const data = await response.json();
+      setClients(data);
+    } catch (err) {
+      console.error('Error fetching clients:', err);
+    }
+  };
+
+  useEffect(() => {
+    handleViewClients();
+  }, []);
+
   return (
    
     <div className="table">
@@ -16,33 +32,24 @@ export default function ClientTable() {
 
 
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Company</b></div>
-          <div className="col-md-2" ><b>Marketing/Industry</b></div>
-          <div className="col-md-2"><b>Location</b></div>
-          <div className="col-md-2"> <b>Joined</b></div>
-          <div className="col-md-1"> <b>Approved</b></div>
-          <div className="col-md-1"><b>Action</b></div>
+          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Client Number</b></div>
+          <div className="col-md-3" ><b>Client Name</b></div>
+          <div className="col-md-3"><b>Client Email</b></div>
+          <div className="col-md-3"> <b>Client Contact</b></div>
         </div>
         <hr />
-
         <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-        </div>
+            {clients.map((client, index) => (
+              <div key={index} className="row" style={{ width: "100%" }}>
+                <div className="col-md-3">{client.CLIENTNO}</div>
+                <div className="col-md-3">{client.CLIENTNAME}</div>
+                <div className="col-md-3">{client.CLIENTEMAIL}</div>
+                <div className="col-md-3">{client.CLIENTCONTACT}</div>
+              </div>
+            ))}
+          </div>
 
+       
       </section>
     </div>
   </div>
