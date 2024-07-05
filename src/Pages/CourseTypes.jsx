@@ -5,7 +5,7 @@ import '../test/css/bootstrap.min.css';
 import "../App.css";
  
 import Sidebar from "./Sidebar";
-import CourseTypesForm from '../components/CourseTpesForm';
+import CourseTypesForm from '../components/CourseTypeForm';
 
  
 

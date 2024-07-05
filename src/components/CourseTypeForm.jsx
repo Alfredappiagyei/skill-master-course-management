@@ -29,8 +29,8 @@ import CourseTypesTable from '../Tables/CourseTypesTable';
        <div style={{ width: "100%", height:"100vh" }}>
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
-             <input type="text" className="form-control" name="CourseTypeNo" placeholder="CourseTypeNo" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="courseTypeDescription" placeholder="courseTypeDescription" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="CourseTypeNo" placeholder="Course Type Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="courseTypeDescription" placeholder="Course Type Description" style={{ width: "300px" }} /><br />
            </form>
          </div>
  

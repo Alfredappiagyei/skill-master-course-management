@@ -3,6 +3,7 @@ const cors = require('cors');
 const { getEmployees } = require('./src/Tables/employees');
 const { getClients } = require('./src/Tables/clients');
 const { getDelegates } = require('./src/Tables/delegates');
+const { getCourseTypes } = require('./src/Tables/coursetypes');
 
 const app = express();
 const port = 3001;
@@ -36,6 +37,14 @@ app.get('/api/delegates', async (req, res) => {
   }
 });
 
+app.get('/api/coursetypes', async (req, res) => {
+  try {
+    const coursetypes = await getCourseTypes();
+    res.json(coursetypes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
