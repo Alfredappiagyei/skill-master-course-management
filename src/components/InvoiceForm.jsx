@@ -27,11 +27,14 @@ import InvoiceTable from '../Tables/InvoiceTable';
        <div style={{ width: "100%", height:"100vh" }}>
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
-             <input type="text" className="form-control" name="employeeNo" placeholder="Employee Number" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="employeeFName" placeholder="First Name" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="employeeLName" placeholder="Last Name" style={{ width: "300px" }} /><br />
-             <input type="email" className="form-control" name="employeeEmail" placeholder="Email" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="employeeContact" placeholder="Contact" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="invoiceno" placeholder="Invoice number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="dateraised" placeholder="Date Raised" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="datepaid" placeholder="Date Paid" style={{ width: "300px" }} /><br />
+             <input type="email" className="form-control" name="creditCardNo" placeholder="Credit Crad Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="holdername" placeholder="Holder Name" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="expirydate" placeholder="Expiry Date" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="registrationnumber" placeholder="Registeration Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="pMthodno" placeholder="Payment Method Number" style={{ width: "300px" }} /><br />
            </form>
          </div>
  

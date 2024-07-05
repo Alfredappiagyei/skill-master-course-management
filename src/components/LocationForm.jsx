@@ -29,11 +29,10 @@ import LocationTable from '../Tables/LocationTable';
        <div style={{ width: "100%", height:"100vh" }}>
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
-             <input type="text" className="form-control" name="employeeNo" placeholder="Employee Number" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="employeeFName" placeholder="First Name" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="employeeLName" placeholder="Last Name" style={{ width: "300px" }} /><br />
-             <input type="email" className="form-control" name="employeeEmail" placeholder="Email" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="employeeContact" placeholder="Contact" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name=" locationNo" placeholder="locationNo" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="  locationName " placeholder=" locationName " style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="  locationMaxSize " placeholder="locationMaxSize " style={{ width: "300px" }} /><br />
+              
            </form>
          </div>
  
