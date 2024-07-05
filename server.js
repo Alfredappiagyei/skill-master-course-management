@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getEmployees } = require('./src/Tables/oracledbtest');
+const { getEmployees } = require('./src/Tables/employees');
 const { getClients } = require('./src/Tables/clients');
 
 const app = express();
