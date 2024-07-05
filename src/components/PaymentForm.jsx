@@ -29,8 +29,8 @@ import PaymentTable from '../Tables/PaymentTable';
        <div style={{ width: "100%", height:"100vh" }}>
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
-             <input type="text" className="form-control" name="pMethodNo" placeholder="pMethod Number" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name=" pMethodName" placeholder=" pMethod Name" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="pMethodNo" placeholder="Payment Method Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name=" pMethodName" placeholder="Payment Method Name" style={{ width: "300px" }} /><br />
            </form>
          </div>
  
@@ -38,11 +38,11 @@ import PaymentTable from '../Tables/PaymentTable';
            <button className="button" style={{ width: "200px" }} onClick={this.handleSubmit}>
              Add New Payment
            </button>
-           <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
-             View Payment
+           <button className="button" style={{ fontSize: "10px",width: "200px" }} onClick={this.toggleModal}>
+             View Payment Methods
            </button>
            <button className="button" style={{ width: "200px" }}>
-             Update Payments
+             Update Payment
            </button>
          </div>
  

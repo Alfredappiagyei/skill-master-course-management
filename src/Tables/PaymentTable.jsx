@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 export default function PaymentTable() {
+
+  const [payments, setPayments] = useState([]);
+
+  const handleViewPayments = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/payments');
+      const data = await response.json();
+      setPayments(data);
+    } catch (err) {
+      console.error('Error fetching payments:', err);
+    }
+  };
+
+  useEffect(() => {
+    handleViewPayments();
+  }, []);
   return (
    
     <div className="table">
@@ -16,33 +32,19 @@ export default function PaymentTable() {
 
 
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Company</b></div>
-          <div className="col-md-2" ><b>Marketing/Industry</b></div>
-          <div className="col-md-2"><b>Location</b></div>
-          <div className="col-md-2"> <b>Joined</b></div>
-          <div className="col-md-1"> <b>Approved</b></div>
-          <div className="col-md-1"><b>Action</b></div>
+          <div className="col-md-6"><b>Payment Method Number</b></div>
+          <div className="col-md-6" ><b>Payment Method Name</b></div>
+        
         </div>
         <hr />
-
         <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-        </div>
-
+            {payments.map((payment, index) => (
+              <div key={index} className="row" style={{ width: "100%" }}>
+                <div className="col-md-6">{payment.PMETHODNO}</div>
+                <div className="col-md-6">{payment.PMETHODNAME}</div>
+              </div>
+            ))}
+          </div>
       </section>
     </div>
   </div>

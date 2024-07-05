@@ -49,7 +49,7 @@ import CourseTable from '../Tables/CourseTable';
              Add New Course
            </button>
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
-             View Course
+             View Courses
            </button>
            <button className="button" style={{ width: "200px" }}>
              Update Course

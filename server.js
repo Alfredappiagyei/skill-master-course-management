@@ -6,6 +6,8 @@ const { getDelegates } = require('./src/Tables/delegates');
 const { getCourseTypes } = require('./src/Tables/coursetypes');
 const { getCourses } = require('./src/Tables/courses');
 const { getCoursefees } = require('./src/Tables/coursefees');
+const { getPayments } = require('./src/Tables/payments');
+
 
 
 const app = express();
@@ -62,6 +64,15 @@ app.get('/api/coursefees', async (req, res) => {
   try {
     const coursefees = await getCoursefees();
     res.json(coursefees);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/payments', async (req, res) => {
+  try {
+    const payments = await getPayments();
+    res.json(payments);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

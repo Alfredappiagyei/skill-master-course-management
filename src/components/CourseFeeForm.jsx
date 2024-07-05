@@ -44,7 +44,7 @@ import CourseFeeTable from '../Tables/CourseFeeTable';
              View Course Fees
            </button>
            <button className="button" style={{ width: "200px" }}>
-             Update Fees
+             Update Fee
            </button>
          </div>
  
