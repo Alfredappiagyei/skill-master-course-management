@@ -36,9 +36,9 @@ import DelegateTable from '../Tables/DelegateTable';
              <input type="text" className="form-control" name="delegateCity" placeholder="Delegate City" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="delegateState" placeholder="Delegate State" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="delegateZipCode" placeholder="Delegate Zip Code" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="attTelNo" placeholder="attTelNo" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="attFaxNo" placeholder="attFaxNo" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="attEmailAddress" placeholder="attEmailAddress" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="attTelNo" placeholder="Tel Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="attFaxNo" placeholder="Fax Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="attEmailAddress" placeholder="Email Address" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="ClientNo" placeholder="Client Number" style={{ width: "300px" }} /><br />
            </form>
          </div>

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { getEmployees } = require('./src/Tables/employees');
 const { getClients } = require('./src/Tables/clients');
+const { getDelegates } = require('./src/Tables/delegates');
 
 const app = express();
 const port = 3001;
@@ -21,6 +22,15 @@ app.get('/api/clients', async (req, res) => {
   try {
     const clients = await getClients();
     res.json(clients);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/delegates', async (req, res) => {
+  try {
+    const delegates = await getDelegates();
+    res.json(delegates);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -29,7 +29,7 @@ import ClientTable from '../Tables/ClientTable';
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
              <input type="text" className="form-control" name="clientNo" placeholder="Client Number" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="clientName" placeholder="CLient Name" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="clientName" placeholder="Client Name" style={{ width: "300px" }} /><br />
              <input type="email" className="form-control" name="clientEmail" placeholder="Email" style={{ width: "300px" }} /><br />
              <input type="text" className="form-control" name="clientContact" placeholder="Contact" style={{ width: "300px" }} /><br />
            </form>
