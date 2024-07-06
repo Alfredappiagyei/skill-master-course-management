@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## ENSURE YOU HAVE PERFORMED THE INSTRUCTIONS IN THE `db.md` FILE BEFORE YOU PROCEED HERE
+
 ## Available Scripts
 
 In the project directory, you can run:
