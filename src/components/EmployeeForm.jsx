@@ -8,7 +8,6 @@ class EmployeeForm extends Component {
     super(props);
     this.state = {
       showModal: false,
-      employeeNo: '',
       employeeFName: '',
       employeeLName: '',
       employeeEmail: '',
@@ -26,18 +25,18 @@ class EmployeeForm extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const { employeeNo, employeeFName, employeeLName, employeeEmail, employeeContact } = this.state;
+    const { employeeFName, employeeLName, employeeEmail, employeeContact } = this.state;
 
     try {
       const response = await fetch('http://localhost:3001/api/employees', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ employeeNo, employeeFName, employeeLName, employeeEmail, employeeContact })
+        body: JSON.stringify({ employeeFName, employeeLName, employeeEmail, employeeContact })
       });
 
       if (response.ok) {
         console.log('Employee added successfully');
-        this.setState({ employeeNo: '', employeeFName: '', employeeLName: '', employeeEmail: '', employeeContact: '' });
+        this.setState({ employeeFName: '', employeeLName: '', employeeEmail: '', employeeContact: '' });
       } else {
         console.error('Failed to add employee');
       }
@@ -47,12 +46,11 @@ class EmployeeForm extends Component {
   };
 
   render() {
-    const { showModal, employeeNo, employeeFName, employeeLName, employeeEmail, employeeContact } = this.state;
+    const { showModal, employeeFName, employeeLName, employeeEmail, employeeContact } = this.state;
     return (
       <div style={{ width: "100%", height: "100vh" }}>
         <div className='col-md-6'>
           <form onSubmit={this.handleSubmit}>
-            <input type="text" className="form-control" name="employeeNo" placeholder="Employee Number" value={employeeNo} onChange={this.handleChange} style={{ width: "300px" }} /><br />
             <input type="text" className="form-control" name="employeeFName" placeholder="First Name" value={employeeFName} onChange={this.handleChange} style={{ width: "300px" }} /><br />
             <input type="text" className="form-control" name="employeeLName" placeholder="Last Name" value={employeeLName} onChange={this.handleChange} style={{ width: "300px" }} /><br />
             <input type="email" className="form-control" name="employeeEmail" placeholder="Email" value={employeeEmail} onChange={this.handleChange} style={{ width: "300px" }} /><br />

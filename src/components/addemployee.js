@@ -5,9 +5,8 @@ async function addEmployee(employee) {
   let con;
 
   // Validate input
-  if (!employee.employeeNo || !employee.employeeFName || !employee.employeeLName || !employee.employeeEmail || !employee.employeeContact) {
+  if (!employee.employeeFName || !employee.employeeLName || !employee.employeeEmail || !employee.employeeContact) {
     const missingFields = [];
-    if (!employee.employeeNo) missingFields.push('employeeNo');
     if (!employee.employeeFName) missingFields.push('employeeFName');
     if (!employee.employeeLName) missingFields.push('employeeLName');
     if (!employee.employeeEmail) missingFields.push('employeeEmail');
@@ -25,20 +24,24 @@ async function addEmployee(employee) {
       connectString: "encarta:1522/xepdb1"
     });
 
-    await con.execute(
+    const result = await con.execute(
       `BEGIN 
-         new_employee(:employeeNo, :employeeFName, :employeeLName, :employeeEmail, :employeeContact);
+         new_employee(:employeeFName, :employeeLName, :employeeEmail, :employeeContact, :newEmployeeNo);
        END;`,
       {
-        employeeNo: employee.employeeNo,
         employeeFName: employee.employeeFName,
         employeeLName: employee.employeeLName,
         employeeEmail: employee.employeeEmail,
-        employeeContact: employee.employeeContact
+        employeeContact: employee.employeeContact,
+        newEmployeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
       },
       { autoCommit: true }
     );
-    console.log('Employee added successfully');
+
+    const newEmployeeNo = result.outBinds.newEmployeeNo[0];
+    console.log(`Employee added successfully with ID: ${newEmployeeNo}`);
+    
+    return newEmployeeNo; // Return the generated employeeNo if needed
   } catch (err) {
     console.error('Error inserting employee:', err);
     throw err;
