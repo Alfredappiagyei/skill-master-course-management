@@ -10,6 +10,10 @@ const { getCourses } = require('./src/Tables/courses');
 const { getCoursefees } = require('./src/Tables/coursefees');
 const { getPayments } = require('./src/Tables/payments');
 const { getLocations } = require('./src/Tables/locations');
+const { getRegistrations } = require('./src/Tables/registrations');
+const { getInvoices } = require('./src/Tables/invoices');
+const { getBookings } = require('./src/Tables/bookings');
+
 
 //  ADDING
 const { addEmployee } = require('./src/Components/addemployee');
@@ -92,6 +96,33 @@ app.get('/api/locations', async (req, res) => {
   try {
     const locations = await getLocations();
     res.json(locations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/registrations', async (req, res) => {
+  try {
+    const registrations = await getRegistrations();
+    res.json(registrations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/invoices', async (req, res) => {
+  try {
+    const invoices = await getInvoices();
+    res.json(invoices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/bookings', async (req, res) => {
+  try {
+    const bookings = await getBookings();
+    res.json(bookings);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

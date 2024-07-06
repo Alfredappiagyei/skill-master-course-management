@@ -11,8 +11,25 @@ async function getCourses() {
       connectString: "encarta:1522/xepdb1"
     });
 
-    const data = await con.execute('SELECT * FROM course');
-    return data.rows;
+    const result = await con.execute(
+      `BEGIN 
+         get_course_details(:cursor);
+       END;`,
+      {
+        cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }
+      }
+    );
+
+    const resultSet = result.outBinds.cursor;
+    const rows = [];
+
+    let row;
+    while ((row = await resultSet.getRow())) {
+      rows.push(row);
+    }
+
+    await resultSet.close();
+    return rows;
   } catch (err) {
     console.error('Error fetching courses:', err);
     throw err;
@@ -26,5 +43,7 @@ async function getCourses() {
     }
   }
 }
+
+
 
 module.exports = { getCourses };

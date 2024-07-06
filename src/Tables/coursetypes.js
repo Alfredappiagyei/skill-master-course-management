@@ -11,10 +11,27 @@ async function getCourseTypes() {
       connectString: "encarta:1522/xepdb1"
     });
 
-    const data = await con.execute('SELECT * FROM coursetype');
-    return data.rows;
+    const result = await con.execute(
+      `BEGIN 
+         get_coursetype_details(:cursor);
+       END;`,
+      {
+        cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }
+      }
+    );
+
+    const resultSet = result.outBinds.cursor;
+    const rows = [];
+
+    let row;
+    while ((row = await resultSet.getRow())) {
+      rows.push(row);
+    }
+
+    await resultSet.close();
+    return rows;
   } catch (err) {
-    console.error('Error fetching course types:', err);
+    console.error('Error fetching coursetypes:', err);
     throw err;
   } finally {
     if (con) {
@@ -26,5 +43,7 @@ async function getCourseTypes() {
     }
   }
 }
+
+
 
 module.exports = { getCourseTypes };

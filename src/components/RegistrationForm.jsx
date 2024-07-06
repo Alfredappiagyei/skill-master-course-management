@@ -30,12 +30,12 @@ import RegistrationTable from '../Tables/RegistrationTable';
        <div style={{ width: "100%", height:"100vh" }}>
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
-             <input type="number" className="form-control" name="registrationNo" placeholder="registrationNo" style={{ width: "300px" }} /><br />
-             <input type="date" className="form-control" name="registrationDate" placeholder="registrationDate" style={{ width: "300px" }} /><br />
-             <input type="number" className="form-control" name="delegateNo" placeholder="delegateNo" style={{ width: "300px" }} /><br />
-             <input type="number" className="form-control" name="courseFeeNo" placeholder="courseFeeNo" style={{ width: "300px" }} /><br />
-             <input type="number" className="form-control" name="registerEmployeeNo" placeholder="registerEmployeeNo" style={{ width: "300px" }} /><br />
-             <input type="number" className="form-control" name="courseNo" placeholder="courseNo" style={{ width: "300px" }} /><br />
+             <input type="number" className="form-control" name="registrationNo" placeholder="Registration Number" style={{ width: "300px" }} /><br />
+             <input type="date" className="form-control" name="registrationDate" placeholder="Registration Date" style={{ width: "300px" }} /><br />
+             <input type="number" className="form-control" name="delegateNo" placeholder="Delegate Number" style={{ width: "300px" }} /><br />
+             <input type="number" className="form-control" name="courseFeeNo" placeholder="Course Fee Number" style={{ width: "300px" }} /><br />
+             <input type="number" className="form-control" name="registerEmployeeNo" placeholder="Employee Number" style={{ width: "300px" }} /><br />
+             <input type="number" className="form-control" name="courseNo" placeholder="Course Number" style={{ width: "300px" }} /><br />
            </form>
          </div>
  

@@ -1,6 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 export default function InvoiceTable() {
+  const [invoices, setInvoices] = useState([]);
+
+  const handleViewInvoices = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/invoices');
+      const data = await response.json();
+      setInvoices(data);
+    } catch (err) {
+      console.error('Error fetching invoices:', err);
+    }
+  };
+
+  useEffect(() => {
+    handleViewInvoices();
+  }, []);
   return (
    
     <div className="table">
@@ -16,32 +31,33 @@ export default function InvoiceTable() {
 
 
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Company</b></div>
-          <div className="col-md-2" ><b>Marketing/Industry</b></div>
-          <div className="col-md-2"><b>Location</b></div>
-          <div className="col-md-2"> <b>Joined</b></div>
-          <div className="col-md-1"> <b>Approved</b></div>
-          <div className="col-md-1"><b>Action</b></div>
+          <div className="col-md-1"><b>Invoice  Number</b></div>
+          <div className="col-md-1" ><b>Date Raised</b></div>
+          <div className="col-md-1" ><b>Date Paid</b></div>
+          <div className="col-md-3" ><b>Credit Card Number</b></div>
+          <div className="col-md-3" ><b>Holders Name</b></div>
+          <div className="col-md-1" ><b>Expiry Date</b></div>
+          <div className="col-md-1" ><b>Registration Number</b></div>
+          <div className="col-md-1" ><b>Payment Method Number</b></div>
+
+        
         </div>
         <hr />
-
         <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-        </div>
+            {invoices.map((invoice, index) => (
+              <div key={index} className="row" style={{ width: "100%" }}>
+                <div className="col-md-1">{invoice.INVOICENO}</div>
+                <div className="col-md-1">{invoice.DATERAISED}</div>
+                <div className="col-md-1">{invoice.DATEPAID}</div>
+                <div className="col-md-3">{invoice.CREDITCARDNO}</div>
+                <div className="col-md-3">{invoice.HOLDERSNAME}</div>
+                <div className="col-md-1">{invoice.EXPIRYDATE}</div>
+                <div className="col-md-1">{invoice.REGISTRATIONNO}</div>
+                <div className="col-md-1">{invoice.PMETHODNO}</div>
+
+              </div>
+            ))}
+          </div>
 
       </section>
     </div>

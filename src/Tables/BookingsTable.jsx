@@ -1,6 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 export default function BookingTable() {
+  const [bookings, setBookings] = useState([]);
+
+  const handleViewBookings = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/bookings');
+      const data = await response.json();
+      setBookings(data);
+    } catch (err) {
+      console.error('Error fetching bookings:', err);
+    }
+  };
+
+  useEffect(() => {
+    handleViewBookings();
+  }, []);
   return (
    
     <div className="table">
@@ -15,32 +30,30 @@ export default function BookingTable() {
         <input type="text" id="search2" class="form-control" placeholder="Dashboard" />
 
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Company</b></div>
-          <div className="col-md-2" ><b>Marketing/Industry</b></div>
-          <div className="col-md-2"><b>Location</b></div>
-          <div className="col-md-2"> <b>Joined</b></div>
-          <div className="col-md-1"> <b>Approved</b></div>
-          <div className="col-md-1"><b>Action</b></div>
+          <div className="col-md-2"><b>Booking  Number</b></div>
+          <div className="col-md-4" ><b>Booking Date</b></div>
+          <div className="col-md-2" ><b>Location Number</b></div>
+          <div className="col-md-2" ><b>Course Number</b></div>
+          <div className="col-md-2" ><b>Employee Number</b></div>
+
+        
         </div>
         <hr />
-
         <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-        </div>
+            {bookings.map((booking, index) => (
+              <div key={index} className="row" style={{ width: "100%" }}>
+                <div className="col-md-1">{booking.BOOKINGNO}</div>
+                <div className="col-md-1">{booking.BOOKINGDATE}</div>
+                <div className="col-md-1">{booking.LOCATIONNO}</div>
+                <div className="col-md-3">{booking.COURSENO}</div>
+                <div className="col-md-3">{booking.BOOKINGEMPLOYEENO}</div>
+
+
+
+              </div>
+            ))}
+          </div>
+
 
       </section>
     </div>

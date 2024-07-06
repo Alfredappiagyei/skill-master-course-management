@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
-async function getPayments() {
+async function getRegistrations() {
   let con;
 
   try {
@@ -13,7 +13,7 @@ async function getPayments() {
 
     const result = await con.execute(
       `BEGIN 
-         get_paymentmethod_details(:cursor);
+         get_registration_details(:cursor);
        END;`,
       {
         cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }
@@ -31,7 +31,7 @@ async function getPayments() {
     await resultSet.close();
     return rows;
   } catch (err) {
-    console.error('Error fetching payments:', err);
+    console.error('Error fetching registrations:', err);
     throw err;
   } finally {
     if (con) {
@@ -46,4 +46,4 @@ async function getPayments() {
 
 
 
-module.exports = { getPayments };
+module.exports = { getRegistrations };

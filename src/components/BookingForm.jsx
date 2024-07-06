@@ -30,10 +30,10 @@ import BookingTable from '../Tables/BookingsTable';
          <div className='col-md-6'>
            <form onSubmit={this.handleSubmit}>
              <input type="text" className="form-control" name="bookingNo" placeholder="Booking Number" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="bookingdate" placeholder="bookingDate" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name="locationNo" placeholder="location Number" style={{ width: "300px" }} /><br />
-             <input type="email" className="form-control" name="courseNo" placeholder="courseNo" style={{ width: "300px" }} /><br />
-             <input type="text" className="form-control" name=" bookingEmployeeNo " placeholder=" bookingEmployeeNo" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="bookingdate" placeholder="Booking Date" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name="locationNo" placeholder="Location Number" style={{ width: "300px" }} /><br />
+             <input type="email" className="form-control" name="courseNo" placeholder="Course Number" style={{ width: "300px" }} /><br />
+             <input type="text" className="form-control" name=" bookingEmployeeNo " placeholder="Employee Number" style={{ width: "300px" }} /><br />
            </form>
          </div>
  
