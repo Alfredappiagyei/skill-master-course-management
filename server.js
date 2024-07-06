@@ -7,6 +7,8 @@ const { getCourseTypes } = require('./src/Tables/coursetypes');
 const { getCourses } = require('./src/Tables/courses');
 const { getCoursefees } = require('./src/Tables/coursefees');
 const { getPayments } = require('./src/Tables/payments');
+const { getLocations } = require('./src/Tables/locations');
+
 
 
 
@@ -78,6 +80,14 @@ app.get('/api/payments', async (req, res) => {
   }
 });
 
+app.get('/api/locations', async (req, res) => {
+  try {
+    const locations = await getLocations();
+    res.json(locations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

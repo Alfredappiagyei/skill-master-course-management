@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 export default function LocationTable() {
+
+  const [locations, setLocations] = useState([]);
+
+  const handleViewLocations = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/locations');
+      const data = await response.json();
+      setLocations(data);
+    } catch (err) {
+      console.error('Error fetching employees:', err);
+    }
+  };
+
+  useEffect(() => {
+    handleViewLocations();
+  }, []);
   return (
    
     <div className="table">
@@ -16,32 +32,23 @@ export default function LocationTable() {
 
 
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-3" style={{ paddingRight: "100px" }}><b>Company</b></div>
-          <div className="col-md-2" ><b>Marketing/Industry</b></div>
-          <div className="col-md-2"><b>Location</b></div>
-          <div className="col-md-2"> <b>Joined</b></div>
-          <div className="col-md-1"> <b>Approved</b></div>
-          <div className="col-md-1"><b>Action</b></div>
+          <div className="col-md-4"><b>Location Number</b></div>
+          <div className="col-md-4" ><b>Location Name</b></div>
+          <div className="col-md-4" ><b>Location Maximum Size</b></div>
+
+        
         </div>
         <hr />
-
         <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-          <h3>Table Here</h3>
-        </div>
+            {locations.map((location, index) => (
+              <div key={index} className="row" style={{ width: "100%" }}>
+                <div className="col-md-6">{location.LOCATIONNO}</div>
+                <div className="col-md-6">{location.LOCATIONNAME}</div>
+                <div className="col-md-6">{location.LOCATIONMAXSIZE}</div>
+
+              </div>
+            ))}
+          </div>
 
       </section>
     </div>
