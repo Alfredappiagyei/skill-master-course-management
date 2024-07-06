@@ -5,7 +5,8 @@ import './test/css/bootstrap.min.css';
 
 import "./App.css";
 
-import Employees from "./Pages/Employees";
+ 
+import Home from "./Pages/Home";
  
 
 
@@ -17,7 +18,7 @@ export class App extends Component {
   render() {
     return (
       <div style={{ display: "flex", margin: 0, padding: 0, width: "100%", }}>
-        <Employees />
+        <Home/>
       </div>
 
     );
