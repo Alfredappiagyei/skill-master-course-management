@@ -16,7 +16,10 @@ const { getBookings } = require('./src/Tables/bookings');
 
 
 //  ADDING
-const { addEmployee } = require('./src/Components/addemployee');
+const { addEmployee } = require('./src/components/addemployee');
+const { addClient } = require('./src/components/addclient');
+const { addDelegate } = require('./src/components/adddelegate');
+
 
 
 
@@ -135,6 +138,24 @@ app.post('/api/employees', async (req, res) => {
   try {
     await addEmployee(req.body);
     res.status(201).json({ message: 'Employee added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/delegates', async (req, res) => {
+  try {
+    await addDelegate(req.body);
+    res.status(201).json({ message: 'Delegate added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/clients', async (req, res) => {
+  try {
+    await addClient(req.body);
+    res.status(201).json({ message: 'Client added successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
