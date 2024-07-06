@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 export default function Sidebar() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px", backgroundColor:"#304463", height:"100vh", width:"100%", paddingLeft:20}}>       
-      <Link to="/form" style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-home"></span> <p style={{fontWeight:"bold"}}>Home</p></Link>
+      <Link to="/home" style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-home"></span> <p style={{fontWeight:"bold"}}>Home</p></Link>
       <Link to="/employees"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-user"></span><p style={{fontWeight:"bold"}}>Employees</p></Link>
       <Link to="/client"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-bookmark"></span><p style={{fontWeight:"bold"}}>Clients</p></Link>
       <Link to="/delegate"  style={{ color: "#fff", display:"flex", gap:25, textDecoration:"none" }}><span className="glyphicon glyphicon-asterisk"></span><p style={{fontWeight:"bold"}}>Delegates</p></Link>

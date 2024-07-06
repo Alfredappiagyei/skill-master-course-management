@@ -15,7 +15,8 @@ import Location from '../Pages/Location';
 import Registrations from '../Pages/Registrations';
 import Invoices from '../Pages/Invoices';
 import Bookings from '../Pages/Bookings';
- 
+import Home from '../Pages/Home';
+
 
 export default function Router() {
     return (
@@ -35,6 +36,7 @@ export default function Router() {
         <Route path='/registration' element={<Registrations/>}/>
         <Route path='/invoices' element={<Invoices/>}/>
         <Route path='/booking' element={<Bookings/>}/>
+        <Route path='/home' element={<Home/>}/>
         </Routes>
         </BrowserRouter>
     )

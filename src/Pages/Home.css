@@ -1,0 +1,39 @@
+.nav {
+    background: linear-gradient(45deg, #304463, #566680);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .animated-card {
+    animation: fadeInUp 1s ease-in-out;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .gradient-card {
+    background: linear-gradient(45deg, #304463, #566680);
+    color: white;
+  }
+  
+  .section2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 40px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
