@@ -1,3 +1,4 @@
+require('dotenv').config();
 const oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
@@ -11,7 +12,7 @@ async function addEmployee(employee) {
     if (!employee.employeeLName) missingFields.push('employeeLName');
     if (!employee.employeeEmail) missingFields.push('employeeEmail');
     if (!employee.employeeContact) missingFields.push('employeeContact');
-    
+
     const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
     console.error(errorMessage);
     throw new Error(errorMessage);
@@ -19,9 +20,9 @@ async function addEmployee(employee) {
 
   try {
     con = await oracledb.getConnection({
-      user: "system",
-      password: "oracleE",
-      connectString: "encarta:1522/xepdb1"
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
@@ -40,7 +41,7 @@ async function addEmployee(employee) {
 
     const newEmployeeNo = result.outBinds.newEmployeeNo[0];
     console.log(`Employee added successfully with ID: ${newEmployeeNo}`);
-    
+
     return newEmployeeNo; // Return the generated employeeNo if needed
   } catch (err) {
     console.error('Error inserting employee:', err);

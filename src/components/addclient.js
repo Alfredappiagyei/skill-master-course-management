@@ -1,3 +1,4 @@
+require('dotenv').config();
 const oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
@@ -18,9 +19,9 @@ async function addClient(client) {
 
   try {
     con = await oracledb.getConnection({
-      user: "system",
-      password: "oracleE",
-      connectString: "encarta:1522/xepdb1"
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
