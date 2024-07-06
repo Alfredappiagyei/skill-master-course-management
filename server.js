@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+
+//  RETRIEVING
 const { getEmployees } = require('./src/Tables/employees');
 const { getClients } = require('./src/Tables/clients');
 const { getDelegates } = require('./src/Tables/delegates');
@@ -9,6 +11,11 @@ const { getCoursefees } = require('./src/Tables/coursefees');
 const { getPayments } = require('./src/Tables/payments');
 const { getLocations } = require('./src/Tables/locations');
 
+//  ADDING
+const { addEmployee } = require('./src/Components/addemployee');
+
+
+
 
 
 
@@ -17,6 +24,7 @@ const port = 3001;
 
 app.use(cors());
 
+//  RETRIEVING
 app.get('/api/employees', async (req, res) => {
   try {
     const employees = await getEmployees();
@@ -84,6 +92,18 @@ app.get('/api/locations', async (req, res) => {
   try {
     const locations = await getLocations();
     res.json(locations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+//  ADDING 
+app.use(express.json())
+
+app.post('/api/employees', async (req, res) => {
+  try {
+    await addEmployee(req.body);
+    res.status(201).json({ message: 'Employee added successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
