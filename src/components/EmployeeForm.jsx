@@ -69,19 +69,14 @@ class EmployeeForm extends Component {
             <input type="text" className="form-control" name="employeeContact" placeholder="Contact" value={employeeContact} onChange={this.handleChange} style={{ width: "300px" }} /><br />
           </form>
         </div>
-
         <div className='col-md-6' style={{ display: "flex", flexWrap: "wrap", alignItems: "center", textAlign: "center", gap: 10 }}>
-           <button className="button" style={{ width: "200px" }} onClick={this.handleSubmit} disabled={isLoading}>
-             {isLoading ? 'Adding...' : 'Add New Employee'}
-           </button>
-           <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
-             View Employees
-           </button>
-           <button className="button" style={{ width: "200px" }}>
-             Update Employee
-           </button>
-         </div>
-
+          <button className="button" style={{ width: "200px" }} onClick={this.handleSubmit} disabled={isLoading}>
+            {isLoading ? 'Adding...' : 'Add New Employee'}
+          </button>
+          <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
+            View Employees
+          </button>
+        </div>
         <Modal show={showModal} handleClose={this.toggleModal}>
           <EmployeeTable />
         </Modal>

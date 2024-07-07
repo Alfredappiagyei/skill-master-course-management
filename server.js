@@ -7,8 +7,8 @@ console.log(`DB_USER: ${process.env.DB_USER}`);
 console.log(`DB_PASSWORD: ${process.env.DB_PASSWORD}`);
 console.log(`DB_CONNECT_STRING: ${process.env.DB_CONNECT_STRING}`);
 
-//  RETRIEVING
-const { getEmployees } = require('./src/Tables/employees');
+//  RETRIEVING and DELETING
+const { getEmployees, deleteEmployee } = require('./src/Tables/employees');
 const { getClients } = require('./src/Tables/clients');
 const { getDelegates } = require('./src/Tables/delegates');
 const { getCourseTypes } = require('./src/Tables/coursetypes');
@@ -238,6 +238,33 @@ app.post('/api/bookings', async (req, res) => {
     res.status(201).json({ message: 'Booking added successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+
+// DELETING RECORDS
+app.delete('/api/employees/:employeeNo', async (req, res) => {
+  const employeeNo = parseInt(req.params.employeeNo, 10); // Convert to integer
+
+  try {
+    await deleteEmployee(employeeNo);
+    res.status(200).send({ message: 'Employee deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting employee' });
+  }
+});
+
+// UPDATING RECORDS
+
+app.put('/api/employees/:employeeNo', async (req, res) => {
+  const employeeNo = parseInt(req.params.employeeNo, 10); // Convert to integer
+  const employeeDetails = req.body; // Get the updated details from the request body
+
+  try {
+    await updateEmployee(employeeNo, employeeDetails);
+    res.status(200).send({ message: 'Employee updated successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error updating employee' });
   }
 });
 

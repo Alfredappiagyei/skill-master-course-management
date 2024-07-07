@@ -397,3 +397,33 @@ BEGIN
     SELECT * FROM booking;
 END;
 /
+
+--deleting records
+
+-- delete from employees
+CREATE OR REPLACE PROCEDURE delete_employee(p_employeeNo IN NUMBER) AS
+BEGIN
+  DELETE FROM Employee WHERE employeeNo = p_employeeNo;
+END;
+/
+
+-- updating records
+CREATE OR REPLACE PROCEDURE update_employee(
+    in_employeeNo IN employee.employeeNo%type,
+    in_employeeFName IN employee.employeeFName%type,
+    in_employeeLName IN employee.employeeLName%type,
+    in_employeeEmail IN employee.employeeEmail%type,
+    in_employeeContact IN employee.employeeContact%type
+) IS
+BEGIN
+    UPDATE employee
+    SET 
+        employeeFName = in_employeeFName,
+        employeeLName = in_employeeLName,
+        employeeEmail = in_employeeEmail,
+        employeeContact = in_employeeContact
+    WHERE 
+        employeeNo = in_employeeNo;
+END;
+/
+

@@ -45,6 +45,90 @@ async function getEmployees() {
   }
 }
 
+async function deleteEmployee(employeeNo) {
+  let con;
+
+  try {
+    con = await oracledb.getConnection({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
+    });
+
+    await con.execute(
+      `BEGIN 
+         delete_employee(:employeeNo);
+       END;`,
+      {
+        employeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: employeeNo },
+        
+      }
+    );
+
+    await con.commit();
+    console.log('Employee deleted successfully');
+  } catch (err) {
+    console.error('Error deleting employee:', err);
+    throw err;
+  } finally {
+    if (con) {
+      try {
+        await con.close();
+      } catch (err) {
+        console.error('Error closing connection:', err);
+      }
+    }
+  }
+}
+
+async function updateEmployee(employeeNo, employeeDetails) {
+  console.log('Updating employee with employeeNo:', employeeNo);
+  console.log('Employee details:', employeeDetails);
+
+  let con;
+
+  try {
+    con = await oracledb.getConnection({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
+    });
+
+    await con.execute(
+      `BEGIN 
+         update_employee(
+           :employeeNo,
+           :employeeFName,
+           :employeeLName,
+           :employeeEmail,
+           :employeeContact
+         );
+       END;`,
+      {
+        employeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: employeeNo },
+        employeeFName: { type: oracledb.STRING, dir: oracledb.BIND_IN, val: employeeDetails.EMPLOYEEFNAME },
+        employeeLName: { type: oracledb.STRING, dir: oracledb.BIND_IN, val: employeeDetails.EMPLOYEELNAME },
+        employeeEmail: { type: oracledb.STRING, dir: oracledb.BIND_IN, val: employeeDetails.EMPLOYEEEMAIL },
+        employeeContact: { type: oracledb.STRING, dir: oracledb.BIND_IN, val: employeeDetails.EMPLOYEECONTACT }
+      }
+    );
+
+    await con.commit();
+    console.log('Employee updated successfully');
+  } catch (err) {
+    console.error('Error updating employee:', err);
+    throw err;
+  } finally {
+    if (con) {
+      try {
+        await con.close();
+      } catch (err) {
+        console.error('Error closing connection:', err);
+      }
+    }
+  }
+}
 
 
-module.exports = { getEmployees };
+
+module.exports = { getEmployees, deleteEmployee, updateEmployee };
