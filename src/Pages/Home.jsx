@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography, CardHeader } from '@mui/material';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Sidebar from "./Sidebar";
 import './Home.css';
 
