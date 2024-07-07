@@ -13,7 +13,7 @@ CREATE OR REPLACE PROCEDURE new_employee(
     out_newEmployeeNo OUT employee.employeeNo%type
 ) IS
 BEGIN
-    INSERT INTO Employee(employeeFName, employeeLName, employeeEmail, employeeContact)
+    INSERT INTO employee(employeeFName, employeeLName, employeeEmail, employeeContact)
     VALUES(in_employeeFName, in_employeeLName, in_employeeEmail, in_employeeContact)
     RETURNING employeeNo INTO out_newEmployeeNo;
 END;
@@ -28,7 +28,7 @@ CREATE OR REPLACE PROCEDURE new_client(
     out_newclientNo OUT client.clientNo%type
 ) IS
 BEGIN
-    INSERT INTO Client(clientName, clientEmail, clientContact)
+    INSERT INTO client(clientName, clientEmail, clientContact)
     VALUES (in_clientName, in_clientEmail, in_clientContact)
     RETURNING clientNo INTO out_newclientNo;
 END;
@@ -38,21 +38,21 @@ END;
 --create a new delegate
 
 CREATE OR REPLACE PROCEDURE new_delegate(
-    in_delegateTitle IN Delegate.delegateTitle%type,
-    in_delegateFName IN Delegate.delegateFName%type,
-    in_delegateLName IN Delegate.delegateLName%type,
-    in_delegateStreet IN Delegate.delegateStreet%type,
-    in_delegateCity IN Delegate.delegateCity%type,
-    in_delegateState IN Delegate.delegateState%type,
-    in_delegateZipCode IN Delegate.delegateZipCode%type,
-    in_attTelNo IN Delegate.attTelNo%type,
-    in_attFaxNo IN Delegate.attFaxNo%type,
-    in_attEmailAddress IN Delegate.attEmailAddress%type,
+    in_delegateTitle IN delegate.delegateTitle%type,
+    in_delegateFName IN delegate.delegateFName%type,
+    in_delegateLName IN delegate.delegateLName%type,
+    in_delegateStreet IN delegate.delegateStreet%type,
+    in_delegateCity IN delegate.delegateCity%type,
+    in_delegateState IN delegate.delegateState%type,
+    in_delegateZipCode IN delegate.delegateZipCode%type,
+    in_attTelNo IN delegate.attTelNo%type,
+    in_attFaxNo IN delegate.attFaxNo%type,
+    in_attEmailAddress IN delegate.attEmailAddress%type,
     in_clientNo IN client.clientNo%type,
-    out_newdelegateNo OUT Delegate.delegateNo%type
+    out_newdelegateNo OUT delegate.delegateNo%type
 ) IS
 BEGIN
-    INSERT INTO Delegate(
+    INSERT INTO delegate(
         delegateTitle,
         delegateFName,
         delegateLName,
@@ -82,44 +82,18 @@ END;
 /
 
 
-
--- create a new registration
-create or replace procedure register_delegate(
-    in_registraionDate in Registration.registrationDate%type,
-    in_delegateNo in Delegate.delegateNo%type,
-    in_courseFeeNo in CourseFee.courseFeeNo%type,
-    in_registerEmployeeNo in Registration.registerEmployeeNo%type,
-    in_courseNo in Course.courseNo%type
-) is 
-begin
-    insert into Registration(
-        registrationDate,
-        delegateNo, 
-        courseFeeNo, 
-        registerEmployeeNo, 
-        courseNo)
-    values(
-        in_registraionDate, 
-        in_delegateNo, 
-        in_courseFeeNo, 
-        in_registerEmployeeNo, 
-        in_courseNo
-    );
-end;
-/
-
 -- create an invoice for registration
 create or replace procedure create_invoice(
-    in_dateRaised in Invoice.dateRaised%type,
-    in_datePaid in Invoice.datePaid%type,
-    in_creditCardNo in Invoice.creditCardNo%type,
-    in_holdersName in Invoice.holdersName%type,
-    in_expiryDate in Invoice.expiryDate%type,
-    in_registrationNo in Invoice.registrationNo%type,
-    in_pMethodNo in Invoice.pMethodNo%type
+    in_dateRaised in invoice.dateRaised%type,
+    in_datePaid in invoice.datePaid%type,
+    in_creditCardNo in invoice.creditCardNo%type,
+    in_holdersName in invoice.holdersName%type,
+    in_expiryDate in invoice.expiryDate%type,
+    in_registrationNo in invoice.registrationNo%type,
+    in_pMethodNo in invoice.pMethodNo%type
 ) is 
 begin
-    insert into Invoice(
+    insert into invoice(
         dateRaised,
         datePaid,
         creditCardNo,
@@ -137,6 +111,171 @@ begin
         in_pMethodNo
     );
 end;
+/
+
+-- creating a new course type
+CREATE OR REPLACE PROCEDURE new_course_type(
+    in_courseTypeDescription IN CourseType.courseTypeDescription%type,
+    out_newCourseTypeNo OUT CourseType.courseTypeNo%type
+) IS
+BEGIN
+    INSERT INTO coursetype (
+        courseTypeDescription
+    ) VALUES (
+        in_courseTypeDescription
+    )
+    RETURNING courseTypeNo INTO out_newCourseTypeNo;
+END;
+/
+
+--creating a new course
+CREATE OR REPLACE PROCEDURE new_course(
+    in_courseName IN course.courseName%TYPE,
+    in_courseDescription IN Course.courseDescription%TYPE,
+    in_startDate IN course.startDate%TYPE,
+    in_startTime IN Course.startTime%TYPE,
+    in_endDate IN Course.endDate%TYPE,
+    in_endTime IN Course.endTime%TYPE,
+    in_maxDelegates IN Course.maxDelegates%TYPE,
+    in_confirmed IN Course.confirmed%TYPE,
+    in_delivererEmployeeNo IN Course.delivererEmployeeNo%TYPE,
+    in_courseTypeNo IN Course.courseTypeNo%TYPE,
+    out_newCourseNo OUT Course.courseNo%TYPE
+) IS
+BEGIN
+    INSERT INTO course (
+        courseName,
+        courseDescription,
+        startDate,
+        startTime,
+        endDate,
+        endTime,
+        maxDelegates,
+        confirmed,
+        delivererEmployeeNo,
+        courseTypeNo
+    ) VALUES (
+        in_courseName,
+        in_courseDescription,
+        in_startDate,
+        in_startTime,
+        in_endDate,
+        in_endTime,
+        in_maxDelegates,
+        in_confirmed,
+        in_delivererEmployeeNo,
+        in_courseTypeNo
+    )
+    RETURNING courseNo INTO out_newCourseNo;
+END;
+/
+
+-- creating a course fee
+CREATE OR REPLACE PROCEDURE new_course_fee(
+    in_feeDescription IN CourseFee.feeDescription%TYPE,
+    in_fee IN CourseFee.fee%TYPE,
+    in_courseNo IN CourseFee.courseNo%TYPE,
+    out_newCourseFeeNo OUT CourseFee.courseFeeNo%TYPE
+) IS
+BEGIN
+    INSERT INTO CourseFee (
+        feeDescription,
+        fee,
+        courseNo
+    ) VALUES (
+        in_feeDescription,
+        in_fee,
+        in_courseNo
+    )
+    RETURNING courseFeeNo INTO out_newCourseFeeNo;
+END;
+/
+
+-- creating a payment method
+CREATE OR REPLACE PROCEDURE new_payment_method(
+    in_pMethodName IN PaymentMethod.pMethodName%TYPE,
+    out_newPMethodNo OUT PaymentMethod.pMethodNo%TYPE
+) IS
+BEGIN
+    INSERT INTO PaymentMethod (
+        pMethodName
+    ) VALUES (
+        in_pMethodName
+    )
+    RETURNING pMethodNo INTO out_newPMethodNo;
+END;
+/
+
+--creating a new location
+CREATE OR REPLACE PROCEDURE new_location(
+    in_locationName IN Location.locationName%TYPE,
+    in_locationMaxSize IN Location.locationMaxSize%TYPE,
+    out_newLocationNo OUT Location.locationNo%TYPE
+) IS
+BEGIN
+    INSERT INTO Location (
+        locationName,
+        locationMaxSize
+    ) VALUES (
+        in_locationName,
+        in_locationMaxSize
+    )
+    RETURNING locationNo INTO out_newLocationNo;
+END;
+/
+
+--creating new registration
+CREATE OR REPLACE PROCEDURE new_registration(
+    in_delegateNo IN Registration.delegateNo%TYPE,
+    in_courseFeeNo IN Registration.courseFeeNo%TYPE,
+    in_registerEmployeeNo IN Registration.registerEmployeeNo%TYPE,
+    in_courseNo IN Registration.courseNo%TYPE,
+    out_newRegistrationNo OUT Registration.registrationNo%TYPE
+) IS
+BEGIN
+    INSERT INTO Registration (
+        delegateNo,
+        courseFeeNo,
+        registerEmployeeNo,
+        courseNo
+    ) VALUES (
+        in_delegateNo,
+        in_courseFeeNo,
+        in_registerEmployeeNo,
+        in_courseNo
+    )
+    RETURNING registrationNo INTO out_newRegistrationNo;
+END;
+/
+
+--creating a new invoice
+CREATE OR REPLACE PROCEDURE new_invoice(
+    in_datePaid IN Invoice.datePaid%TYPE,
+    in_creditCardNo IN Invoice.creditCardNo%TYPE,
+    in_holdersName IN Invoice.holdersName%TYPE,
+    in_expiryDate IN Invoice.expiryDate%TYPE,
+    in_registrationNo IN Invoice.registrationNo%TYPE,
+    in_pMethodNo IN Invoice.pMethodNo%TYPE,
+    out_newInvoiceNo OUT Invoice.invoiceNo%TYPE
+) IS
+BEGIN
+    INSERT INTO Invoice (
+        datePaid,
+        creditCardNo,
+        holdersName,
+        expiryDate,
+        registrationNo,
+        pMethodNo
+    ) VALUES (
+        in_datePaid,
+        in_creditCardNo,
+        in_holdersName,
+        in_expiryDate,
+        in_registrationNo,
+        in_pMethodNo
+    )
+    RETURNING invoiceNo INTO out_newInvoiceNo;
+END;
 /
 
 --book a location for a registration
@@ -162,6 +301,10 @@ BEGIN
     RETURNING bookingNo INTO out_newBookingNo;
 END;
 /
+
+
+
+
 
 
 -- RETRIVE RECORDS
