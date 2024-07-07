@@ -54,7 +54,7 @@ export default function Home() {
                         </CardContent>
                       </Card>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={12}>
                       <Card className="animated-card gradient-card">
                         <CardHeader title="Progress Chart" style={{ color: "#fff" }} />
                         <CardContent>
@@ -66,23 +66,6 @@ export default function Home() {
                               <YAxis tick={{ fill: "#fff" }} />
                               <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} labelStyle={{ color: '#fff' }} itemStyle={{ color: '#fff' }} />
                             </LineChart>
-                          </ResponsiveContainer>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Card className="animated-card gradient-card">
-                        <CardHeader title="Bar Chart" style={{ color: "#fff" }} />
-                        <CardContent>
-                          <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={data}>
-                              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                              <XAxis dataKey="name" tick={{ fill: "#fff" }} />
-                              <YAxis tick={{ fill: "#fff" }} />
-                              <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} labelStyle={{ color: '#fff' }} itemStyle={{ color: '#fff' }} />
-                              <Bar dataKey="pv" fill="#8884d8" />
-                              <Bar dataKey="uv" fill="#82ca9d" />
-                            </BarChart>
                           </ResponsiveContainer>
                         </CardContent>
                       </Card>

@@ -31,8 +31,7 @@ const { addCourseFee } = require('./src/components/addcoursefee');
 const { addPaymentMethod } = require('./src/components/addpayment');
 const { addLocation } = require('./src/components/addlocation');
 const { addRegistration } = require('./src/components/addregistration');
-
-
+const { addInvoice } = require('./src/components/addinvoice');
 const { addBooking } = require('./src/components/addbooking');
 
 
@@ -231,6 +230,14 @@ app.post('/api/registrations', async (req, res) => {
   }
 });
 
+app.post('/api/invoices', async (req, res) => {
+  try {
+    await addInvoice(req.body);
+    res.status(201).json({ message: 'Invoice added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.post('/api/bookings', async (req, res) => {
   try {
