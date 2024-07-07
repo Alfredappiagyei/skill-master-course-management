@@ -6,9 +6,8 @@ async function addRegistration(registration) {
   let con;
 
   // Validate input
-  if (!registration.registrationDate || !registration.delegateNo || !registration.courseFeeNo || !registration.registerEmployeeNo || !registration.courseNo) {
+  if (!registration.delegateNo || !registration.courseFeeNo || !registration.registerEmployeeNo || !registration.courseNo) {
     const missingFields = [];
-    if (!registration.registrationDate) missingFields.push('registrationDate');
     if (!registration.delegateNo) missingFields.push('delegateNo');
     if (!registration.courseFeeNo) missingFields.push('courseFeeNo');
     if (!registration.registerEmployeeNo) missingFields.push('registerEmployeeNo');
@@ -21,14 +20,14 @@ async function addRegistration(registration) {
 
   try {
     con = await oracledb.getConnection({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        connectString: process.env.DB_CONNECT_STRING
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
       `BEGIN 
-         new_registration(:registrationDate, :delegateNo, :courseFeeNo, :registerEmployeeNo, :courseNo, :newregistrationNo);
+         new_registration(TO_DATE(:registrationDate,'YYYY-MM-DD'), :delegateNo, :courseFeeNo, :registerEmployeeNo, :courseNo, :newRegistrationNo);
        END;`,
       {
         registrationDate: registration.registrationDate,
@@ -36,15 +35,15 @@ async function addRegistration(registration) {
         courseFeeNo: registration.courseFeeNo,
         registerEmployeeNo: registration.registerEmployeeNo,
         courseNo: registration.courseNo,
-        newregistrationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+        newRegistrationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
       },
       { autoCommit: true }
     );
 
-    const newregistrationNo = result.outBinds.newregistrationNo[0];
-    console.log(`Registration added successfully with ID: ${newregistrationNo}`);
+    const newRegistrationNo = result.outBinds.newRegistrationNo[0];
+    console.log(`Registration added successfully with ID: ${newRegistrationNo}`);
     
-    return newregistrationNo; // Return the generated registrationNo if needed
+    return newRegistrationNo; // Return the generated registrationNo if needed
   } catch (err) {
     console.error('Error inserting registration:', err);
     throw err;

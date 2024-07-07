@@ -27,18 +27,11 @@ async function addCourse(course) {
     throw new Error(errorMessage);
   }
 
-  // Ensure startDate and endDate are in 'YYYY-MM-DD' format
-  const startDate = new Date(course.startDate);
-  const formattedStartDate = `${startDate.getFullYear()}-${('0' + (startDate.getMonth() + 1)).slice(-2)}-${('0' + startDate.getDate()).slice(-2)}`;
-
-  const endDate = new Date(course.endDate);
-  const formattedEndDate = `${endDate.getFullYear()}-${('0' + (endDate.getMonth() + 1)).slice(-2)}-${('0' + endDate.getDate()).slice(-2)}`;
-
   try {
     con = await oracledb.getConnection({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      connectString: process.env.DB_CONNECT_STRING
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
@@ -47,9 +40,9 @@ async function addCourse(course) {
            :courseName,
            :courseDescription,
            TO_DATE(:startDate, 'YYYY-MM-DD'),
-           :startTime,
+           TO_DATE(:startTime, 'HH24:MI:SS'),
            TO_DATE(:endDate, 'YYYY-MM-DD'),
-           :endTime,
+           TO_DATE(:endTime, 'HH24:MI:SS'),
            :maxDelegates,
            :confirmed,
            :delivererEmployeeNo,
@@ -60,9 +53,9 @@ async function addCourse(course) {
       {
         courseName: course.courseName,
         courseDescription: course.courseDescription,
-        startDate: formattedStartDate,
+        startDate: course.startDate,
         startTime: course.startTime,
-        endDate: formattedEndDate,
+        endDate: course.endDate,
         endTime: course.endTime,
         maxDelegates: course.maxDelegates,
         confirmed: course.confirmed,

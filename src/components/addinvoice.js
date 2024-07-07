@@ -27,7 +27,7 @@ async function addInvoice(invoice) {
 
     const result = await con.execute(
       `BEGIN 
-         new_invoice(:dateRaised, :datePaid, :creditCardNo, :holdersName, :expiryDate, :registrationNo, :pMethodNo, :newInvoiceNo);
+         new_invoice(TO_DATE(:dateRaised, 'YYYY-MM-DD'), TO_DATE(:datePaid, 'YYYY-MM-DD'), :creditCardNo, :holdersName, TO_DATE(:expiryDate, 'YYYY-MM-DD'), :registrationNo, :pMethodNo, :newInvoiceNo);
        END;`,
       {
         dateRaised: invoice.dateRaised,

@@ -60,13 +60,13 @@ class RegistrationForm extends Component {
         </div>
 
         <div className='col-md-6' style={{ display: "flex", flexWrap: "wrap", alignItems: "center", textAlign: "center", gap: 10 }}>
-           <button className="button" style={{ width: "200px" }} onClick={this.handleSubmit}>
+           <button className="button" style={{ fontSize: "10px",width: "200px" }} onClick={this.handleSubmit}>
              Add New Registration
            </button>
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
              View Registrations
            </button>
-           <button className="button" style={{ width: "200px" }}>
+           <button className="button" style={{fontSize: "10px", width: "200px" }}>
              Update Registration
            </button>
          </div>

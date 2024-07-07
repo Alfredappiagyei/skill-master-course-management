@@ -225,58 +225,43 @@ END;
 /
 
 --creating new registration
-CREATE OR REPLACE PROCEDURE new_registration(
-    in_delegateNo IN Registration.delegateNo%TYPE,
-    in_courseFeeNo IN Registration.courseFeeNo%TYPE,
-    in_registerEmployeeNo IN Registration.registerEmployeeNo%TYPE,
-    in_courseNo IN Registration.courseNo%TYPE,
-    out_newRegistrationNo OUT Registration.registrationNo%TYPE
-) IS
+CREATE OR REPLACE PROCEDURE NEW_REGISTRATION(
+  in_registrationDate IN registration.registrationDate%type,
+  in_delegateNo IN registration.delegateNo%type,
+  in_courseFeeNo IN registration.courseFeeNo%type,
+  in_registerEmployeeNo IN registration.registerEmployeeNo%type,
+  in_courseNo IN registration.courseNo%type,
+  out_newRegistrationNo OUT Registration.registrationNo%TYPE
+
+) AS
 BEGIN
-    INSERT INTO Registration (
-        delegateNo,
-        courseFeeNo,
-        registerEmployeeNo,
-        courseNo
-    ) VALUES (
-        in_delegateNo,
-        in_courseFeeNo,
-        in_registerEmployeeNo,
-        in_courseNo
-    )
-    RETURNING registrationNo INTO out_newRegistrationNo;
+  INSERT INTO Registration (registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo)
+  VALUES (in_registrationDate, in_delegateNo, in_courseFeeNo, in_registerEmployeeNo, in_courseNo)
+  RETURNING registrationNo INTO out_newRegistrationNo;
 END;
 /
 
+
 --creating a new invoice
-CREATE OR REPLACE PROCEDURE new_invoice(
-    in_datePaid IN Invoice.datePaid%TYPE,
-    in_creditCardNo IN Invoice.creditCardNo%TYPE,
-    in_holdersName IN Invoice.holdersName%TYPE,
-    in_expiryDate IN Invoice.expiryDate%TYPE,
-    in_registrationNo IN Invoice.registrationNo%TYPE,
-    in_pMethodNo IN Invoice.pMethodNo%TYPE,
-    out_newInvoiceNo OUT Invoice.invoiceNo%TYPE
-) IS
+CREATE OR REPLACE PROCEDURE NEW_INVOICE (
+  in_dateRaised IN Invoice.dateRaised%type,
+  in_datePaid IN Invoice.datePaid%type,
+  in_creditCardNo IN Invoice.creditCardNo%type,
+  in_holdersName IN Invoice.holdersName%type,
+  in_expiryDate IN Invoice.expiryDate%type,
+  in_registrationNo IN Invoice.registrationNo%type,
+  in_pMethodNo IN Invoice.pMethodNo%type,
+  out_newInvoiceNo OUT Invoice.InvoiceNo%type
+) AS
 BEGIN
-    INSERT INTO Invoice (
-        datePaid,
-        creditCardNo,
-        holdersName,
-        expiryDate,
-        registrationNo,
-        pMethodNo
-    ) VALUES (
-        in_datePaid,
-        in_creditCardNo,
-        in_holdersName,
-        in_expiryDate,
-        in_registrationNo,
-        in_pMethodNo
-    )
-    RETURNING invoiceNo INTO out_newInvoiceNo;
+  INSERT INTO Invoice (
+    dateRaised, datePaid, creditCardNo, holdersName, expiryDate, registrationNo, pMethodNo
+  ) VALUES (
+    in_dateRaised, in_datePaid, in_creditCardNo, in_holdersName, in_expiryDate, in_registrationNo, in_pMethodNo
+  ) RETURNING invoiceNo INTO out_newInvoiceNo;
 END;
 /
+
 
 --book a location for a registration
 CREATE OR REPLACE PROCEDURE new_booking(
