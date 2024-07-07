@@ -25,6 +25,11 @@ const { getBookings } = require('./src/Tables/bookings');
 const { addEmployee } = require('./src/components/addemployee');
 const { addClient } = require('./src/components/addclient');
 const { addDelegate } = require('./src/components/adddelegate');
+const { addCourseType } = require('./src/components/addcoursetype');
+const { addCourse } = require('./src/components/addcourse');
+const { addCourseFee } = require('./src/components/addcoursefee');
+
+
 const { addBooking } = require('./src/components/addbooking');
 
 
@@ -164,6 +169,33 @@ app.post('/api/clients', async (req, res) => {
   try {
     await addClient(req.body);
     res.status(201).json({ message: 'Client added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/coursetypes', async (req, res) => {
+  try {
+    await addCourseType(req.body);
+    res.status(201).json({ message: 'Course Type added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/courses', async (req, res) => {
+  try {
+    await addCourse(req.body);
+    res.status(201).json({ message: 'Course  added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/coursefees', async (req, res) => {
+  try {
+    await addCourseFee(req.body);
+    res.status(201).json({ message: 'Course Fee added successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
