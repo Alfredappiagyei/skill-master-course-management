@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from './Modal';
-import LocationsTable from '../Tables/LocationsTable';
+import LocationTable from '../Tables/LocationTable';
 
 class LocationForm extends Component {
   constructor(props) {
@@ -66,7 +66,7 @@ class LocationForm extends Component {
          </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>
-          <LocationsTable />
+          <LocationTable />
         </Modal>
       </div>
     );

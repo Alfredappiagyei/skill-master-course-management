@@ -28,6 +28,9 @@ const { addDelegate } = require('./src/components/adddelegate');
 const { addCourseType } = require('./src/components/addcoursetype');
 const { addCourse } = require('./src/components/addcourse');
 const { addCourseFee } = require('./src/components/addcoursefee');
+const { addPaymentMethod } = require('./src/components/addpayment');
+const { addLocation } = require('./src/components/addlocation');
+const { addRegistration } = require('./src/components/addregistration');
 
 
 const { addBooking } = require('./src/components/addbooking');
@@ -200,6 +203,34 @@ app.post('/api/coursefees', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.post('/api/paymentmethods', async (req, res) => {
+  try {
+    await addPaymentMethod(req.body);
+    res.status(201).json({ message: 'Payment Method added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/locations', async (req, res) => {
+  try {
+    await addLocation(req.body);
+    res.status(201).json({ message: 'Location added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/registrations', async (req, res) => {
+  try {
+    await addRegistration(req.body);
+    res.status(201).json({ message: 'Registration added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.post('/api/bookings', async (req, res) => {
   try {

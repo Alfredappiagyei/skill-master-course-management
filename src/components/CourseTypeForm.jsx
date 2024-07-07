@@ -52,14 +52,14 @@ class CourseTypesForm extends Component {
         </div>
 
         <div className='col-md-6' style={{ display: "flex", flexWrap: "wrap", alignItems: "center", textAlign: "center", gap: 10 }}>
-           <button className="button" style={{ width: "200px" }} onClick={this.handleSubmit}>
-             Add New Client
+           <button className="button" style={{ fontSize: "10px",width: "200px" }} onClick={this.handleSubmit}>
+             Add New Course Type
            </button>
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
-             View Clients
+             View Course Types
            </button>
            <button className="button" style={{ width: "200px" }}>
-             Update Client
+             Update Course Type
            </button>
          </div>
 
