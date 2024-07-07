@@ -1,5 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+
+// debugging DB CON
+console.log(`DB_USER: ${process.env.DB_USER}`);
+console.log(`DB_PASSWORD: ${process.env.DB_PASSWORD}`);
+console.log(`DB_CONNECT_STRING: ${process.env.DB_CONNECT_STRING}`);
 
 //  RETRIEVING
 const { getEmployees } = require('./src/Tables/employees');
@@ -19,6 +25,8 @@ const { getBookings } = require('./src/Tables/bookings');
 const { addEmployee } = require('./src/components/addemployee');
 const { addClient } = require('./src/components/addclient');
 const { addDelegate } = require('./src/components/adddelegate');
+const { addBooking } = require('./src/components/addbooking');
+
 
 
 
@@ -156,6 +164,15 @@ app.post('/api/clients', async (req, res) => {
   try {
     await addClient(req.body);
     res.status(201).json({ message: 'Client added successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/bookings', async (req, res) => {
+  try {
+    await addBooking(req.body);
+    res.status(201).json({ message: 'Booking added successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

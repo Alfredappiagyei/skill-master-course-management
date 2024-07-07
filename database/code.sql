@@ -140,26 +140,29 @@ end;
 /
 
 --book a location for a registration
-create or replace procedure book_location(
-    in_bookingDate in Booking.bookingDate%type,
-    in_locationNo in Location.locationNo%type,
-    in_courseNo in Course.courseNo%type,
-    in_bookingEmployeeNo in Booking.bookingEmployeeNo%type
-) is 
-begin
-    insert into Booking(
+CREATE OR REPLACE PROCEDURE new_booking(
+    in_bookingDate IN Booking.bookingDate%type,
+    in_locationNo IN Booking.locationNo%type,
+    in_courseNo IN Booking.courseNo%type,
+    in_bookingEmployeeNo IN Booking.bookingEmployeeNo%type,
+    out_newBookingNo OUT Booking.bookingNo%type
+) IS
+BEGIN
+    INSERT INTO Booking(
         bookingDate,
         locationNo,
         courseNo,
-        bookingEmployeeNo)
-    values(
+        bookingEmployeeNo
+    ) VALUES (
         in_bookingDate,
         in_locationNo,
         in_courseNo,
         in_bookingEmployeeNo
-    );
-end;
+    )
+    RETURNING bookingNo INTO out_newBookingNo;
+END;
 /
+
 
 -- RETRIVE RECORDS
 -- front end with JS
