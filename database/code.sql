@@ -2,7 +2,7 @@
 -- TRIGGERS and PROCEDURES and CURSORS for INSERTING AND RETRIEVING INFORMATION
 -- from the database
 
-
+-- INSERTING RECORDS WITH STORED PROCEDURES
 --create a new employee
 
 CREATE OR REPLACE PROCEDURE new_employee(
@@ -79,38 +79,6 @@ BEGIN
     )
     RETURNING delegateNo INTO out_newdelegateNo;
 END;
-/
-
-
--- create an invoice for registration
-create or replace procedure create_invoice(
-    in_dateRaised in invoice.dateRaised%type,
-    in_datePaid in invoice.datePaid%type,
-    in_creditCardNo in invoice.creditCardNo%type,
-    in_holdersName in invoice.holdersName%type,
-    in_expiryDate in invoice.expiryDate%type,
-    in_registrationNo in invoice.registrationNo%type,
-    in_pMethodNo in invoice.pMethodNo%type
-) is 
-begin
-    insert into invoice(
-        dateRaised,
-        datePaid,
-        creditCardNo,
-        holdersName,
-        expiryDate,
-        registrationNo,
-        pMethodNo)
-    values(
-        in_dateRaised,
-        in_datePaid,
-        in_creditCardNo,
-        in_holdersName,
-        in_expiryDate,
-        in_registrationNo,
-        in_pMethodNo
-    );
-end;
 /
 
 -- creating a new course type
@@ -292,8 +260,7 @@ END;
 
 
 
--- RETRIVE RECORDS
--- front end with JS
+-- RETRIVE RECORDS with CURSORS
 
 -- RETRIEVING EMPLOYEE DETAILS
 CREATE OR REPLACE PROCEDURE get_employees_details (p_cursor OUT SYS_REFCURSOR) AS
@@ -391,6 +358,9 @@ BEGIN
   DELETE FROM Employee WHERE employeeNo = p_employeeNo;
 END;
 /
+
+
+
 
 -- updating records
 CREATE OR REPLACE PROCEDURE update_employee(
