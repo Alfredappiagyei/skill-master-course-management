@@ -353,13 +353,81 @@ END;
 --deleting records
 
 -- delete from employees
-CREATE OR REPLACE PROCEDURE delete_employee(p_employeeNo IN NUMBER) AS
+CREATE OR REPLACE PROCEDURE delete_employee(p_employeeNo IN employee.employee%type) AS
 BEGIN
   DELETE FROM Employee WHERE employeeNo = p_employeeNo;
 END;
 /
 
+-- delete from clients
+CREATE OR REPLACE PROCEDURE delete_client(p_clientNo IN client.clientNo%type) AS
+BEGIN
+  DELETE FROM client WHERE clientNo = p_clientNo;
+END;
+/
 
+-- delete from delegate
+CREATE OR REPLACE PROCEDURE delete_delegate(p_delegateNo IN delegate.delegateNo%type) AS
+BEGIN
+  DELETE FROM delegate WHERE delegateNo = p_delegateNo;
+END;
+/
+
+-- delete from course type
+CREATE OR REPLACE PROCEDURE delete_courseType(p_courseTypeNo IN coursetype.courseTypeNo%type) AS
+BEGIN
+  DELETE FROM coursetype WHERE courseTypeNo = p_courseTypeNo;
+END;
+/
+
+-- delete from course
+CREATE OR REPLACE PROCEDURE delete_course(p_courseNo IN course.courseNo%type) AS
+BEGIN
+  DELETE FROM course WHERE courseNo = p_courseNo;
+END;
+/
+
+-- delete from course fee
+CREATE OR REPLACE PROCEDURE delete_courseFee(p_courseFeeNo IN coursefee.courseFeeNo%type) AS
+BEGIN
+  DELETE FROM coursefee WHERE courseFeeNo = p_courseFeeNo;
+END;
+/
+
+-- delete from payment method
+CREATE OR REPLACE PROCEDURE delete_paymentMethod(p_paymentMethodNo IN paymentmethod.paymentMethodNo%type) AS
+BEGIN
+  DELETE FROM paymentmethod WHERE paymentMethodNo = p_paymentMethodNo;
+END;
+/
+
+-- delete from location 
+CREATE OR REPLACE PROCEDURE delete_location(p_locationNo IN location.locationNo%type) AS
+BEGIN
+  DELETE FROM location WHERE locationNo = p_locationNo;
+END;
+/
+
+-- delete from registration 
+CREATE OR REPLACE PROCEDURE delete_registration(p_registrationNo IN registration.registrationNo%type) AS
+BEGIN
+  DELETE FROM registration WHERE registrationNo = p_registrationNo;
+END;
+/
+
+-- delete from invoice 
+CREATE OR REPLACE PROCEDURE delete_invoice(p_invoiceNo IN invoice.invoiceNo%type) AS
+BEGIN
+  DELETE FROM invoice WHERE invoiceNo = p_invoiceNo;
+END;
+/
+
+-- delete from booking
+CREATE OR REPLACE PROCEDURE delete_booking(p_bookingNo IN booking.bookingNo%type) AS
+BEGIN
+  DELETE FROM booking WHERE bookingNo = p_bookingNo;
+END;
+/
 
 
 -- updating records

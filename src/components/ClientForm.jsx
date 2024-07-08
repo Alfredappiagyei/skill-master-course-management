@@ -63,9 +63,6 @@ class ClientForm extends Component {
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
              View Clients
            </button>
-           <button className="button" style={{ width: "200px" }}>
-             Update Client
-           </button>
          </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>

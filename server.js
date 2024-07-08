@@ -9,8 +9,8 @@ console.log(`DB_CONNECT_STRING: ${process.env.DB_CONNECT_STRING}`);
 
 //  RETRIEVING and DELETING
 const { getEmployees, deleteEmployee } = require('./src/Tables/employees');
-const { getClients } = require('./src/Tables/clients');
-const { getDelegates } = require('./src/Tables/delegates');
+const { getClients, deleteClient } = require('./src/Tables/clients');
+const { getDelegates, delete_delegate } = require('./src/Tables/delegates');
 const { getCourseTypes } = require('./src/Tables/coursetypes');
 const { getCourses } = require('./src/Tables/courses');
 const { getCoursefees } = require('./src/Tables/coursefees');
@@ -261,6 +261,28 @@ app.delete('/api/employees/:employeeNo', async (req, res) => {
   }
 });
 
+app.delete('/api/clients/:clientNo', async (req, res) => {
+  const clientNo = parseInt(req.params.clientNo, 10); // Convert to integer
+
+  try {
+    await deleteClient(clientNo);
+    res.status(200).send({ message: 'Client deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting client' });
+  }
+});
+
+app.delete('/api/delegates/:delegateNo', async (req, res) => {
+  const delegateNo = parseInt(req.params.delegateNo, 10); // Convert to integer
+
+  try {
+    await delete_delegate(delegateNo);
+    res.status(200).send({ message: 'Delegate deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting client' });
+  }
+});
+
 // UPDATING RECORDS
 
 app.put('/api/employees/:employeeNo', async (req, res) => {
@@ -272,6 +294,27 @@ app.put('/api/employees/:employeeNo', async (req, res) => {
     res.status(200).send({ message: 'Employee updated successfully' });
   } catch (error) {
     res.status(500).send({ error: 'Error updating employee' });
+  }
+});
+
+app.put('/api/clients/:clientNo', async (req, res) => {
+  const { clientNo } = req.params;
+  const { CLIENTNAME, CLIENTEMAIL, CLIENTCONTACT } = req.body;
+
+  try {
+    const updatedClient = await updatedClient(clientNo, CLIENTNAME, CLIENTEMAIL, CLIENTCONTACT);
+    res.json(updatedClient);
+  } catch (err) {
+    res.status(500).send('Error updating client');
+  }
+});
+
+app.put('/api/delegates/:delegateNo', async (req, res) => {
+  try {
+    const updatedDelegate = await updatedDelegate(req.params.id, req.body);
+    res.json(updatedDelegate);
+  } catch (err) {
+    res.status(500).send('Error updating delegate');
   }
 });
 
