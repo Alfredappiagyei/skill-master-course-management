@@ -73,8 +73,8 @@ async function addDelegate(delegate) {
     console.log(`Delegate added successfully with ID: ${newdelegateNo}`);
     
     return newdelegateNo; // Return the generated delegateNo if needed
-  } catch (err) {
-    console.error('Error inserting delegate:', err);
+  } catch (TypeError) {
+    console.error('Error inserting delegate:', 'CLIENT NUMBER DOES NOT EXIST');
     throw err;
   } finally {
     if (con) {
