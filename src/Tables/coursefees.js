@@ -45,6 +45,40 @@ async function getCoursefees() {
   }
 }
 
+async function deleteCourseFee(courseFeeNo) {
+  let con;
+
+  try {
+    con = await oracledb.getConnection({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
+    });
+
+    await con.execute(
+      `BEGIN 
+         delete_courseFee(:courseFeeNo);
+       END;`,
+      {
+        courseFeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: courseFeeNo },
+        
+      },
+      { autoCommit: true }
+    );
+  } catch (err) {
+    console.error('Error deleting course fee:', err);
+    throw err;
+  } finally {
+    if (con) {
+      try {
+        await con.close();
+      } catch (err) {
+        console.error('Error closing connection:', err);
+      }
+    }
+  }
+}
 
 
-module.exports = { getCoursefees };
+
+module.exports = { getCoursefees, deleteCourseFee };

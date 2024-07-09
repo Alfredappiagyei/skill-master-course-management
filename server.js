@@ -10,11 +10,11 @@ console.log(`DB_CONNECT_STRING: ${process.env.DB_CONNECT_STRING}`);
 //  RETRIEVING and DELETING
 const { getEmployees, deleteEmployee } = require('./src/Tables/employees');
 const { getClients, deleteClient } = require('./src/Tables/clients');
-const { getDelegates, delete_delegate } = require('./src/Tables/delegates');
-const { getCourseTypes } = require('./src/Tables/coursetypes');
-const { getCourses } = require('./src/Tables/courses');
-const { getCoursefees } = require('./src/Tables/coursefees');
-const { getPayments } = require('./src/Tables/payments');
+const { getDelegates, deleteDelegate } = require('./src/Tables/delegates');
+const { getCourseTypes, deleteCourseType } = require('./src/Tables/coursetypes');
+const { getCourses, deleteCourse } = require('./src/Tables/courses');
+const { getCoursefees, deleteCourseFee } = require('./src/Tables/coursefees');
+const { getPayments, deletePayment } = require('./src/Tables/payments');
 const { getLocations } = require('./src/Tables/locations');
 const { getRegistrations } = require('./src/Tables/registrations');
 const { getInvoices } = require('./src/Tables/invoices');
@@ -276,10 +276,54 @@ app.delete('/api/delegates/:delegateNo', async (req, res) => {
   const delegateNo = parseInt(req.params.delegateNo, 10); // Convert to integer
 
   try {
-    await delete_delegate(delegateNo);
+    await deleteDelegate(delegateNo);
     res.status(200).send({ message: 'Delegate deleted successfully' });
   } catch (error) {
     res.status(500).send({ error: 'Error deleting client' });
+  }
+});
+
+app.delete('/api/coursetypes/:courseTypeNo', async (req, res) => {
+  const courseTypeNo = parseInt(req.params.courseTypeNo, 10); // Convert to integer
+
+  try {
+    await deleteCourseType(courseTypeNo);
+    res.status(200).send({ message: 'Course type deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting course type' });
+  }
+});
+
+app.delete('/api/courses/:courseNo', async (req, res) => {
+  const courseNo = parseInt(req.params.courseNo, 10); // Convert to integer
+
+  try {
+    await deleteCourse(courseNo);
+    res.status(200).send({ message: 'Course deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting course' });
+  }
+});
+
+app.delete('/api/coursefees/:courseFeeNo', async (req, res) => {
+  const courseFeeNo = parseInt(req.params.courseFeeNo, 10); // Convert to integer
+
+  try {
+    await deleteCourseFee(courseFeeNo);
+    res.status(200).send({ message: 'Course fee deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting course fee' });
+  }
+});
+
+app.delete('/api/payments/:pMethodNo', async (req, res) => {
+  const pMethodNo = parseInt(req.params.pMethodNo, 10);
+
+  try {
+    await deletePayment(pMethodNo);
+    res.status(200).send({ message: 'Payment method deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting payment method' });
   }
 });
 
@@ -317,6 +361,8 @@ app.put('/api/delegates/:delegateNo', async (req, res) => {
     res.status(500).send('Error updating delegate');
   }
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

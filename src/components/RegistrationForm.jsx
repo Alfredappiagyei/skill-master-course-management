@@ -66,9 +66,7 @@ class RegistrationForm extends Component {
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
              View Registrations
            </button>
-           <button className="button" style={{fontSize: "10px", width: "200px" }}>
-             Update Registration
-           </button>
+       
          </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>

@@ -70,9 +70,6 @@ class BookingForm extends Component {
           <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
             View Bookings
           </button>
-          <button className="button" style={{ width: "200px" }}>
-            Update Booking
-          </button>
         </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>

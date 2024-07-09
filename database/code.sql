@@ -395,9 +395,9 @@ END;
 /
 
 -- delete from payment method
-CREATE OR REPLACE PROCEDURE delete_paymentMethod(p_paymentMethodNo IN paymentmethod.paymentMethodNo%type) AS
+CREATE OR REPLACE PROCEDURE delete_paymentMethod(p_paymentMethodNo IN paymentmethod.pMethodNo%type) AS
 BEGIN
-  DELETE FROM paymentmethod WHERE paymentMethodNo = p_paymentMethodNo;
+  DELETE FROM paymentmethod WHERE pMethodNo = p_paymentMethodNo;
 END;
 /
 

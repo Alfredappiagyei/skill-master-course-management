@@ -58,9 +58,7 @@ class PaymentForm extends Component {
            <button className="button" style={{ fontSize: "10px",width: "200px" }} onClick={this.toggleModal}>
              View Payment Methods
            </button>
-           <button className="button" style={{ fontSize: "10px",width: "200px" }}>
-             Update Payment Method
-           </button>
+         
          </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>

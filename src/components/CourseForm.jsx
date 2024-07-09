@@ -109,9 +109,7 @@ class CourseForm extends Component {
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
              View Courses
            </button>
-           <button className="button" style={{ width: "200px" }}>
-             Update Course
-           </button>
+       
          </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>

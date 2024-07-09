@@ -45,7 +45,7 @@ async function getDelegates() {
   }
 }
 
-async function delete_delegate(delegateNo) {
+async function deleteDelegate(delegateNo) {
   let con;
 
   try {
@@ -137,4 +137,4 @@ async function updateDelegate(id, data) {
   }
 }
 
-module.exports = { getDelegates, delete_delegate, updateDelegate };
+module.exports = { getDelegates, deleteDelegate, updateDelegate };

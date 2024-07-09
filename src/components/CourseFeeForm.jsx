@@ -62,9 +62,7 @@ class CourseFeeForm extends Component {
            <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
              View Course Fees
            </button>
-           <button className="button" style={{ width: "200px" }}>
-             Update Course Fee
-           </button>
+         
          </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>

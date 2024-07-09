@@ -45,6 +45,40 @@ async function getCourses() {
   }
 }
 
+async function deleteCourse(courseNo) {
+  let con;
+
+  try {
+    con = await oracledb.getConnection({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
+    });
+
+    await con.execute(
+      `BEGIN 
+         delete_course(:courseNo);
+       END;`,
+      {
+        courseNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: courseNo },
+        
+      },
+      { autoCommit: true }
+    );
+  } catch (err) {
+    console.error('Error deleting course:', err);
+    throw err;
+  } finally {
+    if (con) {
+      try {
+        await con.close();
+      } catch (err) {
+        console.error('Error closing connection:', err);
+      }
+    }
+  }
+}
 
 
-module.exports = { getCourses };
+
+module.exports = { getCourses, deleteCourse };

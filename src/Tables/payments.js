@@ -45,6 +45,37 @@ async function getPayments() {
   }
 }
 
+async function deletePayment(pMethodNo) {
+  let con;
 
+  try {
+    con = await oracledb.getConnection({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
+    });
 
-module.exports = { getPayments };
+    await con.execute(
+      `BEGIN 
+         delete_paymentMethod(:pMethodNo);
+       END;`,
+      {
+        pMethodNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: pMethodNo }
+      },
+      { autoCommit: true }
+    );
+  } catch (err) {
+    console.error('Error deleting payment method:', err);
+    throw err;
+  } finally {
+    if (con) {
+      try {
+        await con.close();
+      } catch (err) {
+        console.error('Error closing connection:', err);
+      }
+    }
+  }
+}
+
+module.exports = { getPayments, deletePayment };
