@@ -33,17 +33,17 @@ async function addCourseFee(courseFee) {
            :feeDescription,
            :fee,
            :courseNo,
-           :newCourseFeeNo
+           :newCourseFeeNo,
+           :out_error_message
          );
        END;`,
       {
         feeDescription: courseFee.feeDescription,
         fee: courseFee.fee,
         courseNo: courseFee.courseNo,
-        newCourseFeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
-    );
+        newCourseFeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+      }    );
 
     const newCourseFeeNo = result.outBinds.newCourseFeeNo[0];
     console.log(`Course fee added successfully with ID: ${newCourseFeeNo}`);

@@ -29,15 +29,15 @@ async function addPaymentMethod(paymentMethod) {
       `BEGIN 
          new_payment_method(
            :pMethodName,
-           :newPMethodNo
+           :newPMethodNo,
+           :out_error_message
          );
        END;`,
       {
         pMethodName: paymentMethod.pMethodName,
-        newPMethodNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
-    );
+        newPMethodNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+      }    );
 
     const newPMethodNo = result.outBinds.newPMethodNo[0];
     console.log(`Payment method added successfully with ID: ${newPMethodNo}`);

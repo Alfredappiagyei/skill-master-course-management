@@ -28,16 +28,18 @@ async function addLocation(location) {
 
     const result = await con.execute(
       `BEGIN 
-         new_location(
+         NEW_LOCATION(
            :locationName,
            :locationMaxSize,
-           :newLocationNo
+           :newLocationNo,
+           :out_error_message
          );
        END;`,
       {
         locationName: location.locationName,
         locationMaxSize: location.locationMaxSize,
-        newLocationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+        newLocationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
       },
       { autoCommit: true }
     );

@@ -20,28 +20,28 @@ async function addCourseType(courseType) {
 
   try {
     con = await oracledb.getConnection({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        connectString: process.env.DB_CONNECT_STRING
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
       `BEGIN 
          new_course_type(
-           :courseTypeDescription,
-           :newCourseTypeNo
+           :in_courseTypeDescription,
+           :out_newCourseTypeNo,
+           :out_error_message
          );
        END;`,
       {
-        courseTypeDescription: courseType.courseTypeDescription,
-        newCourseTypeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
-    );
+        in_courseTypeDescription: courseType.courseTypeDescription,
+        out_newCourseTypeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+      });
 
-    const newCourseTypeNo = result.outBinds.newCourseTypeNo[0];
+    const newCourseTypeNo = result.outBinds.out_newCourseTypeNo[0];
     console.log(`Course type added successfully with ID: ${newCourseTypeNo}`);
-    
+
     return newCourseTypeNo; // Return the generated courseTypeNo if needed
   } catch (err) {
     console.error('Error inserting course type:', err);

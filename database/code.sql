@@ -6,18 +6,55 @@
 --create a new employee
 
 CREATE OR REPLACE PROCEDURE new_employee(
-    in_employeeFName in employee.employeeFName%type,
-    in_employeeLName in employee.employeeLName%type,
-    in_employeeEmail in employee.employeeEmail%type,
-    in_employeeContact in employee.employeeContact%type,
-    out_newEmployeeNo OUT employee.employeeNo%type
+    in_employeeFName IN Employee.employeeFName%TYPE,
+    in_employeeLName IN Employee.employeeLName%TYPE,
+    in_employeeEmail IN Employee.employeeEmail%TYPE,
+    in_employeeContact IN Employee.employeeContact%TYPE,
+    out_newEmployeeNo OUT Employee.employeeNo%TYPE,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO employee(employeeFName, employeeLName, employeeEmail, employeeContact)
-    VALUES(in_employeeFName, in_employeeLName, in_employeeEmail, in_employeeContact)
-    RETURNING employeeNo INTO out_newEmployeeNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_employeeFName IS NULL OR in_employeeLName IS NULL OR in_employeeEmail IS NULL OR in_employeeContact IS NULL THEN
+        out_error_message := 'Missing required fields.';
+        RETURN;
+    END IF;
+
+    -- Validate email format
+    IF NOT REGEXP_LIKE(in_employeeEmail, '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$') THEN
+        out_error_message := 'Invalid email format.';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new employee
+        INSERT INTO Employee(employeeFName, employeeLName, employeeEmail, employeeContact)
+        VALUES(in_employeeFName, in_employeeLName, in_employeeEmail, in_employeeContact)
+        RETURNING employeeNo INTO out_newEmployeeNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate employee email. Employee already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
+
 
 
 --create a new client
@@ -25,14 +62,50 @@ CREATE OR REPLACE PROCEDURE new_client(
     in_clientName IN client.clientName%type,
     in_clientEmail IN client.clientEmail%type,
     in_clientContact IN client.clientContact%type,
-    out_newclientNo OUT client.clientNo%type
+    out_newclientNo OUT client.clientNo%type,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO client(clientName, clientEmail, clientContact)
-    VALUES (in_clientName, in_clientEmail, in_clientContact)
-    RETURNING clientNo INTO out_newclientNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_clientName IS NULL OR in_clientEmail IS NULL OR in_clientContact IS NULL THEN
+        out_error_message := 'Missing required fields.';
+        RETURN;
+    END IF;
+
+    -- Validate email format
+    IF NOT REGEXP_LIKE(in_clientEmail, '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$') THEN
+        out_error_message := 'Invalid email format.';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new client
+        INSERT INTO client(clientName, clientEmail, clientContact)
+        VALUES (in_clientName, in_clientEmail, in_clientContact)
+        RETURNING clientNo INTO out_newclientNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate client email. Client already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
 
 
 --create a new delegate
@@ -49,52 +122,130 @@ CREATE OR REPLACE PROCEDURE new_delegate(
     in_attFaxNo IN delegate.attFaxNo%type,
     in_attEmailAddress IN delegate.attEmailAddress%type,
     in_clientNo IN client.clientNo%type,
-    out_newdelegateNo OUT delegate.delegateNo%type
+    out_newdelegateNo OUT delegate.delegateNo%type,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO delegate(
-        delegateTitle,
-        delegateFName,
-        delegateLName,
-        delegateStreet,
-        delegateCity,
-        delegateState,
-        delegateZipCode,
-        attTelNo,
-        attFaxNo,
-        attEmailAddress,
-        clientNo)
-    VALUES(
-        in_delegateTitle,
-        in_delegateFName,
-        in_delegateLName,
-        in_delegateStreet,
-        in_delegateCity,
-        in_delegateState,
-        in_delegateZipCode,
-        in_attTelNo,
-        in_attFaxNo,
-        in_attEmailAddress,
-        in_clientNo
-    )
-    RETURNING delegateNo INTO out_newdelegateNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_delegateTitle IS NULL OR
+       in_delegateFName IS NULL OR
+       in_delegateLName IS NULL OR
+       in_delegateStreet IS NULL OR
+       in_delegateCity IS NULL OR
+       in_delegateState IS NULL OR
+       in_delegateZipCode IS NULL OR
+       in_attTelNo IS NULL OR
+       in_attFaxNo IS NULL OR
+       in_attEmailAddress IS NULL OR
+       in_clientNo IS NULL THEN
+       
+        out_error_message := 'Missing required fields.';
+        RETURN;
+    END IF;
+
+    -- Validate email format (you can add more validations here as needed)
+    IF NOT REGEXP_LIKE(in_attEmailAddress, '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$') THEN
+        out_error_message := 'Invalid email format.';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new delegate
+        INSERT INTO delegate(
+            delegateTitle,
+            delegateFName,
+            delegateLName,
+            delegateStreet,
+            delegateCity,
+            delegateState,
+            delegateZipCode,
+            attTelNo,
+            attFaxNo,
+            attEmailAddress,
+            clientNo
+        )
+        VALUES (
+            in_delegateTitle,
+            in_delegateFName,
+            in_delegateLName,
+            in_delegateStreet,
+            in_delegateCity,
+            in_delegateState,
+            in_delegateZipCode,
+            in_attTelNo,
+            in_attFaxNo,
+            in_attEmailAddress,
+            in_clientNo
+        )
+        RETURNING delegateNo INTO out_newdelegateNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate delegate details. Delegate already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
 
 -- creating a new course type
 CREATE OR REPLACE PROCEDURE new_course_type(
     in_courseTypeDescription IN CourseType.courseTypeDescription%type,
-    out_newCourseTypeNo OUT CourseType.courseTypeNo%type
+    out_newCourseTypeNo OUT CourseType.courseTypeNo%type,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO coursetype (
-        courseTypeDescription
-    ) VALUES (
-        in_courseTypeDescription
-    )
-    RETURNING courseTypeNo INTO out_newCourseTypeNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_courseTypeDescription IS NULL THEN
+        out_error_message := 'Missing required field: courseTypeDescription';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new course type
+        INSERT INTO coursetype (
+            courseTypeDescription
+        ) VALUES (
+            in_courseTypeDescription
+        )
+        RETURNING courseTypeNo INTO out_newCourseTypeNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate course type description. Course type already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
 
 --creating a new course
 CREATE OR REPLACE PROCEDURE new_course(
@@ -108,106 +259,278 @@ CREATE OR REPLACE PROCEDURE new_course(
     in_confirmed IN Course.confirmed%TYPE,
     in_delivererEmployeeNo IN Course.delivererEmployeeNo%TYPE,
     in_courseTypeNo IN Course.courseTypeNo%TYPE,
-    out_newCourseNo OUT Course.courseNo%TYPE
+    out_newCourseNo OUT Course.courseNo%TYPE,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO course (
-        courseName,
-        courseDescription,
-        startDate,
-        startTime,
-        endDate,
-        endTime,
-        maxDelegates,
-        confirmed,
-        delivererEmployeeNo,
-        courseTypeNo
-    ) VALUES (
-        in_courseName,
-        in_courseDescription,
-        in_startDate,
-        in_startTime,
-        in_endDate,
-        in_endTime,
-        in_maxDelegates,
-        in_confirmed,
-        in_delivererEmployeeNo,
-        in_courseTypeNo
-    )
-    RETURNING courseNo INTO out_newCourseNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_courseName IS NULL OR
+       in_courseDescription IS NULL OR
+       in_startDate IS NULL OR
+       in_startTime IS NULL OR
+       in_endDate IS NULL OR
+       in_endTime IS NULL OR
+       in_maxDelegates IS NULL OR
+       in_confirmed IS NULL OR
+       in_delivererEmployeeNo IS NULL OR
+       in_courseTypeNo IS NULL THEN
+       
+        out_error_message := 'Missing required fields.';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new course
+        INSERT INTO course (
+            courseName,
+            courseDescription,
+            startDate,
+            startTime,
+            endDate,
+            endTime,
+            maxDelegates,
+            confirmed,
+            delivererEmployeeNo,
+            courseTypeNo
+        ) VALUES (
+            in_courseName,
+            in_courseDescription,
+            in_startDate,
+            in_startTime,
+            in_endDate,
+            in_endTime,
+            in_maxDelegates,
+            in_confirmed,
+            in_delivererEmployeeNo,
+            in_courseTypeNo
+        )
+        RETURNING courseNo INTO out_newCourseNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate course name. Course already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
 
 -- creating a course fee
 CREATE OR REPLACE PROCEDURE new_course_fee(
     in_feeDescription IN CourseFee.feeDescription%TYPE,
     in_fee IN CourseFee.fee%TYPE,
     in_courseNo IN CourseFee.courseNo%TYPE,
-    out_newCourseFeeNo OUT CourseFee.courseFeeNo%TYPE
+    out_newCourseFeeNo OUT CourseFee.courseFeeNo%TYPE,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO CourseFee (
-        feeDescription,
-        fee,
-        courseNo
-    ) VALUES (
-        in_feeDescription,
-        in_fee,
-        in_courseNo
-    )
-    RETURNING courseFeeNo INTO out_newCourseFeeNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_feeDescription IS NULL OR
+       in_fee IS NULL OR
+       in_courseNo IS NULL THEN
+       
+        out_error_message := 'Missing required fields.';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new course fee
+        INSERT INTO CourseFee (
+            feeDescription,
+            fee,
+            courseNo
+        ) VALUES (
+            in_feeDescription,
+            in_fee,
+            in_courseNo
+        )
+        RETURNING courseFeeNo INTO out_newCourseFeeNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate course fee entry. Course fee already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
 
 -- creating a payment method
 CREATE OR REPLACE PROCEDURE new_payment_method(
     in_pMethodName IN PaymentMethod.pMethodName%TYPE,
-    out_newPMethodNo OUT PaymentMethod.pMethodNo%TYPE
+    out_newPMethodNo OUT PaymentMethod.pMethodNo%TYPE,
+    out_error_message OUT VARCHAR2
 ) IS
 BEGIN
-    INSERT INTO PaymentMethod (
-        pMethodName
-    ) VALUES (
-        in_pMethodName
-    )
-    RETURNING pMethodNo INTO out_newPMethodNo;
+    -- Initialize the error message to NULL
+    out_error_message := NULL;
+
+    -- Validate input
+    IF in_pMethodName IS NULL THEN
+        out_error_message := 'Missing required field: pMethodName';
+        RETURN;
+    END IF;
+
+    BEGIN
+        -- Insert new payment method
+        INSERT INTO PaymentMethod (
+            pMethodName
+        ) VALUES (
+            in_pMethodName
+        )
+        RETURNING pMethodNo INTO out_newPMethodNo;
+        COMMIT; -- Commit the transaction to make the insertion permanent
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            out_error_message := 'Duplicate payment method entry. Payment method already exists.';
+        WHEN OTHERS THEN
+            out_error_message := SQLERRM;
+    END;
+
+    -- Handle specific errors here if needed
+    IF out_error_message IS NOT NULL THEN
+        -- Log the error or handle it as per your application's requirements
+        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+        -- You can raise an application-specific exception or perform other actions
+        -- based on the error encountered.
+    END IF;
+
 END;
 /
+
 
 --creating a new location
-CREATE OR REPLACE PROCEDURE new_location(
-    in_locationName IN Location.locationName%TYPE,
-    in_locationMaxSize IN Location.locationMaxSize%TYPE,
-    out_newLocationNo OUT Location.locationNo%TYPE
-) IS
+CREATE OR REPLACE PROCEDURE NEW_LOCATION (
+  in_locationName IN Location.locationName%TYPE,
+  in_locationMaxSize IN Location.locationMaxSize%TYPE,
+  out_newLocationNo OUT Location.locationNo%TYPE,
+  out_error_message OUT VARCHAR2
+) AS
 BEGIN
+  -- Initialize the error message to NULL
+  out_error_message := NULL;
+
+  -- Validate input
+  IF in_locationName IS NULL OR in_locationMaxSize IS NULL THEN
+    out_error_message := 'Missing required fields: locationName, locationMaxSize';
+    RETURN;
+  END IF;
+
+  BEGIN
+    -- Insert new location
     INSERT INTO Location (
-        locationName,
-        locationMaxSize
+      locationName,
+      locationMaxSize
     ) VALUES (
-        in_locationName,
-        in_locationMaxSize
-    )
-    RETURNING locationNo INTO out_newLocationNo;
+      in_locationName,
+      in_locationMaxSize
+    ) RETURNING locationNo INTO out_newLocationNo;
+    COMMIT; -- Commit the transaction to make the insertion permanent
+
+  EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+      out_error_message := 'Duplicate location entry. Location already exists.';
+    WHEN OTHERS THEN
+      out_error_message := SQLERRM;
+  END;
+
+  -- Handle specific errors here if needed
+  IF out_error_message IS NOT NULL THEN
+    -- Log the error or handle it as per your application's requirements
+    DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+    -- You can raise an application-specific exception or perform other actions
+    -- based on the error encountered.
+  END IF;
+
 END;
 /
 
+
 --creating new registration
-CREATE OR REPLACE PROCEDURE NEW_REGISTRATION(
+CREATE OR REPLACE PROCEDURE NEW_REGISTRATION (
   in_registrationDate IN registration.registrationDate%type,
   in_delegateNo IN registration.delegateNo%type,
   in_courseFeeNo IN registration.courseFeeNo%type,
   in_registerEmployeeNo IN registration.registerEmployeeNo%type,
   in_courseNo IN registration.courseNo%type,
-  out_newRegistrationNo OUT Registration.registrationNo%TYPE
-
+  out_newRegistrationNo OUT Registration.registrationNo%TYPE,
+  out_error_message OUT VARCHAR2
 ) AS
 BEGIN
-  INSERT INTO Registration (registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo)
-  VALUES (in_registrationDate, in_delegateNo, in_courseFeeNo, in_registerEmployeeNo, in_courseNo)
-  RETURNING registrationNo INTO out_newRegistrationNo;
+  -- Initialize the error message to NULL
+  out_error_message := NULL;
+
+  -- Validate input
+  IF in_registrationDate IS NULL OR in_delegateNo IS NULL OR in_courseFeeNo IS NULL 
+     OR in_registerEmployeeNo IS NULL OR in_courseNo IS NULL THEN
+    out_error_message := 'Missing required fields: registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo';
+    RETURN;
+  END IF;
+
+  BEGIN
+    -- Insert new registration
+    INSERT INTO Registration (
+      registrationDate,
+      delegateNo,
+      courseFeeNo,
+      registerEmployeeNo,
+      courseNo
+    ) VALUES (
+      in_registrationDate,
+      in_delegateNo,
+      in_courseFeeNo,
+      in_registerEmployeeNo,
+      in_courseNo
+    ) RETURNING registrationNo INTO out_newRegistrationNo;
+    COMMIT; -- Commit the transaction to make the insertion permanent
+
+  EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+      out_error_message := 'Duplicate registration entry. Registration already exists.';
+    WHEN OTHERS THEN
+      out_error_message := SQLERRM;
+  END;
+
+  -- Handle specific errors here if needed
+  IF out_error_message IS NOT NULL THEN
+    -- Log the error or handle it as per your application's requirements
+    DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+    -- You can raise an application-specific exception or perform other actions
+    -- based on the error encountered.
+  END IF;
+
 END;
 /
+
 
 
 --creating a new invoice
@@ -219,16 +542,50 @@ CREATE OR REPLACE PROCEDURE NEW_INVOICE (
   in_expiryDate IN Invoice.expiryDate%type,
   in_registrationNo IN Invoice.registrationNo%type,
   in_pMethodNo IN Invoice.pMethodNo%type,
-  out_newInvoiceNo OUT Invoice.InvoiceNo%type
+  out_newInvoiceNo OUT Invoice.InvoiceNo%type,
+  out_error_message OUT VARCHAR2
 ) AS
 BEGIN
-  INSERT INTO Invoice (
-    dateRaised, datePaid, creditCardNo, holdersName, expiryDate, registrationNo, pMethodNo
-  ) VALUES (
-    in_dateRaised, in_datePaid, in_creditCardNo, in_holdersName, in_expiryDate, in_registrationNo, in_pMethodNo
-  ) RETURNING invoiceNo INTO out_newInvoiceNo;
+  -- Initialize the error message to NULL
+  out_error_message := NULL;
+
+  -- Validate input
+  IF in_dateRaised IS NULL OR
+     in_datePaid IS NULL OR
+     in_registrationNo IS NULL OR
+     in_pMethodNo IS NULL THEN
+     
+    out_error_message := 'Missing required fields: dateRaised, datePaid, registrationNo, pMethodNo';
+    RETURN;
+  END IF;
+
+  BEGIN
+    -- Insert new invoice
+    INSERT INTO Invoice (
+      dateRaised, datePaid, creditCardNo, holdersName, expiryDate, registrationNo, pMethodNo
+    ) VALUES (
+      in_dateRaised, in_datePaid, in_creditCardNo, in_holdersName, in_expiryDate, in_registrationNo, in_pMethodNo
+    ) RETURNING invoiceNo INTO out_newInvoiceNo;
+    COMMIT; -- Commit the transaction to make the insertion permanent
+
+  EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+      out_error_message := 'Duplicate invoice entry. Invoice already exists.';
+    WHEN OTHERS THEN
+      out_error_message := SQLERRM;
+  END;
+
+  -- Handle specific errors here if needed
+  IF out_error_message IS NOT NULL THEN
+    -- Log the error or handle it as per your application's requirements
+    DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
+    -- You can raise an application-specific exception or perform other actions
+    -- based on the error encountered.
+  END IF;
+
 END;
 /
+
 
 
 --book a location for a registration
@@ -252,8 +609,13 @@ BEGIN
         in_bookingEmployeeNo
     )
     RETURNING bookingNo INTO out_newBookingNo;
+    COMMIT; -- Commit the transaction to make the insertion permanent
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error inserting booking: ' || SQLERRM);
 END;
 /
+
 
 
 
@@ -363,6 +725,22 @@ END;
 CREATE OR REPLACE PROCEDURE delete_client(p_clientNo IN client.clientNo%type) AS
 BEGIN
   DELETE FROM client WHERE clientNo = p_clientNo;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE delete_client(p_clientNo IN client.clientNo%type) AS
+BEGIN
+  DELETE FROM client WHERE clientNo = p_clientNo;
+  COMMIT;
+EXCEPTION
+  WHEN OTHERS THEN
+    IF SQLCODE = -2292 THEN
+      -- Child records found, handle as needed
+      RAISE_APPLICATION_ERROR(-20001, 'Cannot delete client due to related records.');
+    ELSE
+      -- Handle other exceptions
+      RAISE;
+    END IF;
 END;
 /
 

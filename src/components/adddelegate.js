@@ -38,38 +38,38 @@ async function addDelegate(delegate) {
     const result = await con.execute(
       `BEGIN 
          new_delegate(
-           :delegateTitle, 
-           :delegateFName, 
-           :delegateLName, 
-           :delegateStreet, 
-           :delegateCity, 
-           :delegateState, 
-           :delegateZipCode, 
-           :attTelNo, 
-           :attFaxNo, 
-           :attEmailAddress, 
-           :clientNo, 
-           :newdelegateNo
+           :in_delegateTitle, 
+           :in_delegateFName, 
+           :in_delegateLName, 
+           :in_delegateStreet, 
+           :in_delegateCity, 
+           :in_delegateState, 
+           :in_delegateZipCode, 
+           :in_attTelNo, 
+           :in_attFaxNo, 
+           :in_attEmailAddress, 
+           :in_clientNo, 
+           :out_newdelegateNo, 
+           :out_error_message
          );
        END;`,
       {
-        delegateTitle: delegate.delegateTitle,
-        delegateFName: delegate.delegateFName,
-        delegateLName: delegate.delegateLName,
-        delegateStreet: delegate.delegateStreet,
-        delegateCity: delegate.delegateCity,
-        delegateState: delegate.delegateState,
-        delegateZipCode: delegate.delegateZipCode,
-        attTelNo: delegate.attTelNo,
-        attFaxNo: delegate.attFaxNo,
-        attEmailAddress: delegate.attEmailAddress,
-        clientNo: delegate.ClientNo,
-        newdelegateNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
-    );
+        in_delegateTitle: delegate.delegateTitle,
+        in_delegateFName: delegate.delegateFName,
+        in_delegateLName: delegate.delegateLName,
+        in_delegateStreet: delegate.delegateStreet,
+        in_delegateCity: delegate.delegateCity,
+        in_delegateState: delegate.delegateState,
+        in_delegateZipCode: delegate.delegateZipCode,
+        in_attTelNo: delegate.attTelNo,
+        in_attFaxNo: delegate.attFaxNo,
+        in_attEmailAddress: delegate.attEmailAddress,
+        in_clientNo: delegate.clientNo,
+        out_newdelegateNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+      }    );
 
-    const newdelegateNo = result.outBinds.newdelegateNo[0];
+    const newdelegateNo = result.outBinds.out_newdelegateNo[0];
     console.log(`Delegate added successfully with ID: ${newdelegateNo}`);
     
     return newdelegateNo; // Return the generated delegateNo if needed

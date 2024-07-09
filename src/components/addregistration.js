@@ -6,13 +6,17 @@ async function addRegistration(registration) {
   let con;
 
   // Validate input
-  if (!registration.delegateNo || !registration.courseFeeNo || !registration.registerEmployeeNo || !registration.courseNo) {
-    const missingFields = [];
-    if (!registration.delegateNo) missingFields.push('delegateNo');
-    if (!registration.courseFeeNo) missingFields.push('courseFeeNo');
-    if (!registration.registerEmployeeNo) missingFields.push('registerEmployeeNo');
-    if (!registration.courseNo) missingFields.push('courseNo');
-    
+  const requiredFields = [
+    'registrationDate',
+    'delegateNo',
+    'courseFeeNo',
+    'registerEmployeeNo',
+    'courseNo'
+  ];
+
+  const missingFields = requiredFields.filter(field => !registration[field]);
+
+  if (missingFields.length > 0) {
     const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
     console.error(errorMessage);
     throw new Error(errorMessage);
@@ -27,7 +31,15 @@ async function addRegistration(registration) {
 
     const result = await con.execute(
       `BEGIN 
-         new_registration(TO_DATE(:registrationDate,'YYYY-MM-DD'), :delegateNo, :courseFeeNo, :registerEmployeeNo, :courseNo, :newRegistrationNo);
+         NEW_REGISTRATION(
+           TO_DATE(:registrationDate,'YYYY-MM-DD'),
+           :delegateNo,
+           :courseFeeNo,
+           :registerEmployeeNo,
+           :courseNo,
+           :newRegistrationNo,
+           :out_error_message
+         );
        END;`,
       {
         registrationDate: registration.registrationDate,
@@ -35,7 +47,8 @@ async function addRegistration(registration) {
         courseFeeNo: registration.courseFeeNo,
         registerEmployeeNo: registration.registerEmployeeNo,
         courseNo: registration.courseNo,
-        newRegistrationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+        newRegistrationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
       },
       { autoCommit: true }
     );

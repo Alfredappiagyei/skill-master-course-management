@@ -27,7 +27,17 @@ async function addInvoice(invoice) {
 
     const result = await con.execute(
       `BEGIN 
-         new_invoice(TO_DATE(:dateRaised, 'YYYY-MM-DD'), TO_DATE(:datePaid, 'YYYY-MM-DD'), :creditCardNo, :holdersName, TO_DATE(:expiryDate, 'YYYY-MM-DD'), :registrationNo, :pMethodNo, :newInvoiceNo);
+         NEW_INVOICE(
+           TO_DATE(:dateRaised, 'YYYY-MM-DD'),
+           TO_DATE(:datePaid, 'YYYY-MM-DD'),
+           :creditCardNo,
+           :holdersName,
+           TO_DATE(:expiryDate, 'YYYY-MM-DD'),
+           :registrationNo,
+           :pMethodNo,
+           :newInvoiceNo,
+           :out_error_message
+         );
        END;`,
       {
         dateRaised: invoice.dateRaised,
@@ -37,7 +47,8 @@ async function addInvoice(invoice) {
         expiryDate: invoice.expiryDate,
         registrationNo: invoice.registrationNo,
         pMethodNo: invoice.pMethodNo,
-        newInvoiceNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+        newInvoiceNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
       },
       { autoCommit: true }
     );

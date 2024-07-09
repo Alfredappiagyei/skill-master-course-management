@@ -47,7 +47,8 @@ async function addCourse(course) {
            :confirmed,
            :delivererEmployeeNo,
            :courseTypeNo,
-           :newCourseNo
+           :newCourseNo,
+           :out_error_message
          );
        END;`,
       {
@@ -61,10 +62,9 @@ async function addCourse(course) {
         confirmed: course.confirmed,
         delivererEmployeeNo: course.delivererEmployeeNo,
         courseTypeNo: course.courseTypeNo,
-        newCourseNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
-    );
+        newCourseNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+      }    );
 
     const newCourseNo = result.outBinds.newCourseNo[0];
     console.log(`Course added successfully with ID: ${newCourseNo}`);

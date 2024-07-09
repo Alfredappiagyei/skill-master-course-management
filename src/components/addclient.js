@@ -26,18 +26,26 @@ async function addClient(client) {
 
     const result = await con.execute(
       `BEGIN 
-         new_client(:clientName, :clientEmail, :clientContact, :newclientNo);
+         new_client(:in_clientName, :in_clientEmail, :in_clientContact, :out_newclientNo, :out_error_message);
        END;`,
       {
-        clientName: client.clientName,
-        clientEmail: client.clientEmail,
-        clientContact: client.clientContact,
-        newclientNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
+        in_clientName: client.clientName,
+        in_clientEmail: client.clientEmail,
+        in_clientContact: client.clientContact,
+        out_newclientNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+      }
     );
 
-    const newclientNo = result.outBinds.newclientNo[0];
+    // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting client:', errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    // If no error, retrieve the generated clientNo
+    const newclientNo = result.outBinds.out_newclientNo[0];
     console.log(`Client added successfully with ID: ${newclientNo}`);
     
     return newclientNo; // Return the generated clientId if needed

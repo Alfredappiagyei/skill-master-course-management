@@ -69,8 +69,11 @@ async function deleteClient(clientNo) {
     console.log('Client deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting client:', err);
-    throw err;
+    if (err.errorNum === 2292) {
+      console.error('Cannot delete client due to related records.');
+    } else {
+      console.error('Error deleting client:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {
