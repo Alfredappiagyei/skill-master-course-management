@@ -45,6 +45,41 @@ async function getLocations() {
   }
 }
 
+async function deleteLocation(locationNo) {
+  let con;
+
+  try {
+    con = await oracledb.getConnection({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
+    });
+
+    await con.execute(
+      `BEGIN 
+         delete_location(:locationNo);
+       END;`,
+      {
+        locationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: locationNo },
+        
+      }
+    );
+
+    await con.commit();
+  } catch (err) {
+    console.error('Error deleting location:', err);
+    throw err;
+  } finally {
+    if (con) {
+      try {
+        await con.close();
+      } catch (err) {
+        console.error('Error closing connection:', err);
+      }
+    }
+  }
+}
 
 
-module.exports = { getLocations };
+
+module.exports = { getLocations, deleteLocation };

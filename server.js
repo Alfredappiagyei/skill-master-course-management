@@ -15,10 +15,10 @@ const { getCourseTypes, deleteCourseType } = require('./src/Tables/coursetypes')
 const { getCourses, deleteCourse } = require('./src/Tables/courses');
 const { getCoursefees, deleteCourseFee } = require('./src/Tables/coursefees');
 const { getPayments, deletePayment } = require('./src/Tables/payments');
-const { getLocations } = require('./src/Tables/locations');
-const { getRegistrations } = require('./src/Tables/registrations');
-const { getInvoices } = require('./src/Tables/invoices');
-const { getBookings } = require('./src/Tables/bookings');
+const { getLocations, deleteLocation } = require('./src/Tables/locations');
+const { getRegistrations , deleteRegistration} = require('./src/Tables/registrations');
+const { getInvoices, deleteInvoice } = require('./src/Tables/invoices');
+const { getBookings, deleteBooking } = require('./src/Tables/bookings');
 
 
 //  ADDING
@@ -322,6 +322,50 @@ app.delete('/api/payments/:pMethodNo', async (req, res) => {
   try {
     await deletePayment(pMethodNo);
     res.status(200).send({ message: 'Payment method deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting payment method' });
+  }
+});
+
+app.delete('/api/locations/:locationNo', async (req, res) => {
+  const locationNo = parseInt(req.params.locationNo, 10);
+
+  try {
+    await deleteLocation(locationNo);
+    res.status(200).send({ message: 'Location deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting location' });
+  }
+});
+
+app.delete('/api/registrations/:registrationNo', async (req, res) => {
+  const registrationNo = parseInt(req.params.registrationNo, 10);
+
+  try {
+    await deleteRegistration(registrationNo);
+    res.status(200).send({ message: 'Registration  deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting payment method' });
+  }
+});
+
+app.delete('/api/invoices/:invoiceNo', async (req, res) => {
+  const invoiceNo = parseInt(req.params.invoiceNo, 10);
+
+  try {
+    await deleteInvoice(invoiceNo);
+    res.status(200).send({ message: 'Invoice  deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Error deleting payment method' });
+  }
+});
+
+app.delete('/api/bookings/:bookingNo', async (req, res) => {
+  const bookingNo = parseInt(req.params.bookingNo, 10);
+
+  try {
+    await deleteBooking(bookingNo);
+    res.status(200).send({ message: 'Booking  deleted successfully' });
   } catch (error) {
     res.status(500).send({ error: 'Error deleting payment method' });
   }
