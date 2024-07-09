@@ -65,6 +65,8 @@ async function deleteCourseType(courseTypeNo) {
       }
     );
     await con.commit();
+    console.log('Course Type deleted successfully');
+
 
 
   } catch (err) {

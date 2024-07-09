@@ -66,6 +66,8 @@ async function deleteDelegate(delegateNo) {
     );
 
     await con.commit();
+    console.log('Delegate deleted successfully');
+
   } catch (err) {
     console.error('Error deleting delegate:', err);
     throw err;

@@ -16,7 +16,7 @@ async function addInvoice(invoice) {
     const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
     console.error(errorMessage);
     throw new Error(errorMessage);
-  }
+  } 
 
   try {
     con = await oracledb.getConnection({

@@ -66,6 +66,8 @@ async function deleteClient(clientNo) {
     );
 
     await con.commit();
+    console.log('Client deleted successfully');
+
   } catch (err) {
     console.error('Error deleting client:', err);
     throw err;

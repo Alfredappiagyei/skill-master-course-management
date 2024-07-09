@@ -64,6 +64,8 @@ async function deletePayment(pMethodNo) {
       },
       { autoCommit: true }
     );
+    console.log('Payment Method deleted successfully');
+
   } catch (err) {
     console.error('Error deleting payment method:', err);
     throw err;

@@ -66,6 +66,8 @@ async function deleteInvoice(invoiceNo) {
     );
 
     await con.commit();
+    console.log('Invoice deleted successfully');
+
   } catch (err) {
     console.error('Error deleting invoice:', err);
     throw err;

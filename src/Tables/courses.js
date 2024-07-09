@@ -65,6 +65,8 @@ async function deleteCourse(courseNo) {
       },
       { autoCommit: true }
     );
+    console.log('Course deleted successfully');
+
   } catch (err) {
     console.error('Error deleting course:', err);
     throw err;

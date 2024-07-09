@@ -66,6 +66,8 @@ async function deleteBooking(bookingNo) {
     );
 
     await con.commit();
+    console.log('Bookings deleted successfully');
+
   } catch (err) {
     console.error('Error deleting booking:', err);
     throw err;

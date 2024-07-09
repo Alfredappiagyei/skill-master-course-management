@@ -66,6 +66,8 @@ async function deleteRegistration(registrationNo) {
     );
 
     await con.commit();
+    console.log('Registration deleted successfully');
+
   } catch (err) {
     console.error('Error deleting invoice:', err);
     throw err;

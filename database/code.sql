@@ -352,12 +352,12 @@ END;
 
 --deleting records
 
--- delete from employees
-CREATE OR REPLACE PROCEDURE delete_employee(p_employeeNo IN employee.employee%type) AS
+CREATE OR REPLACE PROCEDURE delete_employee(p_employeeNo IN Employee.employeeNo%type) AS
 BEGIN
   DELETE FROM Employee WHERE employeeNo = p_employeeNo;
 END;
 /
+
 
 -- delete from clients
 CREATE OR REPLACE PROCEDURE delete_client(p_clientNo IN client.clientNo%type) AS
@@ -450,3 +450,520 @@ BEGIN
 END;
 /
 
+--CREATING USER LOGS
+
+-- LOG EMPLOYEE TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_employee_activity
+AFTER INSERT OR UPDATE OR DELETE ON employee
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: employeeNo=' || :NEW.employeeNo || 
+                        ', employeeFName=' || :NEW.employeeFName || 
+                        ', employeeLName=' || :NEW.employeeLName || 
+                        ', employeeEmail=' || :NEW.employeeEmail || 
+                        ', employeeContact=' || :NEW.employeeContact;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: employeeNo=' || :OLD.employeeNo || 
+                        ', employeeFName=' || :OLD.employeeFName || 
+                        ', employeeLName=' || :OLD.employeeLName || 
+                        ', employeeEmail=' || :OLD.employeeEmail || 
+                        ', employeeContact=' || :OLD.employeeContact;
+        v_new_values := 'New Values: employeeNo=' || :NEW.employeeNo || 
+                        ', employeeFName=' || :NEW.employeeFName || 
+                        ', employeeLName=' || :NEW.employeeLName || 
+                        ', employeeEmail=' || :NEW.employeeEmail || 
+                        ', employeeContact=' || :NEW.employeeContact;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: employeeNo=' || :OLD.employeeNo || 
+                        ', employeeFName=' || :OLD.employeeFName || 
+                        ', employeeLName=' || :OLD.employeeLName || 
+                        ', employeeEmail=' || :OLD.employeeEmail || 
+                        ', employeeContact=' || :OLD.employeeContact;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'employees', v_old_values, v_new_values);
+END;
+/
+
+
+-- LOG CLIENT TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_client_activity
+AFTER INSERT OR UPDATE OR DELETE ON Client
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: clientNo=' || :NEW.clientNo || 
+                        ', clientName=' || :NEW.clientName || 
+                        ', clientEmail=' || :NEW.clientEmail || 
+                        ', clientContact=' || :NEW.clientContact;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: clientNo=' || :OLD.clientNo || 
+                        ', clientName=' || :OLD.clientName || 
+                        ', clientEmail=' || :OLD.clientEmail || 
+                        ', clientContact=' || :OLD.clientContact;
+        v_new_values := 'New Values: clientNo=' || :NEW.clientNo || 
+                        ', clientName=' || :NEW.clientName || 
+                        ', clientEmail=' || :NEW.clientEmail || 
+                        ', clientContact=' || :NEW.clientContact;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: clientNo=' || :OLD.clientNo || 
+                        ', clientName=' || :OLD.clientName || 
+                        ', clientEmail=' || :OLD.clientEmail || 
+                        ', clientContact=' || :OLD.clientContact;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Client', v_old_values, v_new_values);
+END;
+/
+
+
+--LOG DELEGATE TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_delegate_activity
+AFTER INSERT OR UPDATE OR DELETE ON Delegate
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: delegateNo=' || :NEW.delegateNo || 
+                        ', delegateTitle=' || :NEW.delegateTitle || 
+                        ', delegateFName=' || :NEW.delegateFName || 
+                        ', delegateLName=' || :NEW.delegateLName || 
+                        ', delegateStret=' || :NEW.delegateStreet || 
+                        ', City=' || :NEW.delegateCity || 
+                        ', State=' || :NEW.delegateState || 
+                        ', Zip Code=' || :NEW.delegateZipCode || 
+                        ', Tel Number=' || :NEW.attTelNo || 
+                        ', Fax Number=' || :NEW.attFaxNo || 
+                        ', Email=' || :NEW.attEmailAddress || 
+                        ', clientNo=' || :NEW.clientNo;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: delegateNo=' || :OLD.delegateNo || 
+                         ', delegateTitle=' || :OLD.delegateTitle || 
+                        ', delegateFName=' || :OLD.delegateFName || 
+                        ', delegateLName=' || :OLD.delegateLName || 
+                        ', delegateStret=' || :OLD.delegateStreet || 
+                        ', delegateCity=' || :OLD.delegateCity || 
+                        ', delegateState=' || :OLD.delegateState || 
+                        ', delegateZipCode=' || :OLD.delegateZipCode || 
+                        ', Tel Number=' || :OLD.attTelNo || 
+                        ', Fax Number=' || :OLD.attFaxNo || 
+                        ', Email=' || :OLD.attEmailAddress ||
+                        ', clientNo=' || :OLD.clientNo;
+        v_new_values := 'New Values: delegateNo=' || :NEW.delegateNo || 
+                        ', delegateTitle=' || :NEW.delegateTitle || 
+                        ', delegateFName=' || :NEW.delegateFName || 
+                        ', delegateLName=' || :NEW.delegateLName || 
+                        ', delegateStret=' || :NEW.delegateStreet || 
+                        ', City=' || :NEW.delegateCity || 
+                        ', State=' || :NEW.delegateState || 
+                        ', Zip Code=' || :NEW.delegateZipCode || 
+                        ', Tel Number=' || :NEW.attTelNo || 
+                        ', Fax Number=' || :NEW.attFaxNo || 
+                        ', Email=' || :NEW.attEmailAddress ||
+                        ', clientNo=' || :NEW.clientNo;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: delegateNo=' || :OLD.delegateNo || 
+                         ', delegateTitle=' || :OLD.delegateTitle || 
+                        ', delegateFName=' || :OLD.delegateFName || 
+                        ', delegateLName=' || :OLD.delegateLName || 
+                        ', delegateStret=' || :OLD.delegateStreet || 
+                        ', delegateCity=' || :OLD.delegateCity || 
+                        ', delegateState=' || :OLD.delegateState || 
+                        ', delegateZipCode=' || :OLD.delegateZipCode || 
+                        ', Tel Number=' || :OLD.attTelNo || 
+                        ', Fax Number=' || :OLD.attFaxNo || 
+                        ', Email=' || :OLD.attEmailAddress ||
+                        ', clientNo=' || :OLD.clientNo;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Delegate', v_old_values, v_new_values);
+END;
+/
+
+-- LOG COURSE TYPE TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_coursetype_activity
+AFTER INSERT OR UPDATE OR DELETE ON CourseType
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: courseTypeNo=' || :NEW.courseTypeNo || 
+                        ', courseTypeDescription=' || :NEW.courseTypeDescription;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: courseTypeNo=' || :OLD.courseTypeNo || 
+                        ', courseTypeDescription=' || :OLD.courseTypeDescription;
+        v_new_values := 'New Values: courseTypeNo=' || :NEW.courseTypeNo || 
+                        ', courseTypeDescription=' || :NEW.courseTypeDescription;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: courseTypeNo=' || :OLD.courseTypeNo || 
+                        ', courseTypeDescription=' || :OLD.courseTypeDescription;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'CourseType', v_old_values, v_new_values);
+END;
+/
+
+--lOG COURSE TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_course_activity
+AFTER INSERT OR UPDATE OR DELETE ON Course
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: courseNo=' || :NEW.courseNo || 
+                        ', courseName=' || :NEW.courseName || 
+                        ', courseDescription=' || :NEW.courseDescription || 
+                        ', startDate=' || TO_CHAR(:NEW.startDate, 'YYYY-MM-DD') || 
+                        ', startTime=' || TO_CHAR(:NEW.startTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', endDate=' || TO_CHAR(:NEW.endDate, 'YYYY-MM-DD') || 
+                        ', endTime=' || TO_CHAR(:NEW.endTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', maxDelegates=' || :NEW.maxDelegates || 
+                        ', confirmed=' || :NEW.confirmed || 
+                        ', delivererEmployeeNo=' || :NEW.delivererEmployeeNo || 
+                        ', courseTypeNo=' || :NEW.courseTypeNo;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: courseNo=' || :OLD.courseNo || 
+                        ', courseName=' || :OLD.courseName || 
+                        ', courseDescription=' || :OLD.courseDescription || 
+                        ', startDate=' || TO_CHAR(:OLD.startDate, 'YYYY-MM-DD') || 
+                        ', startTime=' || TO_CHAR(:OLD.startTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', endDate=' || TO_CHAR(:OLD.endDate, 'YYYY-MM-DD') || 
+                        ', endTime=' || TO_CHAR(:OLD.endTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', maxDelegates=' || :OLD.maxDelegates || 
+                        ', confirmed=' || :OLD.confirmed || 
+                        ', delivererEmployeeNo=' || :OLD.delivererEmployeeNo || 
+                        ', courseTypeNo=' || :OLD.courseTypeNo;
+        v_new_values := 'New Values: courseNo=' || :NEW.courseNo || 
+                        ', courseName=' || :NEW.courseName || 
+                        ', courseDescription=' || :NEW.courseDescription || 
+                        ', startDate=' || TO_CHAR(:NEW.startDate, 'YYYY-MM-DD') || 
+                        ', startTime=' || TO_CHAR(:NEW.startTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', endDate=' || TO_CHAR(:NEW.endDate, 'YYYY-MM-DD') || 
+                        ', endTime=' || TO_CHAR(:NEW.endTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', maxDelegates=' || :NEW.maxDelegates || 
+                        ', confirmed=' || :NEW.confirmed || 
+                        ', delivererEmployeeNo=' || :NEW.delivererEmployeeNo || 
+                        ', courseTypeNo=' || :NEW.courseTypeNo;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: courseNo=' || :OLD.courseNo || 
+                        ', courseName=' || :OLD.courseName || 
+                        ', courseDescription=' || :OLD.courseDescription || 
+                        ', startDate=' || TO_CHAR(:OLD.startDate, 'YYYY-MM-DD') || 
+                        ', startTime=' || TO_CHAR(:OLD.startTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', endDate=' || TO_CHAR(:OLD.endDate, 'YYYY-MM-DD') || 
+                        ', endTime=' || TO_CHAR(:OLD.endTime, 'YYYY-MM-DD HH24:MI:SS') || 
+                        ', maxDelegates=' || :OLD.maxDelegates || 
+                        ', confirmed=' || :OLD.confirmed || 
+                        ', delivererEmployeeNo=' || :OLD.delivererEmployeeNo || 
+                        ', courseTypeNo=' || :OLD.courseTypeNo;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Course', v_old_values, v_new_values);
+END;
+/
+
+--LOG COURSE FEE TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_coursefee_activity
+AFTER INSERT OR UPDATE OR DELETE ON CourseFee
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: courseFeeNo=' || :NEW.courseFeeNo || 
+                        ', feeDescription=' || :NEW.feeDescription || 
+                        ', fee=' || :NEW.fee || 
+                        ', courseNo=' || :NEW.courseNo;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: courseFeeNo=' || :OLD.courseFeeNo || 
+                        ', feeDescription=' || :OLD.feeDescription || 
+                        ', fee=' || :OLD.fee || 
+                        ', courseNo=' || :OLD.courseNo;
+        v_new_values := 'New Values: courseFeeNo=' || :NEW.courseFeeNo || 
+                        ', feeDescription=' || :NEW.feeDescription || 
+                        ', fee=' || :NEW.fee || 
+                        ', courseNo=' || :NEW.courseNo;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: courseFeeNo=' || :OLD.courseFeeNo || 
+                        ', feeDescription=' || :OLD.feeDescription || 
+                        ', fee=' || :OLD.fee || 
+                        ', courseNo=' || :OLD.courseNo;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'CourseFee', v_old_values, v_new_values);
+END;
+/
+
+
+-- LOG PAYMENT METHOD TABLE AVCTIVITIES
+CREATE OR REPLACE TRIGGER log_paymentmethod_activity
+AFTER INSERT OR UPDATE OR DELETE ON PaymentMethod
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: pMethodNo=' || :NEW.pMethodNo || 
+                        ', pMethodName=' || :NEW.pMethodName;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: pMethodNo=' || :OLD.pMethodNo || 
+                        ', pMethodName=' || :OLD.pMethodName;
+        v_new_values := 'New Values: pMethodNo=' || :NEW.pMethodNo || 
+                        ', pMethodName=' || :NEW.pMethodName;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: pMethodNo=' || :OLD.pMethodNo || 
+                        ', pMethodName=' || :OLD.pMethodName;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'PaymentMethod', v_old_values, v_new_values);
+END;
+/
+
+-- LOG LOCATION TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_location_activity
+AFTER INSERT OR UPDATE OR DELETE ON Location
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: locationNo=' || :NEW.locationNo || 
+                        ', locationName=' || :NEW.locationName || 
+                        ', locationMaxSize=' || :NEW.locationMaxSize;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: locationNo=' || :OLD.locationNo || 
+                        ', locationName=' || :OLD.locationName || 
+                        ', locationMaxSize=' || :OLD.locationMaxSize;
+        v_new_values := 'New Values: locationNo=' || :NEW.locationNo || 
+                        ', locationName=' || :NEW.locationName || 
+                        ', locationMaxSize=' || :NEW.locationMaxSize;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: locationNo=' || :OLD.locationNo || 
+                        ', locationName=' || :OLD.locationName || 
+                        ', locationMaxSize=' || :OLD.locationMaxSize;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Location', v_old_values, v_new_values);
+END;
+/
+
+-- LOG REGISTRATION TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_registration_activity
+AFTER INSERT OR UPDATE OR DELETE ON Registration
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: registrationNo=' || :NEW.registrationNo || 
+                        ', registrationDate=' || TO_CHAR(:NEW.registrationDate, 'YYYY-MM-DD') || 
+                        ', delegateNo=' || :NEW.delegateNo || 
+                        ', courseFeeNo=' || :NEW.courseFeeNo || 
+                        ', registerEmployeeNo=' || :NEW.registerEmployeeNo || 
+                        ', courseNo=' || :NEW.courseNo;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: registrationNo=' || :OLD.registrationNo || 
+                        ', registrationDate=' || TO_CHAR(:OLD.registrationDate, 'YYYY-MM-DD') || 
+                        ', delegateNo=' || :OLD.delegateNo || 
+                        ', courseFeeNo=' || :OLD.courseFeeNo || 
+                        ', registerEmployeeNo=' || :OLD.registerEmployeeNo || 
+                        ', courseNo=' || :OLD.courseNo;
+        v_new_values := 'New Values: registrationNo=' || :NEW.registrationNo || 
+                        ', registrationDate=' || TO_CHAR(:NEW.registrationDate, 'YYYY-MM-DD') || 
+                        ', delegateNo=' || :NEW.delegateNo || 
+                        ', courseFeeNo=' || :NEW.courseFeeNo || 
+                        ', registerEmployeeNo=' || :NEW.registerEmployeeNo || 
+                        ', courseNo=' || :NEW.courseNo;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: registrationNo=' || :OLD.registrationNo || 
+                        ', registrationDate=' || TO_CHAR(:OLD.registrationDate, 'YYYY-MM-DD') || 
+                        ', delegateNo=' || :OLD.delegateNo || 
+                        ', courseFeeNo=' || :OLD.courseFeeNo || 
+                        ', registerEmployeeNo=' || :OLD.registerEmployeeNo || 
+                        ', courseNo=' || :OLD.courseNo;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Registration', v_old_values, v_new_values);
+END;
+/
+
+
+-- LOG INVOICE TABLE ACTIVITIES 
+CREATE OR REPLACE TRIGGER log_invoice_activity
+AFTER INSERT OR UPDATE OR DELETE ON Invoice
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: invoiceNo=' || :NEW.invoiceNo || 
+                        ', dateRaised=' || TO_CHAR(:NEW.dateRaised, 'YYYY-MM-DD') || 
+                        ', datePaid=' || TO_CHAR(:NEW.datePaid, 'YYYY-MM-DD') || 
+                        ', creditCardNo=' || :NEW.creditCardNo || 
+                        ', holdersName=' || :NEW.holdersName || 
+                        ', expiryDate=' || TO_CHAR(:NEW.expiryDate, 'YYYY-MM-DD') || 
+                        ', registrationNo=' || :NEW.registrationNo || 
+                        ', pMethodNo=' || :NEW.pMethodNo;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: invoiceNo=' || :OLD.invoiceNo || 
+                        ', dateRaised=' || TO_CHAR(:OLD.dateRaised, 'YYYY-MM-DD') || 
+                        ', datePaid=' || TO_CHAR(:OLD.datePaid, 'YYYY-MM-DD') || 
+                        ', creditCardNo=' || :OLD.creditCardNo || 
+                        ', holdersName=' || :OLD.holdersName || 
+                        ', expiryDate=' || TO_CHAR(:OLD.expiryDate, 'YYYY-MM-DD') || 
+                        ', registrationNo=' || :OLD.registrationNo || 
+                        ', pMethodNo=' || :OLD.pMethodNo;
+        v_new_values := 'New Values: invoiceNo=' || :NEW.invoiceNo || 
+                        ', dateRaised=' || TO_CHAR(:NEW.dateRaised, 'YYYY-MM-DD') || 
+                        ', datePaid=' || TO_CHAR(:NEW.datePaid, 'YYYY-MM-DD') || 
+                        ', creditCardNo=' || :NEW.creditCardNo || 
+                        ', holdersName=' || :NEW.holdersName || 
+                        ', expiryDate=' || TO_CHAR(:NEW.expiryDate, 'YYYY-MM-DD') || 
+                        ', registrationNo=' || :NEW.registrationNo || 
+                        ', pMethodNo=' || :NEW.pMethodNo;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: invoiceNo=' || :OLD.invoiceNo || 
+                        ', dateRaised=' || TO_CHAR(:OLD.dateRaised, 'YYYY-MM-DD') || 
+                        ', datePaid=' || TO_CHAR(:OLD.datePaid, 'YYYY-MM-DD') || 
+                        ', creditCardNo=' || :OLD.creditCardNo || 
+                        ', holdersName=' || :OLD.holdersName || 
+                        ', expiryDate=' || TO_CHAR(:OLD.expiryDate, 'YYYY-MM-DD') || 
+                        ', registrationNo=' || :OLD.registrationNo || 
+                        ', pMethodNo=' || :OLD.pMethodNo;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Invoice', v_old_values, v_new_values);
+END;
+/
+
+-- LOG BOOKING TABLE ACTIVITIES
+CREATE OR REPLACE TRIGGER log_booking_activity
+AFTER INSERT OR UPDATE OR DELETE ON Booking
+FOR EACH ROW
+DECLARE
+    v_action VARCHAR2(50);
+    v_old_values CLOB;
+    v_new_values CLOB;
+BEGIN
+    -- Determine the action type
+    IF INSERTING THEN
+        v_action := 'INSERT';
+        v_new_values := 'New Values: bookingNo=' || :NEW.bookingNo || 
+                        ', bookingDate=' || TO_CHAR(:NEW.bookingDate, 'YYYY-MM-DD') || 
+                        ', locationNo=' || :NEW.locationNo || 
+                        ', courseNo=' || :NEW.courseNo || 
+                        ', bookingEmployeeNo=' || :NEW.bookingEmployeeNo;
+    ELSIF UPDATING THEN
+        v_action := 'UPDATE';
+        v_old_values := 'Old Values: bookingNo=' || :OLD.bookingNo || 
+                        ', bookingDate=' || TO_CHAR(:OLD.bookingDate, 'YYYY-MM-DD') || 
+                        ', locationNo=' || :OLD.locationNo || 
+                        ', courseNo=' || :OLD.courseNo || 
+                        ', bookingEmployeeNo=' || :OLD.bookingEmployeeNo;
+        v_new_values := 'New Values: bookingNo=' || :NEW.bookingNo || 
+                        ', bookingDate=' || TO_CHAR(:NEW.bookingDate, 'YYYY-MM-DD') || 
+                        ', locationNo=' || :NEW.locationNo || 
+                        ', courseNo=' || :NEW.courseNo || 
+                        ', bookingEmployeeNo=' || :NEW.bookingEmployeeNo;
+    ELSIF DELETING THEN
+        v_action := 'DELETE';
+        v_old_values := 'Old Values: bookingNo=' || :OLD.bookingNo || 
+                        ', bookingDate=' || TO_CHAR(:OLD.bookingDate, 'YYYY-MM-DD') || 
+                        ', locationNo=' || :OLD.locationNo || 
+                        ', courseNo=' || :OLD.courseNo || 
+                        ', bookingEmployeeNo=' || :OLD.bookingEmployeeNo;
+    END IF;
+
+    -- Insert the log into ActivityLog table
+    INSERT INTO ActivityLog (username, actionType, tableName, oldValues, newValues)
+    VALUES (USER, v_action, 'Booking', v_old_values, v_new_values);
+END;
+/

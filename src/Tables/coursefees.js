@@ -65,6 +65,8 @@ async function deleteCourseFee(courseFeeNo) {
       },
       { autoCommit: true }
     );
+    console.log('Course Fee deleted successfully');
+
   } catch (err) {
     console.error('Error deleting course fee:', err);
     throw err;

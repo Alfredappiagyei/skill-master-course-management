@@ -66,6 +66,8 @@ async function deleteLocation(locationNo) {
     );
 
     await con.commit();
+    console.log('Location deleted successfully');
+
   } catch (err) {
     console.error('Error deleting location:', err);
     throw err;
