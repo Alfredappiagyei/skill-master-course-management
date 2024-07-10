@@ -7,6 +7,6 @@ LOG IN TO YOUR ORACLE ACCOUNT AND DO THESE:
 
 1. run the 'create.sql' file 
 
-2. run the 'populate.sql' file (OPTIONAL, YOU CAN ADD DETAILS IN FRONTEND, BUT IF YOU WANT TO HAVE PRIOR DATA FROM BACKEND INSERTION)
+2. run the 'code.sql'
 
-3. run the 'code.sql'
+3. run the 'populate.sql' file (OPTIONAL, YOU CAN ADD DETAILS IN FRONTEND, BUT IF YOU WANT TO HAVE PRIOR DATA FROM BACKEND INSERTION)
