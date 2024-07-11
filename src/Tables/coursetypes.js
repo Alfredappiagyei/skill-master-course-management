@@ -64,14 +64,16 @@ async function deleteCourseType(courseTypeNo) {
 
       }
     );
-    await con.commit();
     console.log('Course Type deleted successfully');
 
 
 
   } catch (err) {
-    console.error('Error deleting course type:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete course type due to related records.');
+    } else {
+      console.error('Error deleting course type:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

@@ -14,7 +14,7 @@ async function getEmployees() {
 
     const result = await con.execute(
       `BEGIN 
-         get_employees_details(:cursor);
+         get_employee_details(:cursor);
        END;`,
       {
         cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }
@@ -65,11 +65,13 @@ async function deleteEmployee(employeeNo) {
       }
     );
 
-    await con.commit();
     console.log('Employee deleted successfully');
   } catch (err) {
-    console.error('Error deleting employee:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete employee due to related records.');
+    } else {
+      console.error('Error deleting employee:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

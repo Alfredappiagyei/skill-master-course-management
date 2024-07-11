@@ -65,12 +65,14 @@ async function deleteInvoice(invoiceNo) {
       }
     );
 
-    await con.commit();
     console.log('Invoice deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting invoice:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete invoice due to related records.');
+    } else {
+      console.error('Error deleting invoice:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

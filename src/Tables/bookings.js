@@ -69,8 +69,11 @@ async function deleteBooking(bookingNo) {
     console.log('Bookings deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting booking:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete bookings due to related records.');
+    } else {
+      console.error('Error deleting bookings:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

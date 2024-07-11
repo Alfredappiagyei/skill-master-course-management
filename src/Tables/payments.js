@@ -61,14 +61,15 @@ async function deletePayment(pMethodNo) {
        END;`,
       {
         pMethodNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: pMethodNo }
-      },
-      { autoCommit: true }
-    );
+      }    );
     console.log('Payment Method deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting payment method:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete payment method due to related records.');
+    } else {
+      console.error('Error deleting payment method:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

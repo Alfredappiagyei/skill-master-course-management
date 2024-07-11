@@ -64,13 +64,14 @@ async function deleteLocation(locationNo) {
         
       }
     );
-
-    await con.commit();
     console.log('Location deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting location:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete location due to related records.');
+    } else {
+      console.error('Error deleting location:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

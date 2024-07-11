@@ -62,14 +62,15 @@ async function deleteCourseFee(courseFeeNo) {
       {
         courseFeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_IN, val: courseFeeNo },
         
-      },
-      { autoCommit: true }
-    );
+      }    );
     console.log('Course Fee deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting course fee:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete course fee due to related records.');
+    } else {
+      console.error('Error deleting course fee:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

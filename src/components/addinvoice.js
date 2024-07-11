@@ -6,17 +6,17 @@ async function addInvoice(invoice) {
   let con;
 
   // Validate input
-  if (!invoice.dateRaised || !invoice.datePaid || !invoice.registrationNo || !invoice.pMethodNo) {
-    const missingFields = [];
-    if (!invoice.dateRaised) missingFields.push('dateRaised');
-    if (!invoice.datePaid) missingFields.push('datePaid');
-    if (!invoice.registrationNo) missingFields.push('registrationNo');
-    if (!invoice.pMethodNo) missingFields.push('pMethodNo');
-    
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  } 
+  // if (!invoice.dateRaised || !invoice.datePaid || !invoice.registrationNo || !invoice.pMethodNo) {
+  //   const missingFields = [];
+  //   if (!invoice.dateRaised) missingFields.push('dateRaised');
+  //   if (!invoice.datePaid) missingFields.push('datePaid');
+  //   if (!invoice.registrationNo) missingFields.push('registrationNo');
+  //   if (!invoice.pMethodNo) missingFields.push('pMethodNo');
+
+  //   const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
+  //   console.error(errorMessage);
+  //   throw new Error(errorMessage);
+  // }
 
   try {
     con = await oracledb.getConnection({
@@ -49,17 +49,22 @@ async function addInvoice(invoice) {
         pMethodNo: invoice.pMethodNo,
         newInvoiceNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
-      },
-      { autoCommit: true }
-    );
+      }
+        );
+
+    if (result.outBinds.out_error_message) {
+      throw new Error(result.outBinds.out_error_message);
+    }
 
     const newInvoiceNo = result.outBinds.newInvoiceNo[0];
     console.log(`Invoice added successfully with ID: ${newInvoiceNo}`);
-    
+
     return newInvoiceNo; // Return the generated invoiceNo if needed
   } catch (err) {
+
     console.error('Error inserting invoice:', err);
     throw err;
+
   } finally {
     if (con) {
       try {

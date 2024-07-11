@@ -65,12 +65,14 @@ async function deleteDelegate(delegateNo) {
       }
     );
 
-    await con.commit();
     console.log('Delegate deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting delegate:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete delegate due to related records.');
+    } else {
+      console.error('Error deleting delegate:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

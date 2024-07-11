@@ -5,18 +5,6 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addClient(client) {
   let con;
 
-  // Validate input
-  if (!client.clientName || !client.clientEmail || !client.clientContact) {
-    const missingFields = [];
-    if (!client.clientName) missingFields.push('clientName');
-    if (!client.clientEmail) missingFields.push('clientEmail');
-    if (!client.clientContact) missingFields.push('clientContact');
-    
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
-
   try {
     con = await oracledb.getConnection({
         user: process.env.DB_USER,
@@ -38,10 +26,8 @@ async function addClient(client) {
     );
 
     // Check for errors returned from PL/SQL procedure
-    const errorMessage = result.outBinds.out_error_message;
-    if (errorMessage) {
-      console.error('Error inserting client:', errorMessage);
-      throw new Error(errorMessage);
+    if (result.outBinds.out_error_message) {
+      throw new Error(result.outBinds.out_error_message);
     }
 
     // If no error, retrieve the generated clientNo

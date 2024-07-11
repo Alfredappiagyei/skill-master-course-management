@@ -65,12 +65,14 @@ async function deleteRegistration(registrationNo) {
       }
     );
 
-    await con.commit();
     console.log('Registration deleted successfully');
 
   } catch (err) {
-    console.error('Error deleting invoice:', err);
-    throw err;
+    if (err.errorNum === 20001) {
+      console.error('Cannot delete registration due to related records.');
+    } else {
+      console.error('Error deleting registration:', err);
+    }    throw err;
   } finally {
     if (con) {
       try {

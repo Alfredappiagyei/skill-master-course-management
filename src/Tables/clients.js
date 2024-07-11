@@ -65,11 +65,10 @@ async function deleteClient(clientNo) {
       }
     );
 
-    await con.commit();
     console.log('Client deleted successfully');
 
   } catch (err) {
-    if (err.errorNum === 2292) {
+    if (err.errorNum === 20001) {
       console.error('Cannot delete client due to related records.');
     } else {
       console.error('Error deleting client:', err);

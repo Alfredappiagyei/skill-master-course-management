@@ -19,7 +19,7 @@ BEGIN
 
     -- Validate input
     IF in_employeeFName IS NULL OR in_employeeLName IS NULL OR in_employeeEmail IS NULL OR in_employeeContact IS NULL THEN
-        out_error_message := 'Missing required fields.';
+        out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
 
@@ -42,15 +42,6 @@ BEGIN
         WHEN OTHERS THEN
             out_error_message := SQLERRM;
     END;
-
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
-
 END;
 /
 
@@ -71,7 +62,7 @@ BEGIN
 
     -- Validate input
     IF in_clientName IS NULL OR in_clientEmail IS NULL OR in_clientContact IS NULL THEN
-        out_error_message := 'Missing required fields.';
+        out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
 
@@ -94,15 +85,6 @@ BEGIN
         WHEN OTHERS THEN
             out_error_message := SQLERRM;
     END;
-
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
-
 END;
 /
 
@@ -142,7 +124,7 @@ BEGIN
        in_attEmailAddress IS NULL OR
        in_clientNo IS NULL THEN
        
-        out_error_message := 'Missing required fields.';
+        out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
 
@@ -190,14 +172,6 @@ BEGIN
             out_error_message := SQLERRM;
     END;
 
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
-
 END;
 /
 
@@ -229,19 +203,9 @@ BEGIN
         COMMIT; -- Commit the transaction to make the insertion permanent
 
     EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            out_error_message := 'Duplicate course type description. Course type already exists.';
         WHEN OTHERS THEN
             out_error_message := SQLERRM;
     END;
-
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
 
 END;
 /
@@ -278,7 +242,7 @@ BEGIN
        in_delivererEmployeeNo IS NULL OR
        in_courseTypeNo IS NULL THEN
        
-        out_error_message := 'Missing required fields.';
+        out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
 
@@ -311,19 +275,9 @@ BEGIN
         COMMIT; -- Commit the transaction to make the insertion permanent
 
     EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            out_error_message := 'Duplicate course name. Course already exists.';
         WHEN OTHERS THEN
             out_error_message := SQLERRM;
     END;
-
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
 
 END;
 /
@@ -346,7 +300,7 @@ BEGIN
        in_fee IS NULL OR
        in_courseNo IS NULL THEN
        
-        out_error_message := 'Missing required fields.';
+        out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
 
@@ -365,19 +319,9 @@ BEGIN
         COMMIT; -- Commit the transaction to make the insertion permanent
 
     EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            out_error_message := 'Duplicate course fee entry. Course fee already exists.';
         WHEN OTHERS THEN
             out_error_message := SQLERRM;
     END;
-
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
 
 END;
 /
@@ -410,20 +354,9 @@ BEGIN
         COMMIT; -- Commit the transaction to make the insertion permanent
 
     EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            out_error_message := 'Duplicate payment method entry. Payment method already exists.';
         WHEN OTHERS THEN
             out_error_message := SQLERRM;
     END;
-
-    -- Handle specific errors here if needed
-    IF out_error_message IS NOT NULL THEN
-        -- Log the error or handle it as per your application's requirements
-        DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-        -- You can raise an application-specific exception or perform other actions
-        -- based on the error encountered.
-    END IF;
-
 END;
 /
 
@@ -441,7 +374,7 @@ BEGIN
 
   -- Validate input
   IF in_locationName IS NULL OR in_locationMaxSize IS NULL THEN
-    out_error_message := 'Missing required fields: locationName, locationMaxSize';
+    out_error_message := 'Missing required field(s)';
     RETURN;
   END IF;
 
@@ -457,20 +390,9 @@ BEGIN
     COMMIT; -- Commit the transaction to make the insertion permanent
 
   EXCEPTION
-    WHEN DUP_VAL_ON_INDEX THEN
-      out_error_message := 'Duplicate location entry. Location already exists.';
     WHEN OTHERS THEN
       out_error_message := SQLERRM;
   END;
-
-  -- Handle specific errors here if needed
-  IF out_error_message IS NOT NULL THEN
-    -- Log the error or handle it as per your application's requirements
-    DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-    -- You can raise an application-specific exception or perform other actions
-    -- based on the error encountered.
-  END IF;
-
 END;
 /
 
@@ -492,7 +414,7 @@ BEGIN
   -- Validate input
   IF in_registrationDate IS NULL OR in_delegateNo IS NULL OR in_courseFeeNo IS NULL 
      OR in_registerEmployeeNo IS NULL OR in_courseNo IS NULL THEN
-    out_error_message := 'Missing required fields: registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo';
+    out_error_message := 'Missing required field(s)';
     RETURN;
   END IF;
 
@@ -514,20 +436,9 @@ BEGIN
     COMMIT; -- Commit the transaction to make the insertion permanent
 
   EXCEPTION
-    WHEN DUP_VAL_ON_INDEX THEN
-      out_error_message := 'Duplicate registration entry. Registration already exists.';
     WHEN OTHERS THEN
       out_error_message := SQLERRM;
   END;
-
-  -- Handle specific errors here if needed
-  IF out_error_message IS NOT NULL THEN
-    -- Log the error or handle it as per your application's requirements
-    DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-    -- You can raise an application-specific exception or perform other actions
-    -- based on the error encountered.
-  END IF;
-
 END;
 /
 
@@ -544,7 +455,7 @@ CREATE OR REPLACE PROCEDURE NEW_INVOICE (
   in_pMethodNo IN Invoice.pMethodNo%type,
   out_newInvoiceNo OUT Invoice.InvoiceNo%type,
   out_error_message OUT VARCHAR2
-) AS
+) is
 BEGIN
   -- Initialize the error message to NULL
   out_error_message := NULL;
@@ -555,8 +466,17 @@ BEGIN
      in_registrationNo IS NULL OR
      in_pMethodNo IS NULL THEN
      
-    out_error_message := 'Missing required fields: dateRaised, datePaid, registrationNo, pMethodNo';
+    out_error_message := 'Missing required field(s)';
     RETURN;
+
+  ELSIF in_datePaid < in_dateRaised THEN
+    out_error_message := 'Date paid cannot be earlier than date raised';
+    RETURN;
+  
+  ELSIF in_expiryDate < SYSDATE THEN
+    out_error_message := 'Credit card expiry date cannot be in the past';
+    RETURN;
+
   END IF;
 
   BEGIN
@@ -569,19 +489,9 @@ BEGIN
     COMMIT; -- Commit the transaction to make the insertion permanent
 
   EXCEPTION
-    WHEN DUP_VAL_ON_INDEX THEN
-      out_error_message := 'Duplicate invoice entry. Invoice already exists.';
     WHEN OTHERS THEN
       out_error_message := SQLERRM;
   END;
-
-  -- Handle specific errors here if needed
-  IF out_error_message IS NOT NULL THEN
-    -- Log the error or handle it as per your application's requirements
-    DBMS_OUTPUT.PUT_LINE('Error: ' || out_error_message);
-    -- You can raise an application-specific exception or perform other actions
-    -- based on the error encountered.
-  END IF;
 
 END;
 /
@@ -594,9 +504,26 @@ CREATE OR REPLACE PROCEDURE new_booking(
     in_locationNo IN Booking.locationNo%type,
     in_courseNo IN Booking.courseNo%type,
     in_bookingEmployeeNo IN Booking.bookingEmployeeNo%type,
-    out_newBookingNo OUT Booking.bookingNo%type
+    out_newBookingNo OUT Booking.bookingNo%type,
+    out_error_message OUT VARCHAR2
+
 ) IS
 BEGIN
+  -- Initialize the error message to NULL
+  out_error_message := NULL;
+
+  -- Validate input
+  IF in_bookingDate IS NULL OR
+     in_locationNo IS NULL OR
+     in_courseNo IS NULL OR
+     in_bookingEmployeeNo IS NULL THEN
+
+    out_error_message := 'Missing required field(s)';
+    RETURN;
+  END IF;
+
+  begin
+
     INSERT INTO Booking(
         bookingDate,
         locationNo,
@@ -610,9 +537,10 @@ BEGIN
     )
     RETURNING bookingNo INTO out_newBookingNo;
     COMMIT; -- Commit the transaction to make the insertion permanent
-EXCEPTION
+  EXCEPTION
     WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20001, 'Error inserting booking: ' || SQLERRM);
+      out_error_message := SQLERRM;
+  END;
 END;
 /
 
@@ -625,7 +553,7 @@ END;
 -- RETRIVE RECORDS with CURSORS
 
 -- RETRIEVING EMPLOYEE DETAILS
-CREATE OR REPLACE PROCEDURE get_employees_details (p_cursor OUT SYS_REFCURSOR) AS
+CREATE OR REPLACE PROCEDURE get_employee_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
     SELECT * FROM employee;
@@ -717,6 +645,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_employee(p_employeeNo IN Employee.employeeNo%type) AS
 BEGIN
   DELETE FROM Employee WHERE employeeNo = p_employeeNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete employee due to related records.');
 END;
 /
 
@@ -725,22 +657,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_client(p_clientNo IN client.clientNo%type) AS
 BEGIN
   DELETE FROM client WHERE clientNo = p_clientNo;
-END;
-/
-
-CREATE OR REPLACE PROCEDURE delete_client(p_clientNo IN client.clientNo%type) AS
-BEGIN
-  DELETE FROM client WHERE clientNo = p_clientNo;
   COMMIT;
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE = -2292 THEN
-      -- Child records found, handle as needed
-      RAISE_APPLICATION_ERROR(-20001, 'Cannot delete client due to related records.');
-    ELSE
-      -- Handle other exceptions
-      RAISE;
-    END IF;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete client due to related records.');
 END;
 /
 
@@ -748,6 +668,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_delegate(p_delegateNo IN delegate.delegateNo%type) AS
 BEGIN
   DELETE FROM delegate WHERE delegateNo = p_delegateNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete delegate due to related records.');
 END;
 /
 
@@ -755,6 +679,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_courseType(p_courseTypeNo IN coursetype.courseTypeNo%type) AS
 BEGIN
   DELETE FROM coursetype WHERE courseTypeNo = p_courseTypeNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete course type due to related records.');
 END;
 /
 
@@ -762,6 +690,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_course(p_courseNo IN course.courseNo%type) AS
 BEGIN
   DELETE FROM course WHERE courseNo = p_courseNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete course due to related records.');
 END;
 /
 
@@ -769,6 +701,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_courseFee(p_courseFeeNo IN coursefee.courseFeeNo%type) AS
 BEGIN
   DELETE FROM coursefee WHERE courseFeeNo = p_courseFeeNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete course fee due to related records.');
 END;
 /
 
@@ -776,6 +712,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_paymentMethod(p_paymentMethodNo IN paymentmethod.pMethodNo%type) AS
 BEGIN
   DELETE FROM paymentmethod WHERE pMethodNo = p_paymentMethodNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete payment method due to related records.');
 END;
 /
 
@@ -783,6 +723,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_location(p_locationNo IN location.locationNo%type) AS
 BEGIN
   DELETE FROM location WHERE locationNo = p_locationNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete location due to related records.');
 END;
 /
 
@@ -790,6 +734,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_registration(p_registrationNo IN registration.registrationNo%type) AS
 BEGIN
   DELETE FROM registration WHERE registrationNo = p_registrationNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete registration due to related records.');
 END;
 /
 
@@ -797,6 +745,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_invoice(p_invoiceNo IN invoice.invoiceNo%type) AS
 BEGIN
   DELETE FROM invoice WHERE invoiceNo = p_invoiceNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete invoice due to related records.');
 END;
 /
 
@@ -804,6 +756,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_booking(p_bookingNo IN booking.bookingNo%type) AS
 BEGIN
   DELETE FROM booking WHERE bookingNo = p_bookingNo;
+    COMMIT;
+exception
+  when others then
+    RAISE_APPLICATION_ERROR(-20001, 'Cannot delete booking due to related records.');
 END;
 /
 
