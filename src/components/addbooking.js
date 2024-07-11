@@ -5,22 +5,6 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addBooking(booking) {
   let con;
 
-  // Validate input
-  const requiredFields = [
-    'bookingDate',
-    'locationNo',
-    'courseNo',
-    'bookingEmployeeNo'
-  ];
-
-  const missingFields = requiredFields.filter(field => !booking[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
-
   try {
     con = await oracledb.getConnection({
       user: process.env.DB_USER,
@@ -35,7 +19,8 @@ async function addBooking(booking) {
            :locationNo,
            :courseNo,
            :bookingEmployeeNo,
-           :newBookingNo
+           :newBookingNo,
+           :out_error_message
          );
        END;`,
       {
@@ -43,18 +28,29 @@ async function addBooking(booking) {
         locationNo: booking.locationNo,
         courseNo: booking.courseNo,
         bookingEmployeeNo: booking.bookingEmployeeNo,
-        newBookingNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
-      },
-      { autoCommit: true }
-    );
+        newBookingNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
+
+      }    );
+
+       // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting booking:', errorMessage);
+      throw new Error(errorMessage);
+    }
 
     const newBookingNo = result.outBinds.newBookingNo[0];
     console.log(`Booking added successfully with ID: ${newBookingNo}`);
     
     return newBookingNo; // Return the generated bookingNo if needed
   } catch (err) {
-    console.error('Error inserting booking:', err);
-    throw err;
+     // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting booking:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

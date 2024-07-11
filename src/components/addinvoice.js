@@ -5,19 +5,6 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addInvoice(invoice) {
   let con;
 
-  // Validate input
-  // if (!invoice.dateRaised || !invoice.datePaid || !invoice.registrationNo || !invoice.pMethodNo) {
-  //   const missingFields = [];
-  //   if (!invoice.dateRaised) missingFields.push('dateRaised');
-  //   if (!invoice.datePaid) missingFields.push('datePaid');
-  //   if (!invoice.registrationNo) missingFields.push('registrationNo');
-  //   if (!invoice.pMethodNo) missingFields.push('pMethodNo');
-
-  //   const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-  //   console.error(errorMessage);
-  //   throw new Error(errorMessage);
-  // }
-
   try {
     con = await oracledb.getConnection({
       user: process.env.DB_USER,
@@ -52,18 +39,24 @@ async function addInvoice(invoice) {
       }
         );
 
-    if (result.outBinds.out_error_message) {
-      throw new Error(result.outBinds.out_error_message);
+    // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting invoice:', errorMessage);
+      throw new Error(errorMessage);
     }
-
     const newInvoiceNo = result.outBinds.newInvoiceNo[0];
     console.log(`Invoice added successfully with ID: ${newInvoiceNo}`);
 
     return newInvoiceNo; // Return the generated invoiceNo if needed
   } catch (err) {
 
-    console.error('Error inserting invoice:', err);
-    throw err;
+     // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting invoice:', errorMessage);
+      throw new Error(errorMessage);
+    }
 
   } finally {
     if (con) {

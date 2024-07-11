@@ -5,33 +5,11 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addCourse(course) {
   let con;
 
-  // Validate input
-  const requiredFields = [
-    'courseName',
-    'courseDescription',
-    'startDate',
-    'startTime',
-    'endDate',
-    'endTime',
-    'maxDelegates',
-    'confirmed',
-    'delivererEmployeeNo',
-    'courseTypeNo'
-  ];
-
-  const missingFields = requiredFields.filter(field => !course[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
-
   try {
     con = await oracledb.getConnection({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        connectString: process.env.DB_CONNECT_STRING
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
@@ -64,15 +42,25 @@ async function addCourse(course) {
         courseTypeNo: course.courseTypeNo,
         newCourseNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
-      }    );
+      });
+    // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting course:', errorMessage);
+      throw new Error(errorMessage);
+    }
 
     const newCourseNo = result.outBinds.newCourseNo[0];
     console.log(`Course added successfully with ID: ${newCourseNo}`);
-    
+
     return newCourseNo; // Return the generated courseNo if needed
   } catch (err) {
-    console.error('Error inserting course:', err);
-    throw err;
+    // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting course:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

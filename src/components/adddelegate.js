@@ -5,28 +5,7 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addDelegate(delegate) {
   let con;
 
-  // Validate input
-  const requiredFields = [
-    'delegateTitle',
-    'delegateFName',
-    'delegateLName',
-    'delegateStreet',
-    'delegateCity',
-    'delegateState',
-    'delegateZipCode',
-    'attTelNo',
-    'attFaxNo',
-    'attEmailAddress',
-    'clientNo'
-  ];
-
-  const missingFields = requiredFields.filter(field => !delegate[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
+  
 
   try {
     con = await oracledb.getConnection({
@@ -69,13 +48,24 @@ async function addDelegate(delegate) {
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
       }    );
 
+       // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting delegate:', errorMessage);
+      throw new Error(errorMessage);
+    }
+
     const newdelegateNo = result.outBinds.out_newdelegateNo[0];
     console.log(`Delegate added successfully with ID: ${newdelegateNo}`);
     
     return newdelegateNo; // Return the generated delegateNo if needed
-  } catch (TypeError) {
-    console.error('Error inserting delegate:', 'CLIENT NUMBER DOES NOT EXIST');
-    throw err;
+  } catch (err) {
+     // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting delegate:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

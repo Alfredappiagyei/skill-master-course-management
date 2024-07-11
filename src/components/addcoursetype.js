@@ -5,19 +5,6 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addCourseType(courseType) {
   let con;
 
-  // Validate input
-  const requiredFields = [
-    'courseTypeDescription'
-  ];
-
-  const missingFields = requiredFields.filter(field => !courseType[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
-
   try {
     con = await oracledb.getConnection({
       user: process.env.DB_USER,
@@ -39,13 +26,24 @@ async function addCourseType(courseType) {
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
       });
 
+       // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting course type:', errorMessage);
+      throw new Error(errorMessage);
+    }
+
     const newCourseTypeNo = result.outBinds.out_newCourseTypeNo[0];
     console.log(`Course type added successfully with ID: ${newCourseTypeNo}`);
 
     return newCourseTypeNo; // Return the generated courseTypeNo if needed
   } catch (err) {
-    console.error('Error inserting course type:', err);
-    throw err;
+ // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting course type:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

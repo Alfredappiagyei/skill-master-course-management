@@ -7,9 +7,9 @@ async function addClient(client) {
 
   try {
     con = await oracledb.getConnection({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        connectString: process.env.DB_CONNECT_STRING
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
@@ -26,18 +26,25 @@ async function addClient(client) {
     );
 
     // Check for errors returned from PL/SQL procedure
-    if (result.outBinds.out_error_message) {
-      throw new Error(result.outBinds.out_error_message);
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting client:', errorMessage);
+      throw new Error(errorMessage);
     }
+
 
     // If no error, retrieve the generated clientNo
     const newclientNo = result.outBinds.out_newclientNo[0];
     console.log(`Client added successfully with ID: ${newclientNo}`);
-    
+
     return newclientNo; // Return the generated clientId if needed
   } catch (err) {
-    console.error('Error inserting client:', err);
-    throw err;
+    // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting client:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

@@ -5,19 +5,6 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 async function addPaymentMethod(paymentMethod) {
   let con;
 
-  // Validate input
-  const requiredFields = [
-    'pMethodName'
-  ];
-
-  const missingFields = requiredFields.filter(field => !paymentMethod[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
-
   try {
     con = await oracledb.getConnection({
         user: process.env.DB_USER,
@@ -39,13 +26,24 @@ async function addPaymentMethod(paymentMethod) {
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
       }    );
 
+        // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting payment method:', errorMessage);
+      throw new Error(errorMessage);
+    }
+
     const newPMethodNo = result.outBinds.newPMethodNo[0];
     console.log(`Payment method added successfully with ID: ${newPMethodNo}`);
     
     return newPMethodNo; // Return the generated pMethodNo if needed
   } catch (err) {
-    console.error('Error inserting payment method:', err);
-    throw err;
+     // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting payment method:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

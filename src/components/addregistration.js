@@ -49,17 +49,28 @@ async function addRegistration(registration) {
         courseNo: registration.courseNo,
         newRegistrationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
-      },
-      { autoCommit: true }
-    );
+      }    );
+
+        // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting registration:', errorMessage);
+      throw new Error(errorMessage);
+    }
+
+
 
     const newRegistrationNo = result.outBinds.newRegistrationNo[0];
     console.log(`Registration added successfully with ID: ${newRegistrationNo}`);
     
     return newRegistrationNo; // Return the generated registrationNo if needed
   } catch (err) {
-    console.error('Error inserting registration:', err);
-    throw err;
+     // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting registration:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

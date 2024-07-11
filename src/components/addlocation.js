@@ -40,17 +40,26 @@ async function addLocation(location) {
         locationMaxSize: location.locationMaxSize,
         newLocationNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
-      },
-      { autoCommit: true }
-    );
+      }    );
+
+        // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting location:', errorMessage);
+      throw new Error(errorMessage);
+    }
 
     const newLocationNo = result.outBinds.newLocationNo[0];
     console.log(`Location added successfully with ID: ${newLocationNo}`);
     
     return newLocationNo; // Return the generated locationNo if needed
   } catch (err) {
-    console.error('Error inserting location:', err);
-    throw err;
+     // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting location:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {

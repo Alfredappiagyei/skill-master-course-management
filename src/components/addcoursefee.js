@@ -4,27 +4,11 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 async function addCourseFee(courseFee) {
   let con;
-
-  // Validate input
-  const requiredFields = [
-    'feeDescription',
-    'fee',
-    'courseNo'
-  ];
-
-  const missingFields = requiredFields.filter(field => !courseFee[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `Error: Missing required fields: ${missingFields.join(', ')}`;
-    console.error(errorMessage);
-    throw new Error(errorMessage);
-  }
-
   try {
     con = await oracledb.getConnection({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        connectString: process.env.DB_CONNECT_STRING
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      connectString: process.env.DB_CONNECT_STRING
     });
 
     const result = await con.execute(
@@ -43,15 +27,25 @@ async function addCourseFee(courseFee) {
         courseNo: courseFee.courseNo,
         newCourseFeeNo: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         out_error_message: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 2000 }
-      }    );
+      });
+    // Check for errors returned from PL/SQL procedure
+    const errorMessage = result.outBinds.out_error_message;
+    if (errorMessage) {
+      console.error('Error inserting curse fee:', errorMessage);
+      throw new Error(errorMessage);
+    }
 
     const newCourseFeeNo = result.outBinds.newCourseFeeNo[0];
     console.log(`Course fee added successfully with ID: ${newCourseFeeNo}`);
-    
+
     return newCourseFeeNo; // Return the generated courseFeeNo if needed
   } catch (err) {
-    console.error('Error inserting course fee:', err);
-    throw err;
+      // does not do anything. just so the code doesnot break. originally has 
+    // to throw some error but shows too much info i dont want that
+    if (errorMessage) {
+      console.error('Error inserting course fee:', errorMessage);
+      throw new Error(errorMessage);
+    }
   } finally {
     if (con) {
       try {
