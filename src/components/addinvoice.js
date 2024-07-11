@@ -44,7 +44,9 @@ async function addInvoice(invoice) {
     if (errorMessage) {
       console.error('Error inserting invoice:', errorMessage);
       throw new Error(errorMessage);
-    }
+    } 
+
+
     const newInvoiceNo = result.outBinds.newInvoiceNo[0];
     console.log(`Invoice added successfully with ID: ${newInvoiceNo}`);
 

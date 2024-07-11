@@ -2,9 +2,11 @@
 -- TRIGGERS and PROCEDURES and CURSORS for INSERTING AND RETRIEVING INFORMATION
 -- from the database
 
--- INSERTING RECORDS WITH STORED PROCEDURES
---create a new employee
 
+
+-- INSERTING RECORDS WITH STORED PROCEDURES
+
+--create a new employee
 CREATE OR REPLACE PROCEDURE new_employee(
     in_employeeFName IN Employee.employeeFName%TYPE,
     in_employeeLName IN Employee.employeeLName%TYPE,
@@ -115,12 +117,8 @@ BEGIN
     IF in_delegateTitle IS NULL OR
        in_delegateFName IS NULL OR
        in_delegateLName IS NULL OR
-       in_delegateStreet IS NULL OR
        in_delegateCity IS NULL OR
-       in_delegateState IS NULL OR
-       in_delegateZipCode IS NULL OR
        in_attTelNo IS NULL OR
-       in_attFaxNo IS NULL OR
        in_attEmailAddress IS NULL OR
        in_clientNo IS NULL THEN
        
@@ -367,7 +365,7 @@ CREATE OR REPLACE PROCEDURE NEW_LOCATION (
   in_locationMaxSize IN Location.locationMaxSize%TYPE,
   out_newLocationNo OUT Location.locationNo%TYPE,
   out_error_message OUT VARCHAR2
-) AS
+) IS
 BEGIN
   -- Initialize the error message to NULL
   out_error_message := NULL;
@@ -406,7 +404,7 @@ CREATE OR REPLACE PROCEDURE NEW_REGISTRATION (
   in_courseNo IN registration.courseNo%type,
   out_newRegistrationNo OUT Registration.registrationNo%TYPE,
   out_error_message OUT VARCHAR2
-) AS
+) IS
 BEGIN
   -- Initialize the error message to NULL
   out_error_message := NULL;
@@ -498,7 +496,7 @@ END;
 
 
 
---book a location for a registration
+--booking a location for a registration
 CREATE OR REPLACE PROCEDURE new_booking(
     in_bookingDate IN Booking.bookingDate%type,
     in_locationNo IN Booking.locationNo%type,
@@ -523,7 +521,7 @@ BEGIN
   END IF;
 
   begin
-
+  -- insert new booking
     INSERT INTO Booking(
         bookingDate,
         locationNo,
@@ -639,6 +637,9 @@ BEGIN
     SELECT * FROM booking;
 END;
 /
+
+
+
 
 --deleting records
 
@@ -783,6 +784,8 @@ BEGIN
         employeeNo = in_employeeNo;
 END;
 /
+
+
 
 --CREATING USER LOGS
 
@@ -1301,3 +1304,34 @@ BEGIN
     VALUES (USER, v_action, 'Booking', v_old_values, v_new_values);
 END;
 /
+
+-- CREATE OR REPLACE TRIGGER credit_card_details_check
+-- BEFORE INSERT OR UPDATE ON Invoice
+-- FOR EACH ROW
+-- DECLARE
+--     out_error_message VARCHAR2(200);
+-- BEGIN
+--     IF :NEW.creditCardNo IS NOT NULL THEN
+--         -- Check if holdersName and expiryDate are provided if creditCardNo is filled
+--         IF :NEW.holdersName IS NULL OR :NEW.expiryDate IS NULL THEN
+--             out_error_message := 'If credit card details are provided, holdersName and expiryDate must also be filled.';
+--             RAISE_APPLICATION_ERROR(-20001, out_error_message);
+--         END IF;
+
+--     ELSIF :NEW.holdersName IS NOT NULL THEN
+--         -- Check if creditcardNo and expiryDate are provided if holdersname is filled
+--         IF :NEW.creditCardNo IS NULL OR :NEW.expiryDate IS NULL THEN
+--             out_error_message := 'If credit card details are provided, credit card number and expiryDate must also be filled.';
+--             RAISE_APPLICATION_ERROR(-20001, out_error_message);
+--         END IF;  
+
+--      ELSIF :NEW.expiryDate IS NOT NULL THEN
+--         -- Check if holdersName and creditcardNo are provided if expirey date is filled
+--         IF :NEW.holdersName IS NULL OR :NEW.expiryDate IS NULL THEN
+--             out_error_message := 'If credit card details are provided, holdersName and credi card number must also be filled.';
+--             RAISE_APPLICATION_ERROR(-20001, out_error_message);
+--         END IF;  
+
+--     END IF;
+--   end;
+--   /
