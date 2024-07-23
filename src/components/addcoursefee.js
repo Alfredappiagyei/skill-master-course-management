@@ -31,7 +31,7 @@ async function addCourseFee(courseFee) {
     // Check for errors returned from PL/SQL procedure
     const errorMessage = result.outBinds.out_error_message;
     if (errorMessage) {
-      console.error('Error inserting curse fee:', errorMessage);
+      console.error('Error inserting course fee:', errorMessage);
       throw new Error(errorMessage);
     }
 
