@@ -52,6 +52,9 @@ class ClientForm extends Component {
         body: JSON.stringify({ clientName, clientEmail, clientContact }),
       });
 
+      const result = await response.json();
+
+
       if (response.ok) {
         toast.success('Client added successfully');
         this.setState({
@@ -61,7 +64,14 @@ class ClientForm extends Component {
           errors: {},
         });
       } else {
-        toast.error('Failed to add client');
+        // Display specific error message from the server
+        const errorMessage = result.errors || 'Error inserting client: Duplicate client email. Client already exists.';
+  
+        if (typeof errorMessage === 'string') {
+          if (errorMessage.includes('Duplicate client email')) {
+            toast.error('Failed to add client. Duplicate client email. Client already exists.');
+          } 
+        } 
       }
     } catch (err) {
       toast.error('Error: ' + err.message);

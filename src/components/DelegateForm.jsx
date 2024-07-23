@@ -37,10 +37,7 @@ class DelegateForm extends Component {
       delegateTitle,
       delegateFName,
       delegateLName,
-      delegateStreet,
       delegateCity,
-      delegateState,
-      delegateZipCode,
       attTelNo,
       attEmailAddress,
       clientNo,
@@ -53,8 +50,8 @@ class DelegateForm extends Component {
     if (!delegateCity) errors.delegateCity = 'City is required';
     if (!attTelNo) errors.attTelNo = 'Tel Number is required';
     if (!attEmailAddress) errors.attEmailAddress = 'Email Address is required';
-    if (!clientNo) errors.clientNo = 'Client Number is required,  input existing client number or create one before';
-    
+    if (!clientNo) errors.clientNo = 'Client Number is required';
+
     this.setState({ errors });
     return Object.keys(errors).length === 0;
   };
@@ -65,7 +62,7 @@ class DelegateForm extends Component {
       toast.error('Please fill in all required fields');
       return;
     }
-
+  
     const {
       delegateTitle,
       delegateFName,
@@ -79,7 +76,7 @@ class DelegateForm extends Component {
       attEmailAddress,
       clientNo,
     } = this.state;
-
+  
     try {
       const response = await fetch('http://localhost:3001/api/delegates', {
         method: 'POST',
@@ -98,10 +95,9 @@ class DelegateForm extends Component {
           clientNo,
         }),
       });
-
+  
       const result = await response.json();
-
-
+  
       if (response.ok) {
         toast.success('Delegate added successfully');
         this.setState({
@@ -118,26 +114,29 @@ class DelegateForm extends Component {
           clientNo: '',
           errors: {},
         });
-      } 
-      else {
-        // Display specific error message from the server
-        const errorMessage = result.message || 'Duplicate delegate email.';
-        toast.error(errorMessage);
+      } else {
+        const errorContent = [
+          'Error inserting delegate: Duplicate delegate details. Delegate already exists.',
+          'Error inserting delegate: ORA-02291: integrity constraint (SOLO.SYS_C009558) violated - parent key not found'
+        ];
+  
+        const errorMessage = result.errors || errorContent;
+  
+        let displayedError = false;
+
+      if (Array.isArray(errorMessage)) {
+        errorMessage.forEach((error) => {
+          if (error.includes('Duplicate delegate details') && !displayedError) {
+            toast.error('Failed to add delegate. Duplicate delegate email. Delegate already exists.');
+          } 
+        });
       }
-      // else {
-        
-      //   const errorResponse = await response.json();
-      //   if (errorResponse.error.includes('ORA-02291')) {
-      //     toast.error('Error inserting delegate: Parent key not found. Please input an existing client number.');
-      //   } else {
-      //     toast.error('Failed to add delegate');
-      //   }
-      // }
+      }
     } catch (err) {
       toast.error('Error: ' + err.message);
     }
   };
-
+  
   handleDelete = async (delegateNo) => {
     if (window.confirm('Are you sure you want to delete this delegate?')) {
       try {

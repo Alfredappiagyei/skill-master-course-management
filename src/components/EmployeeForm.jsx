@@ -44,21 +44,21 @@ class EmployeeForm extends Component {
       toast.error('Please fill in all required fields');
       return;
     }
-
+  
     const { employeeFName, employeeLName, employeeEmail, employeeContact } = this.state;
-
+  
     // Set loading to true when submission starts
     this.setState({ isLoading: true });
-
+  
     try {
       const response = await fetch('http://localhost:3001/api/employees', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ employeeFName, employeeLName, employeeEmail, employeeContact }),
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         toast.success('Employee added successfully');
         this.setState({
@@ -70,8 +70,13 @@ class EmployeeForm extends Component {
         });
       } else {
         // Display specific error message from the server
-        const errorMessage = result.message || 'Duplicate employee email.';
-        toast.error(errorMessage);
+        const errorMessage = result.errors || 'Error inserting employee: Duplicate employee email. Employee already exists.';
+  
+        if (typeof errorMessage === 'string') {
+          if (errorMessage.includes('Duplicate employee email')) {
+            toast.error('Failed to add employee. Duplicate employee email. Employee already exists.');
+          } 
+        } 
       }
     } catch (err) {
       toast.error('Error: ' + err.message);
@@ -80,6 +85,7 @@ class EmployeeForm extends Component {
       this.setState({ isLoading: false });
     }
   };
+  
 
   handleDelete = async (employeeId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this employee?');
