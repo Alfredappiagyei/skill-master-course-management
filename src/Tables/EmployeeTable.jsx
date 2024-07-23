@@ -44,21 +44,19 @@ export default function EmployeeTable() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Updating employee:', editEmployee); // Check if editEmployee has the updated values
-  
       const response = await fetch(`http://localhost:3001/api/employees/${editEmployee.EMPLOYEENO}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editEmployee),
       });
-  
+
       if (response.ok) {
-        const updatedEmployee = await response.json(); // Assuming the API returns the updated employee
-        console.log('Employee updated successfully:', updatedEmployee); // Log updated employee details
-  
-        // Update the employees state to reflect the changes
-        setEmployees(employees.map((emp) => (emp.EMPLOYEENO === updatedEmployee.EMPLOYEENO ? updatedEmployee : emp)));
-        setEditEmployee(null); // Reset editEmployee state after successful update
+        const updatedEmployee = await response.json();
+        setEmployees(
+          employees.map((emp) => (emp.EMPLOYEENO === updatedEmployee.EMPLOYEENO ? updatedEmployee : emp))
+        );
+        setEditEmployee(null);
+        console.log('Employee updated successfully:', updatedEmployee);
       } else {
         console.error('Failed to update employee');
       }
@@ -66,65 +64,64 @@ export default function EmployeeTable() {
       console.error('Error:', err);
     }
   };
-  
 
   return (
     <div className="table">
-      <div className="row">
-        <div className="all-startups">
-          <div className="all"><h4>All Employees</h4></div>
-        </div>
-        <section style={{ width: '100%' }}>
-          <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
-          <div className="row" style={{ width: '100%' }}>
-            <div className="col-md-2" style={{ paddingRight: '100px' }}><b>Employee Number</b></div>
-            <div className="col-md-2"><b>First Name</b></div>
-            <div className="col-md-2"><b>Last Name</b></div>
-            <div className="col-md-2"><b>Email</b></div>
-            <div className="col-md-2"><b>Contact</b></div>
-            <div className="col-md-2"><b>Actions</b></div>
-          </div>
-          <hr />
-          <div className="row" style={{ width: '100%', marginLeft: '1px' }}>
+      <div className="all-startups">
+        <div className="all"><h4>All Employees</h4></div>
+      </div>
+      <section style={{ width: '100%' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Employee Number</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Contact</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {employees.map((employee, index) => (
-              <div key={index} className="row" style={{ width: '100%' }}>
-                <div className="col-md-2">{employee.EMPLOYEENO}</div>
-                <div className="col-md-2">{employee.EMPLOYEEFNAME}</div>
-                <div className="col-md-2">{employee.EMPLOYEELNAME}</div>
-                <div className="col-md-2">{employee.EMPLOYEEEMAIL}</div>
-                <div className="col-md-2">{employee.EMPLOYEECONTACT}</div>
-                <div className="col-md-2">
+              <tr key={index}>
+                <td>{employee.EMPLOYEENO}</td>
+                <td>{employee.EMPLOYEEFNAME}</td>
+                <td>{employee.EMPLOYEELNAME}</td>
+                <td>{employee.EMPLOYEEEMAIL}</td>
+                <td>{employee.EMPLOYEECONTACT}</td>
+                <td>
                   <button onClick={() => handleUpdate(employee)}>Update</button>
                   <button onClick={() => handleDelete(employee.EMPLOYEENO)}>Delete</button>
-                </div>
-              </div>
+                </td>
+              </tr>
             ))}
-          </div>
-          {editEmployee && (
-            <form onSubmit={handleFormSubmit}>
-              <h3>Edit Employee</h3>
-              <label>
-                First Name:
-                <input type="text" name="EMPLOYEEFNAME" value={editEmployee.EMPLOYEEFNAME} onChange={handleFormChange} />
-              </label>
-              <label>
-                Last Name:
-                <input type="text" name="EMPLOYEELNAME" value={editEmployee.EMPLOYEELNAME} onChange={handleFormChange} />
-              </label>
-              <label>
-                Email:
-                <input type="email" name="EMPLOYEEEMAIL" value={editEmployee.EMPLOYEEEMAIL} onChange={handleFormChange} />
-              </label>
-              <label>
-                Contact:
-                <input type="text" name="EMPLOYEECONTACT" value={editEmployee.EMPLOYEECONTACT} onChange={handleFormChange} />
-              </label>
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setEditEmployee(null)}>Cancel</button>
-            </form>
-          )}
-        </section>
-      </div>
+          </tbody>
+        </table>
+        {editEmployee && (
+          <form onSubmit={handleFormSubmit}>
+            <h3>Edit Employee</h3>
+            <label>
+              First Name:
+              <input type="text" name="EMPLOYEEFNAME" value={editEmployee.EMPLOYEEFNAME} onChange={handleFormChange} />
+            </label>
+            <label>
+              Last Name:
+              <input type="text" name="EMPLOYEELNAME" value={editEmployee.EMPLOYEELNAME} onChange={handleFormChange} />
+            </label>
+            <label>
+              Email:
+              <input type="email" name="EMPLOYEEEMAIL" value={editEmployee.EMPLOYEEEMAIL} onChange={handleFormChange} />
+            </label>
+            <label>
+              Contact:
+              <input type="text" name="EMPLOYEECONTACT" value={editEmployee.EMPLOYEECONTACT} onChange={handleFormChange} />
+            </label>
+            <button type="submit">Update</button>
+            <button type="button" onClick={() => setEditEmployee(null)}>Cancel</button>
+          </form>
+        )}
+      </section>
     </div>
   );
 }
