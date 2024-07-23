@@ -165,10 +165,8 @@ BEGIN
 
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
-            out_error_message := 'Duplicate delegate details. Delegate already exists.';
+            out_error_message := 'Duplicate delegate email. Delegate already exists.';
         WHEN OTHERS THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Cannot delete course fee due to related records.');
-
             out_error_message := SQLERRM;
     END;
 
