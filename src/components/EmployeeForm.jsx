@@ -57,6 +57,8 @@ class EmployeeForm extends Component {
         body: JSON.stringify({ employeeFName, employeeLName, employeeEmail, employeeContact }),
       });
 
+      const result = await response.json();
+
       if (response.ok) {
         toast.success('Employee added successfully');
         this.setState({
@@ -67,13 +69,35 @@ class EmployeeForm extends Component {
           errors: {},
         });
       } else {
-        toast.error('Failed to add employee');
+        // Display specific error message from the server
+        const errorMessage = result.message || 'Duplicate employee email.';
+        toast.error(errorMessage);
       }
     } catch (err) {
       toast.error('Error: ' + err.message);
     } finally {
       // Set loading to false when submission ends
       this.setState({ isLoading: false });
+    }
+  };
+
+  handleDelete = async (employeeId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this employee?');
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/employees/${employeeId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('Employee deleted successfully');
+        // Optionally refresh the employee table or state here
+      } else {
+        toast.error('Failed to delete employee');
+      }
+    } catch (err) {
+      toast.error('Error: ' + err.message);
     }
   };
 
@@ -153,7 +177,7 @@ class EmployeeForm extends Component {
         </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>
-          <EmployeeTable />
+          <EmployeeTable handleDelete={this.handleDelete} />
         </Modal>
       </div>
     );
