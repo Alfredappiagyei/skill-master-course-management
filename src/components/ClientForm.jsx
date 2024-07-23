@@ -1,7 +1,8 @@
-// ClientForm.js
 import React, { Component } from 'react';
 import Modal from './Modal';
 import ClientTable from '../Tables/ClientTable';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class ClientForm extends Component {
   constructor(props) {
@@ -10,63 +11,150 @@ class ClientForm extends Component {
       showModal: false,
       clientName: '',
       clientEmail: '',
-      clientContact: ''
+      clientContact: '',
+      errors: {},
     };
   }
 
   toggleModal = () => {
-    this.setState(prevState => ({ showModal: !prevState.showModal }));
+    this.setState((prevState) => ({ showModal: !prevState.showModal }));
   };
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  validateForm = () => {
+    const { clientName, clientEmail, clientContact } = this.state;
+    const errors = {};
+
+    if (!clientName) errors.clientName = 'Client Name is required';
+    if (!clientEmail) errors.clientEmail = 'Email is required';
+    if (!clientContact) errors.clientContact = 'Contact is required';
+
+    this.setState({ errors });
+    return Object.keys(errors).length === 0;
+  };
+
   handleSubmit = async (e) => {
     e.preventDefault();
+    if (!this.validateForm()) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
     const { clientName, clientEmail, clientContact } = this.state;
 
     try {
       const response = await fetch('http://localhost:3001/api/clients', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientName, clientEmail, clientContact })
+        body: JSON.stringify({ clientName, clientEmail, clientContact }),
       });
 
       if (response.ok) {
-        console.log('Client added successfully');
-        this.setState({ clientName: '', clientEmail: '', clientContact: '' });
+        toast.success('Client added successfully');
+        this.setState({
+          clientName: '',
+          clientEmail: '',
+          clientContact: '',
+          errors: {},
+        });
       } else {
-        console.error('Failed to add client');
+        toast.error('Failed to add client');
       }
     } catch (err) {
-      console.error('Error:', err);
+      toast.error('Error: ' + err.message);
+    }
+  };
+
+  handleDelete = async (clientNo) => {
+    if (window.confirm('Are you sure you want to delete this client?')) {
+      try {
+        const response = await fetch(`http://localhost:3001/api/clients/${clientNo}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          toast.success('Client deleted successfully');
+          // Refresh the client list or handle the state update accordingly
+        } else {
+          toast.error('Failed to delete client');
+        }
+      } catch (err) {
+        toast.error('Error: ' + err.message);
+      }
     }
   };
 
   render() {
-    const { showModal, clientName, clientEmail, clientContact } = this.state;
+    const { showModal, clientName, clientEmail, clientContact, errors } = this.state;
+
     return (
-      <div style={{ width: "100%", height: "100vh" }}>
-        <div className='col-md-6'>
-          <form onSubmit={this.handleSubmit}>
-            <input type="text" className="form-control" name="clientName" placeholder="Client Name" value={clientName} onChange={this.handleChange} style={{ width: "300px" }} /><br />
-            <input type="email" className="form-control" name="clientEmail" placeholder="Email" value={clientEmail} onChange={this.handleChange} style={{ width: "300px" }} /><br />
-            <input type="text" className="form-control" name="clientContact" placeholder="Contact" value={clientContact} onChange={this.handleChange} style={{ width: "300px" }} /><br />
+      <div style={{ width: '100%', height: '100vh' }}>
+        <ToastContainer />
+        <div className='form-container'>
+          <form onSubmit={this.handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            <div className='form-group'>
+              <label htmlFor='clientName'>Client Name</label>
+              <input
+                type='text'
+                className='form-control'
+                id='clientName'
+                name='clientName'
+                placeholder='Client Name'
+                value={clientName}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.clientName && <span className='error'>{errors.clientName}</span>}
+            </div>
+            <div className='form-group'>
+              <label htmlFor='clientEmail'>Email</label>
+              <input
+                type='email'
+                className='form-control'
+                id='clientEmail'
+                name='clientEmail'
+                placeholder='Email'
+                value={clientEmail}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.clientEmail && <span className='error'>{errors.clientEmail}</span>}
+            </div>
+            <div className='form-group'>
+              <label htmlFor='clientContact'>Contact</label>
+              <input
+                type='text'
+                className='form-control'
+                id='clientContact'
+                name='clientContact'
+                placeholder='Contact'
+                value={clientContact}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.clientContact && <span className='error'>{errors.clientContact}</span>}
+            </div>
+            <div className='form-group'>
+              <button className='button' type='submit' style={{ width: '200px' }}>
+                Add New Client
+              </button>
+              <button
+                className='button'
+                type='button'
+                style={{ width: '200px' }}
+                onClick={this.toggleModal}
+              >
+                View Clients
+              </button>
+            </div>
           </form>
         </div>
 
-        <div className='col-md-6' style={{ display: "flex", flexWrap: "wrap", alignItems: "center", textAlign: "center", gap: 10 }}>
-           <button className="button" style={{ width: "200px" }} onClick={this.handleSubmit}>
-             Add New Client
-           </button>
-           <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
-             View Clients
-           </button>
-         </div>
-
         <Modal show={showModal} handleClose={this.toggleModal}>
-          <ClientTable />
+          <ClientTable onDelete={this.handleDelete} />
         </Modal>
       </div>
     );

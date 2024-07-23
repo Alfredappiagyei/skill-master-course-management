@@ -70,7 +70,7 @@ export default function CourseTypesTable() {
         </div>
 
         <section style={{ width: '100%' }}>
-          <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
+          <input type="text" id="search2" className="form-control" placeholder="Search Course Types" />
 
           <div className="row" style={{ width: '100%' }}>
             <div className="col-md-4"><b>Course Type Number</b></div>
@@ -91,14 +91,16 @@ export default function CourseTypesTable() {
             ))}
           </div>
           {editCourseType && (
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={handleFormSubmit} style={{ marginTop: '20px' }}>
               <h3>Edit Course Type</h3>
-              <label>
-                Course Type Description:
-                <input type="text" name="COURSETYPEDESCRIPTION" value={editCourseType.COURSETYPEDESCRIPTION} onChange={handleFormChange} />
-              </label>
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setEditCourseType(null)}>Cancel</button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <label>
+                  Course Type Description:
+                  <input type="text" name="COURSETYPEDESCRIPTION" value={editCourseType.COURSETYPEDESCRIPTION} onChange={handleFormChange} />
+                </label>
+                <button type="submit" style={{ alignSelf: 'flex-start' }}>Update</button>
+                <button type="button" onClick={() => setEditCourseType(null)} style={{ alignSelf: 'flex-start' }}>Cancel</button>
+              </div>
             </form>
           )}
         </section>

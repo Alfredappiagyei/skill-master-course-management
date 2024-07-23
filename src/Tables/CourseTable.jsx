@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function CourseTable() {
   const [courses, setCourses] = useState([]);
   const [editCourse, setEditCourse] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch courses from API
   const handleViewCourses = async () => {
@@ -73,6 +74,16 @@ export default function CourseTable() {
     }
   };
 
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filter courses based on search term
+  const filteredCourses = courses.filter(course =>
+    course.COURSENAME.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="table">
       <div className="row">
@@ -81,7 +92,14 @@ export default function CourseTable() {
         </div>
 
         <section style={{ width: "100%" }}>
-          <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
+          <input
+            type="text"
+            id="search2"
+            className="form-control"
+            placeholder="Search courses..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
 
           <div className="row" style={{ width: "100%" }}>
             <div className="col-md-1"><b>Course Number</b></div>
@@ -99,7 +117,7 @@ export default function CourseTable() {
           </div>
           <hr />
           <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
-            {courses.map((course, index) => (
+            {filteredCourses.map((course, index) => (
               <div key={index} className="row" style={{ width: "100%" }}>
                 <div className="col-md-1">{course.COURSENO}</div>
                 <div className="col-md-1">{course.COURSENAME}</div>
@@ -124,47 +142,103 @@ export default function CourseTable() {
               <h3>Edit Course</h3>
               <label>
                 Course Number:
-                <input type="text" name="COURSENO" value={editCourse.COURSENO} onChange={handleFormChange} disabled />
+                <input
+                  type="text"
+                  name="COURSENO"
+                  value={editCourse.COURSENO}
+                  onChange={handleFormChange}
+                  disabled
+                />
               </label>
               <label>
                 Course Name:
-                <input type="text" name="COURSENAME" value={editCourse.COURSENAME} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="COURSENAME"
+                  value={editCourse.COURSENAME}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Course Description:
-                <input type="text" name="COURSEDESCRIPTION" value={editCourse.COURSEDESCRIPTION} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="COURSEDESCRIPTION"
+                  value={editCourse.COURSEDESCRIPTION}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Start Date:
-                <input type="text" name="STARTDATE" value={editCourse.STARTDATE} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="STARTDATE"
+                  value={editCourse.STARTDATE}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Start Time:
-                <input type="text" name="STARTTIME" value={editCourse.STARTTIME} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="STARTTIME"
+                  value={editCourse.STARTTIME}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 End Date:
-                <input type="text" name="ENDDATE" value={editCourse.ENDDATE} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="ENDDATE"
+                  value={editCourse.ENDDATE}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 End Time:
-                <input type="text" name="ENDTIME" value={editCourse.ENDTIME} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="ENDTIME"
+                  value={editCourse.ENDTIME}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Maximum Delegates:
-                <input type="text" name="MAXDELEGATE" value={editCourse.MAXDELEGATE} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="MAXDELEGATE"
+                  value={editCourse.MAXDELEGATE}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Confirmed:
-                <input type="text" name="CONFIRMED" value={editCourse.CONFIRMED} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="CONFIRMED"
+                  value={editCourse.CONFIRMED}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Employee Number:
-                <input type="text" name="DELIVEREREMPLOYEENO" value={editCourse.DELIVEREREMPLOYEENO} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="DELIVEREREMPLOYEENO"
+                  value={editCourse.DELIVEREREMPLOYEENO}
+                  onChange={handleFormChange}
+                />
               </label>
               <label>
                 Course Type Number:
-                <input type="text" name="COURSETYPENO" value={editCourse.COURSETYPENO} onChange={handleFormChange} />
+                <input
+                  type="text"
+                  name="COURSETYPENO"
+                  value={editCourse.COURSETYPENO}
+                  onChange={handleFormChange}
+                />
               </label>
               <button type="submit">Update</button>
               <button type="button" onClick={() => setEditCourse(null)}>Cancel</button>

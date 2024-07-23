@@ -65,55 +65,73 @@ export default function ClientTable() {
 
   return (
     <div className="table">
-      <div className="row">
-        <div className="all-startups">
-          <div className="all"><h4>All Clients</h4></div>
+      <div className="all-startups">
+        <div className="all">
+          <h4>All Clients</h4>
         </div>
-        <section style={{ width: '100%' }}>
-          <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
-          <div className="row" style={{ width: '100%' }}>
-            <div className="col-md-2" style={{ paddingRight: '100px' }}><b>Client Number</b></div>
-            <div className="col-md-2"><b>Client Name</b></div>
-            <div className="col-md-2"><b>Client Email</b></div>
-            <div className="col-md-2"><b>Client Contact</b></div>
-            <div className="col-md-2"><b>Actions</b></div>
-          </div>
-          <hr />
-          <div className="row" style={{ width: '100%', marginLeft: '1px' }}>
+      </div>
+      <section style={{ width: '100%' }}>
+        <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Client Number</th>
+              <th>Client Name</th>
+              <th>Client Email</th>
+              <th>Client Contact</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {clients.map((client, index) => (
-              <div key={index} className="row" style={{ width: '100%' }}>
-                <div className="col-md-2">{client.CLIENTNO}</div>
-                <div className="col-md-2">{client.CLIENTNAME}</div>
-                <div className="col-md-2">{client.CLIENTEMAIL}</div>
-                <div className="col-md-2">{client.CLIENTCONTACT}</div>
-                <div className="col-md-2">
+              <tr key={index}>
+                <td>{client.CLIENTNO}</td>
+                <td>{client.CLIENTNAME}</td>
+                <td>{client.CLIENTEMAIL}</td>
+                <td>{client.CLIENTCONTACT}</td>
+                <td>
                   <button onClick={() => handleUpdate(client)}>Update</button>
                   <button onClick={() => handleDelete(client.CLIENTNO)}>Delete</button>
-                </div>
-              </div>
+                </td>
+              </tr>
             ))}
-          </div>
-          {editClient && (
-            <form onSubmit={handleFormSubmit}>
-              <h3>Edit Client</h3>
-              <label>
-                Name:
-                <input type="text" name="CLIENTNAME" value={editClient.CLIENTNAME} onChange={handleFormChange} />
-              </label>
-              <label>
-                Email:
-                <input type="email" name="CLIENTEMAIL" value={editClient.CLIENTEMAIL} onChange={handleFormChange} />
-              </label>
-              <label>
-                Contact:
-                <input type="text" name="CLIENTCONTACT" value={editClient.CLIENTCONTACT} onChange={handleFormChange} />
-              </label>
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setEditClient(null)}>Cancel</button>
-            </form>
-          )}
-        </section>
-      </div>
+          </tbody>
+        </table>
+        {editClient && (
+          <form onSubmit={handleFormSubmit}>
+            <h3>Edit Client</h3>
+            <label>
+              Name:
+              <input
+                type="text"
+                name="CLIENTNAME"
+                value={editClient.CLIENTNAME}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                type="email"
+                name="CLIENTEMAIL"
+                value={editClient.CLIENTEMAIL}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Contact:
+              <input
+                type="text"
+                name="CLIENTCONTACT"
+                value={editClient.CLIENTCONTACT}
+                onChange={handleFormChange}
+              />
+            </label>
+            <button type="submit">Update</button>
+            <button type="button" onClick={() => setEditClient(null)}>Cancel</button>
+          </form>
+        )}
+      </section>
     </div>
   );
 }
