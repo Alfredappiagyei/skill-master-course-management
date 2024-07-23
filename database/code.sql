@@ -506,7 +506,6 @@ CREATE OR REPLACE PROCEDURE new_booking(
     in_bookingEmployeeNo IN Booking.bookingEmployeeNo%type,
     out_newBookingNo OUT Booking.bookingNo%type,
     out_error_message OUT VARCHAR2
-
 ) IS
 BEGIN
   -- Initialize the error message to NULL
@@ -1306,6 +1305,32 @@ BEGIN
     VALUES (USER, v_action, 'Booking', v_old_values, v_new_values);
 END;
 /
+
+-- BACKING UP
+CREATE OR REPLACE PROCEDURE backup_database_proc AS
+    backup_directory VARCHAR2(100) := 'skill-master-course-management\backups'; -- Update with your backup directory path
+    backup_filename VARCHAR2(100) := 'database_backup.dmp'; -- Adjust filename as needed
+    out_error_message VARCHAR2(100) := 'Error during backup: '
+BEGIN
+    -- Ensure the directory exists
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE DIRECTORY backup_dir AS ''' || backup_directory || '''';
+
+    -- Perform the export using Data Pump
+    DBMS_DATAPUMP.OPEN('EXPORT', 'FULL', NULL, NULL, 'backup_job', 'backup_dir');
+    DBMS_DATAPUMP.ADD_FILE('DUMPFILE', backup_filename, 'backup_dir');
+    DBMS_DATAPUMP.ADD_FILE('LOGFILE', 'export.log', 'backup_dir');
+    DBMS_DATAPUMP.START_JOB('backup_job');
+    
+    -- Optional: Commit the transaction
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle exceptions (replace with appropriate error handling)
+        RAISE_APPLICATION_ERROR(-20001, out_error_message || SQLERRM);
+        ROLLBACK; -- Rollback the transaction if an error occurs
+END;
+/
+
 
 -- CREATE OR REPLACE TRIGGER credit_card_details_check
 -- BEFORE INSERT OR UPDATE ON Invoice

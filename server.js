@@ -407,6 +407,52 @@ app.put('/api/delegates/:delegateNo', async (req, res) => {
 });
 
 
+//BACKING UP
+
+const fs = require('fs');
+const path = require('path');
+
+app.get('/backup', async (req, res) => {
+  try {
+      // Connect to Oracle DB
+      const connection = await oracledb.getConnection(dbConfig);
+
+      // PL/SQL script to backup database (adapt as per your needs)
+      const plsqlScript = `
+          DECLARE
+              backup_directory VARCHAR2(100) := 'skill-master-course-management/backups'; -- Update with your backup directory path
+              backup_filename VARCHAR2(100) := 'database_backup.dmp'; -- Adjust filename as needed
+              out_error_message VARCHAR2(100) := 'Error during backup: '
+          BEGIN
+              EXECUTE IMMEDIATE 'CREATE OR REPLACE DIRECTORY backup_dir AS ''' || backup_directory || ''''; 
+              DBMS_DATAPUMP.OPEN('EXPORT', 'FULL', NULL, NULL, 'backup_job', 'backup_dir'); 
+              DBMS_DATAPUMP.ADD_FILE('DUMPFILE', backup_filename, 'backup_dir'); 
+              DBMS_DATAPUMP.ADD_FILE('LOGFILE', 'export.log', 'backup_dir'); 
+              DBMS_DATAPUMP.START_JOB('backup_job'); 
+              commit;
+          EXCEPTION
+            WHEN OTHERS THEN
+                -- Handle exceptions (replace with appropriate error handling)
+                RAISE_APPLICATION_ERROR(-20001, out_error_message || SQLERRM);
+                ROLLBACK; -- 
+          END;
+      `;
+
+      // Execute the PL/SQL script
+      await connection.execute(plsqlScript);
+
+      // Close connection
+      await connection.close();
+
+      // Respond with success message
+      res.send('Database backup initiated successfully.');
+
+  } catch (error) {
+      console.error('Error during database backup:', error);
+      res.status(500).send('Error during database backup.');
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
