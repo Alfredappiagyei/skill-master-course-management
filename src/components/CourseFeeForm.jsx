@@ -139,13 +139,13 @@ class CourseFeeForm extends Component {
               {errors.courseNo && <span className='error'>{errors.courseNo}</span>}
             </div>
             <div className='form-group'>
-              <button className='button' type='submit' style={{ width: '200px' }}>
+              <button className='button' type='submit' style={{ width: '250px' }}>
                 Add New Course Fee
               </button>
               <button
                 className='button'
                 type='button'
-                style={{ width: '200px' }}
+                style={{ width: '250px' }}
                 onClick={this.toggleModal}
               >
                 View Course Fees

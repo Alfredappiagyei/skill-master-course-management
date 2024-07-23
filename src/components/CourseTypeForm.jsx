@@ -101,13 +101,13 @@ class CourseTypesForm extends Component {
               {errors.courseTypeDescription && <span className='error'>{errors.courseTypeDescription}</span>}
             </div>
             <div className='form-group'>
-              <button className='button' type='submit' style={{ width: '200px' }}>
+              <button className='button' type='submit' style={{ width: '250px' }}>
                 Add New Course Type
               </button>
               <button
                 className='button'
                 type='button'
-                style={{ width: '200px' }}
+                style={{ width: '250px' }}
                 onClick={this.toggleModal}
               >
                 View Course Types
