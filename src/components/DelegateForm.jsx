@@ -50,10 +50,7 @@ class DelegateForm extends Component {
     if (!delegateTitle) errors.delegateTitle = 'Title is required';
     if (!delegateFName) errors.delegateFName = 'First Name is required';
     if (!delegateLName) errors.delegateLName = 'Last Name is required';
-    if (!delegateStreet) errors.delegateStreet = 'Street is required';
     if (!delegateCity) errors.delegateCity = 'City is required';
-    if (!delegateState) errors.delegateState = 'State is required';
-    if (!delegateZipCode) errors.delegateZipCode = 'Zip Code is required';
     if (!attTelNo) errors.attTelNo = 'Tel Number is required';
     if (!attEmailAddress) errors.attEmailAddress = 'Email Address is required';
     if (!clientNo) errors.clientNo = 'Client Number is required,  input existing client number or create one before';
@@ -102,6 +99,9 @@ class DelegateForm extends Component {
         }),
       });
 
+      const result = await response.json();
+
+
       if (response.ok) {
         toast.success('Delegate added successfully');
         this.setState({
@@ -118,14 +118,21 @@ class DelegateForm extends Component {
           clientNo: '',
           errors: {},
         });
-      } else {
-        const errorResponse = await response.json();
-        if (errorResponse.error.includes('ORA-02291')) {
-          toast.error('Error inserting delegate: Parent key not found. Please input an existing client number.');
-        } else {
-          toast.error('Failed to add delegate');
-        }
+      } 
+      else {
+        // Display specific error message from the server
+        const errorMessage = result.message || 'Duplicate delegate email.';
+        toast.error(errorMessage);
       }
+      // else {
+        
+      //   const errorResponse = await response.json();
+      //   if (errorResponse.error.includes('ORA-02291')) {
+      //     toast.error('Error inserting delegate: Parent key not found. Please input an existing client number.');
+      //   } else {
+      //     toast.error('Failed to add delegate');
+      //   }
+      // }
     } catch (err) {
       toast.error('Error: ' + err.message);
     }
