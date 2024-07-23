@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## ENSURE YOU HAVE PERFORMED THE INSTRUCTIONS IN THE `database.md` FILE BEFORE YOU PROCEED HERE
+## ENSURE YOU HAVE PERFORMED THE INSTRUCTIONS IN THE `README.md` FILE IN THE `DATABASE` FOLDER BEFORE YOU PROCEED HERE
 
 ## Available Scripts
 
