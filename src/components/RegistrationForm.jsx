@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Modal from './Modal';
 import RegistrationTable from '../Tables/RegistrationTable';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class RegistrationForm extends Component {
   constructor(props) {
@@ -11,7 +13,8 @@ class RegistrationForm extends Component {
       delegateNo: '',
       courseFeeNo: '',
       registerEmployeeNo: '',
-      courseNo: ''
+      courseNo: '',
+      errors: {},
     };
   }
 
@@ -23,51 +26,147 @@ class RegistrationForm extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  validateForm = () => {
+    const { registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo } = this.state;
+    const errors = {};
+
+    if (!registrationDate) errors.registrationDate = 'Registration Date is required';
+    if (!delegateNo) errors.delegateNo = 'Delegate Number is required';
+    if (!courseFeeNo) errors.courseFeeNo = 'Course Fee Number is required';
+    if (!registerEmployeeNo) errors.registerEmployeeNo = 'Register Employee Number is required';
+    if (!courseNo) errors.courseNo = 'Course Number is required';
+
+    this.setState({ errors });
+    return Object.keys(errors).length === 0;
+  };
+
   handleSubmit = async (e) => {
     e.preventDefault();
+    if (!this.validateForm()) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
     const { registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo } = this.state;
 
     try {
       const response = await fetch('http://localhost:3001/api/registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo })
+        body: JSON.stringify({ registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo }),
       });
 
       if (response.ok) {
-        console.log('Registration added successfully');
-        this.setState({ registrationDate: '', delegateNo: '', courseFeeNo: '', registerEmployeeNo: '', courseNo: '' });
+        toast.success('Registration added successfully');
+        this.setState({
+          registrationDate: '',
+          delegateNo: '',
+          courseFeeNo: '',
+          registerEmployeeNo: '',
+          courseNo: '',
+          errors: {},
+        });
       } else {
-        console.error('Failed to add registration');
+        toast.error('Failed to add registration');
       }
     } catch (err) {
-      console.error('Error:', err);
+      toast.error('Error: ' + err.message);
     }
   };
 
   render() {
-    const { showModal, registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo } = this.state;
+    const { showModal, registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo, errors } = this.state;
+
     return (
-      <div style={{ width: "100%", height: "100vh" }}>
-        <div className='col-md-6'>
-          <form onSubmit={this.handleSubmit}>
-            <input type="date" className="form-control" name="registrationDate" placeholder="Registration Date" value={registrationDate} onChange={this.handleChange} style={{ width: "300px" }} /><br />
-            <input type="number" className="form-control" name="delegateNo" placeholder="Delegate Number" value={delegateNo} onChange={this.handleChange} style={{ width: "300px" }} /><br />
-            <input type="number" className="form-control" name="courseFeeNo" placeholder="Course Fee Number" value={courseFeeNo} onChange={this.handleChange} style={{ width: "300px" }} /><br />
-            <input type="number" className="form-control" name="registerEmployeeNo" placeholder="Register Employee Number" value={registerEmployeeNo} onChange={this.handleChange} style={{ width: "300px" }} /><br />
-            <input type="number" className="form-control" name="courseNo" placeholder="Course Number" value={courseNo} onChange={this.handleChange} style={{ width: "300px" }} /><br />
+      <div style={{ width: '100%', height: '100vh' }}>
+        <ToastContainer />
+        <div className='form-container'>
+          <form onSubmit={this.handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            <div className='form-group'>
+              <label htmlFor='registrationDate'>Registration Date</label>
+              <input
+                type='date'
+                className='form-control'
+                id='registrationDate'
+                name='registrationDate'
+                placeholder='Registration Date'
+                value={registrationDate}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.registrationDate && <span className='error'>{errors.registrationDate}</span>}
+            </div>
+            <div className='form-group'>
+              <label htmlFor='delegateNo'>Delegate Number</label>
+              <input
+                type='number'
+                className='form-control'
+                id='delegateNo'
+                name='delegateNo'
+                placeholder='Delegate Number'
+                value={delegateNo}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.delegateNo && <span className='error'>{errors.delegateNo}</span>}
+            </div>
+            <div className='form-group'>
+              <label htmlFor='courseFeeNo'>Course Fee Number</label>
+              <input
+                type='number'
+                className='form-control'
+                id='courseFeeNo'
+                name='courseFeeNo'
+                placeholder='Course Fee Number'
+                value={courseFeeNo}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.courseFeeNo && <span className='error'>{errors.courseFeeNo}</span>}
+            </div>
+            <div className='form-group'>
+              <label htmlFor='registerEmployeeNo'>Register Employee Number</label>
+              <input
+                type='number'
+                className='form-control'
+                id='registerEmployeeNo'
+                name='registerEmployeeNo'
+                placeholder='Register Employee Number'
+                value={registerEmployeeNo}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.registerEmployeeNo && <span className='error'>{errors.registerEmployeeNo}</span>}
+            </div>
+            <div className='form-group'>
+              <label htmlFor='courseNo'>Course Number</label>
+              <input
+                type='number'
+                className='form-control'
+                id='courseNo'
+                name='courseNo'
+                placeholder='Course Number'
+                value={courseNo}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.courseNo && <span className='error'>{errors.courseNo}</span>}
+            </div>
+            <div className='form-group'>
+              <button className='button' type='submit' style={{ width: '250px' }}>
+                Add New Registration
+              </button>
+              <button
+                className='button'
+                type='button'
+                style={{ width: '250px' }}
+                onClick={this.toggleModal}
+              >
+                View Registrations
+              </button>
+            </div>
           </form>
         </div>
-
-        <div className='col-md-6' style={{ display: "flex", flexWrap: "wrap", alignItems: "center", textAlign: "center", gap: 10 }}>
-           <button className="button" style={{ fontSize: "10px",width: "200px" }} onClick={this.handleSubmit}>
-             Add New Registration
-           </button>
-           <button className="button" style={{ width: "200px" }} onClick={this.toggleModal}>
-             View Registrations
-           </button>
-       
-         </div>
 
         <Modal show={showModal} handleClose={this.toggleModal}>
           <RegistrationTable />
