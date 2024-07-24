@@ -120,6 +120,8 @@ class CourseForm extends Component {
         const errorMessage = result.error;
         if (errorMessage.includes('Employee number does not exist')) {
           toast.error('Employee number does not exist. Enter an already existing deliverer employee number.');
+        } else if (errorMessage.includes('Course type number does not exist')) {
+          toast.error('Course type number does not exist. Enter an already existing course type number.');
         } else if (errorMessage.includes('The selected employee is already assigned')) {
           toast.error('Employee is already assigned a different course. Enter a different employee number.');
         } else {

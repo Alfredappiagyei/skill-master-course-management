@@ -70,10 +70,16 @@ class RegistrationForm extends Component {
         });
       } else {
         const errorMessage = result.error;
-        if (errorMessage.includes('Employee number does not exist')) {
+        if (errorMessage.includes('employee number does not exist')) {
           toast.error('Employee number does not exist. Enter an already existing deliverer employee number.');
-        } else if (errorMessage.includes('The selected employee is already assigned')) {
-          toast.error('Employee is already assigned a different course. Enter a different employee number.');
+        } else if (errorMessage.includes('Delegate number does not exist')) {
+          toast.error('Delegate number does not exist. Enter an already existing delegate number.');
+        } else if (errorMessage.includes('Course fee number does not exist')) {
+          toast.error('Course fee number does not exist. Enter an already existing Course fee number.');
+        } else if (errorMessage.includes('Course number does not exist')) {
+          toast.error('Course number does not exist. Enter an already existing Course fee number.');
+        } else if (errorMessage.includes('maximum number of delegates')) {
+          toast.error('Cannot register for course. This Course has reached its upper limit of delegates.');
         } else {
           toast.error('Failed to add course. Please check the details and try again.');
         }

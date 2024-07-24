@@ -228,6 +228,8 @@ CREATE OR REPLACE PROCEDURE new_course(
     out_error_message OUT VARCHAR2
 ) IS
     v_employee_count NUMBER;
+    v_course_type_exist NUMBER;
+
 BEGIN
     -- Initialize the error message to NULL
     out_error_message := NULL;
@@ -247,6 +249,33 @@ BEGIN
         out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
+
+    -- Check if the delivererEmployeeNo exists
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_employee_count
+        FROM Employee
+        WHERE employeeNo = in_delivererEmployeeNo;
+        
+        IF v_employee_count = 0 THEN
+            out_error_message := 'Employee number does not exist. Enter an already existing deliverer employee number.';
+            RETURN;
+        END IF;
+    END;
+
+    -- Check if the courseTypeNo exists
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_course_type_exist
+        FROM CourseType
+        WHERE courseTypeNo = in_courseTypeNo;
+        
+        IF v_course_type_exist = 0 THEN
+            out_error_message := 'Course type number does not exist. Enter an already existing course type number.';
+            RETURN;
+        END IF;
+    END;
+
 
     -- Check if the delivererEmployeeNo is already assigned to another course
     BEGIN
@@ -293,14 +322,12 @@ BEGIN
 
     EXCEPTION
         WHEN OTHERS THEN
-              -- Check if the error is related to integrity constraint violation
           IF SQLCODE = -2291 THEN
-            out_error_message := 'Employee number does not exist. Enter an already existing deliverer employee number.';
+              out_error_message := 'Deliverer Employee number does not exist. Enter an already existing employee number.';
           ELSE
             out_error_message := SQLERRM;
-          end if;
+          end if; 
     END;
-
 END;
 /
 
@@ -431,6 +458,9 @@ CREATE OR REPLACE PROCEDURE NEW_REGISTRATION (
 ) IS
     v_currentDelegates NUMBER;
     v_maxDelegates NUMBER;
+    v_course_fee_exists NUMBER;
+    v_register_employee_exists NUMBER;
+    v_course_exists NUMBER;
 BEGIN
   -- Initialize the error message to NULL
   out_error_message := NULL;
@@ -460,6 +490,40 @@ BEGIN
     RETURN;
   END IF;
 
+  -- Check if the courseFeeNo exists
+  SELECT COUNT(*)
+  INTO v_course_fee_exists
+  FROM CourseFee
+  WHERE courseFeeNo = in_courseFeeNo;
+
+  IF v_course_fee_exists = 0 THEN
+    out_error_message := 'Course fee number does not exist. Enter an existing course fee number.';
+    RETURN;
+  END IF;
+
+  -- Check if the registerEmployeeNo exists
+  SELECT COUNT(*)
+  INTO v_register_employee_exists
+  FROM Employee
+  WHERE employeeNo = in_registerEmployeeNo;
+
+  IF v_register_employee_exists = 0 THEN
+    out_error_message := 'Register employee number does not exist. Enter an existing register employee number.';
+    RETURN;
+  END IF;
+
+  -- Check if the courseNo exists
+  SELECT COUNT(*)
+  INTO v_course_exists
+  FROM Course
+  WHERE courseNo = in_courseNo;
+
+  IF v_course_exists = 0 THEN
+    out_error_message := 'Course number does not exist. Enter an existing course number.';
+    RETURN;
+  END IF;
+
+
   BEGIN
     -- Insert new registration
     INSERT INTO Registration (
@@ -479,20 +543,11 @@ BEGIN
 
   EXCEPTION
     WHEN OTHERS THEN
-    -- Check if the error is related to integrity constraint violation
+    -- Check if the error is related to integrity constraint violation ( specifically DELEGATE NUMBER)
       IF SQLCODE = -2291 THEN
-            -- Check for specific integrity constraint violations
-        IF SQLERRM LIKE '%FK_REGISTRATION_DELEGATENO%' THEN
           out_error_message := 'Delegate number does not exist. Enter an existing delegate number.';
-        ELSIF SQLERRM LIKE '%FK_REGISTRATION_COURSEFEENO%' THEN
-          out_error_message := 'Course fee number does not exist. Enter an existing course fee number.';
-        ELSIF SQLERRM LIKE '%FK_REGISTRATION_REGISTEREEMPLOYEENO%' THEN
-          out_error_message := 'Register employee number does not exist. Enter an existing register employee number.';
-        ELSIF SQLERRM LIKE '%FK_REGISTRATION_COURSENO%' THEN
-          out_error_message := 'Course number does not exist. Enter an existing course number.';
-        ELSE
+      ELSE
           out_error_message := SQLERRM;
-        end if;
       end if;
     END;
 END;
