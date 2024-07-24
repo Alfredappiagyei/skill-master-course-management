@@ -51,12 +51,10 @@ async function addInvoice(invoice) {
     console.log(`Invoice added successfully with ID: ${newInvoiceNo}`);
 
     return newInvoiceNo; // Return the generated invoiceNo if needed
-  } catch (err) {
+  } catch (errorMessage) {
 
-     // does not do anything. just so the code doesnot break. originally has 
-    // to throw some error but shows too much info i dont want that
+    
     if (errorMessage) {
-      console.error('Error inserting invoice:', errorMessage);
       throw new Error(errorMessage);
     }
 

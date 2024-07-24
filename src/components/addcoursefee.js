@@ -40,10 +40,8 @@ async function addCourseFee(courseFee) {
 
     return newCourseFeeNo; // Return the generated courseFeeNo if needed
   } catch (err) {
-      // does not do anything. just so the code doesnot break. originally has 
-    // to throw some error but shows too much info i dont want that
+     
     if (errorMessage) {
-      console.error('Error inserting course fee:', errorMessage);
       throw new Error(errorMessage);
     }
   } finally {

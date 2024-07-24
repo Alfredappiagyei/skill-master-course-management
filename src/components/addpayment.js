@@ -37,11 +37,9 @@ async function addPaymentMethod(paymentMethod) {
     console.log(`Payment method added successfully with ID: ${newPMethodNo}`);
     
     return newPMethodNo; // Return the generated pMethodNo if needed
-  } catch (err) {
-     // does not do anything. just so the code doesnot break. originally has 
-    // to throw some error but shows too much info i dont want that
+  } catch (errorMessage) {
+     
     if (errorMessage) {
-      console.error('Error inserting payment method:', errorMessage);
       throw new Error(errorMessage);
     }
   } finally {

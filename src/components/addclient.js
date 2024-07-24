@@ -38,11 +38,9 @@ async function addClient(client) {
     console.log(`Client added successfully with ID: ${newclientNo}`);
 
     return newclientNo; // Return the generated clientId if needed
-  } catch (err) {
-    // does not do anything. just so the code doesnot break. originally has 
-    // to throw some error but shows too much info i dont want that
+  } catch (errorMessage) {
+
     if (errorMessage) {
-      console.error('Error inserting client:', errorMessage);
       throw new Error(errorMessage);
     }
   } finally {

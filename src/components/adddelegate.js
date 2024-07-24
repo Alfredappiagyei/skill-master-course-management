@@ -60,8 +60,6 @@ async function addDelegate(delegate) {
     
     return newdelegateNo; // Return the generated delegateNo if needed
   } catch (errorMessage) {
-     // does not do anything. just so the code doesnot break. originally has 
-    // to throw some error but shows too much info i dont want that
     if (errorMessage) {
       throw new Error(errorMessage);
     }
