@@ -493,6 +493,7 @@ BEGIN
         ELSE
           out_error_message := SQLERRM;
         end if;
+      end if;
     END;
 END;
 /
