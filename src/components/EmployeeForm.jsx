@@ -75,7 +75,9 @@ class EmployeeForm extends Component {
         if (typeof errorMessage === 'string') {
           if (errorMessage.includes('Duplicate employee email')) {
             toast.error('Failed to add employee. Duplicate employee email. Employee already exists.');
-          } 
+          } else {
+            toast.error('Failed to add Employee. Please check the details and try again.');
+          }
         } 
       }
     } catch (err) {

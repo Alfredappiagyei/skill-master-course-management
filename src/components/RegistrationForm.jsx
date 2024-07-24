@@ -56,6 +56,8 @@ class RegistrationForm extends Component {
         body: JSON.stringify({ registrationDate, delegateNo, courseFeeNo, registerEmployeeNo, courseNo }),
       });
 
+      const result = await response.json();
+
       if (response.ok) {
         toast.success('Registration added successfully');
         this.setState({
@@ -67,7 +69,14 @@ class RegistrationForm extends Component {
           errors: {},
         });
       } else {
-        toast.error('Failed to add registration');
+        const errorMessage = result.error;
+        if (errorMessage.includes('Employee number does not exist')) {
+          toast.error('Employee number does not exist. Enter an already existing deliverer employee number.');
+        } else if (errorMessage.includes('The selected employee is already assigned')) {
+          toast.error('Employee is already assigned a different course. Enter a different employee number.');
+        } else {
+          toast.error('Failed to add course. Please check the details and try again.');
+        }
       }
     } catch (err) {
       toast.error('Error: ' + err.message);

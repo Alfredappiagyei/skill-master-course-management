@@ -70,7 +70,9 @@ class ClientForm extends Component {
         if (typeof errorMessage === 'string') {
           if (errorMessage.includes('Duplicate client email')) {
             toast.error('Failed to add client. Duplicate client email. Client already exists.');
-          } 
+          } else {
+            toast.error('Failed to add client. Please check the details and try again.');
+          }
         } 
       }
     } catch (err) {

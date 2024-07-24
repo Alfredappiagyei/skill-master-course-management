@@ -113,8 +113,7 @@ class DelegateForm extends Component {
           errors: {},
         });
       } else {
-        const errorDetails = 'Error inserting delegate: Duplicate delegate email. Delegate already exists.'
-        const errorMessage = result.error || errorDetails;
+        const errorMessage = result.error;
         if (errorMessage.includes('Duplicate delegate email')) {
           toast.error('Failed to add delegate. Duplicate delegate email. Delegate already exists.');
         } else if (errorMessage.includes('Client number does not exist')) {

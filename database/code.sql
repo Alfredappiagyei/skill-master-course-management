@@ -119,9 +119,7 @@ BEGIN
        in_delegateLName IS NULL OR
        in_delegateCity IS NULL OR
        in_attTelNo IS NULL OR
-       in_attEmailAddress IS NULL OR
-       in_clientNo IS NULL THEN
-       
+       in_attEmailAddress IS NULL THEN       
         out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
@@ -229,6 +227,7 @@ CREATE OR REPLACE PROCEDURE new_course(
     out_newCourseNo OUT Course.courseNo%TYPE,
     out_error_message OUT VARCHAR2
 ) IS
+    v_employee_count NUMBER;
 BEGIN
     -- Initialize the error message to NULL
     out_error_message := NULL;
@@ -248,6 +247,21 @@ BEGIN
         out_error_message := 'Missing required field(s).';
         RETURN;
     END IF;
+
+    -- Check if the delivererEmployeeNo is already assigned to another course
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_employee_count
+        FROM Course
+        WHERE delivererEmployeeNo = in_delivererEmployeeNo;
+        
+        IF v_employee_count > 0 THEN
+            out_error_message := 'The selected employee is already assigned to another course.';
+            RETURN;
+        END IF;
+    end;
+
+
 
     BEGIN
         -- Insert new course
@@ -279,7 +293,12 @@ BEGIN
 
     EXCEPTION
         WHEN OTHERS THEN
+              -- Check if the error is related to integrity constraint violation
+          IF SQLCODE = -2291 THEN
+            out_error_message := 'Employee number does not exist. Enter an already existing deliverer employee number.';
+          ELSE
             out_error_message := SQLERRM;
+          end if;
     END;
 
 END;
@@ -410,6 +429,8 @@ CREATE OR REPLACE PROCEDURE NEW_REGISTRATION (
   out_newRegistrationNo OUT Registration.registrationNo%TYPE,
   out_error_message OUT VARCHAR2
 ) IS
+    v_currentDelegates NUMBER;
+    v_maxDelegates NUMBER;
 BEGIN
   -- Initialize the error message to NULL
   out_error_message := NULL;
@@ -418,6 +439,24 @@ BEGIN
   IF in_registrationDate IS NULL OR in_delegateNo IS NULL OR in_courseFeeNo IS NULL 
      OR in_registerEmployeeNo IS NULL OR in_courseNo IS NULL THEN
     out_error_message := 'Missing required field(s)';
+    RETURN;
+  END IF;
+
+  -- Retrieve the current number of delegates registered for the course
+  SELECT COUNT(*)
+  INTO v_currentDelegates
+  FROM Registration
+  WHERE courseNo = in_courseNo;
+
+  -- Retrieve the maximum number of delegates allowed for the course
+  SELECT maxDelegates
+  INTO v_maxDelegates
+  FROM Course
+  WHERE courseNo = in_courseNo;
+
+  -- Check if the course has reached it's upper limit of delegates
+  IF v_currentDelegates >= v_maxDelegates THEN
+    out_error_message := 'The course has reached the maximum number of delegates';
     RETURN;
   END IF;
 
@@ -440,8 +479,21 @@ BEGIN
 
   EXCEPTION
     WHEN OTHERS THEN
-      out_error_message := SQLERRM;
-  END;
+    -- Check if the error is related to integrity constraint violation
+      IF SQLCODE = -2291 THEN
+            -- Check for specific integrity constraint violations
+        IF SQLERRM LIKE '%FK_REGISTRATION_DELEGATENO%' THEN
+          out_error_message := 'Delegate number does not exist. Enter an existing delegate number.';
+        ELSIF SQLERRM LIKE '%FK_REGISTRATION_COURSEFEENO%' THEN
+          out_error_message := 'Course fee number does not exist. Enter an existing course fee number.';
+        ELSIF SQLERRM LIKE '%FK_REGISTRATION_REGISTEREEMPLOYEENO%' THEN
+          out_error_message := 'Register employee number does not exist. Enter an existing register employee number.';
+        ELSIF SQLERRM LIKE '%FK_REGISTRATION_COURSENO%' THEN
+          out_error_message := 'Course number does not exist. Enter an existing course number.';
+        ELSE
+          out_error_message := SQLERRM;
+        end if;
+    END;
 END;
 /
 
