@@ -59,11 +59,10 @@ async function addDelegate(delegate) {
     console.log(`Delegate added successfully with ID: ${newdelegateNo}`);
     
     return newdelegateNo; // Return the generated delegateNo if needed
-  } catch (err) {
+  } catch (errorMessage) {
      // does not do anything. just so the code doesnot break. originally has 
     // to throw some error but shows too much info i dont want that
     if (errorMessage) {
-      console.error('Error inserting delegate:', errorMessage);
       throw new Error(errorMessage);
     }
   } finally {

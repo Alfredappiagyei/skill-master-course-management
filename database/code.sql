@@ -167,7 +167,12 @@ BEGIN
         WHEN DUP_VAL_ON_INDEX THEN
             out_error_message := 'Duplicate delegate email. Delegate already exists.';
         WHEN OTHERS THEN
-            out_error_message := SQLERRM;
+        -- Check if the error is related to integrity constraint violation
+            IF SQLCODE = -2291 THEN
+              out_error_message := 'Client number does not exist. Enter an already existing client number.';
+            ELSE
+              out_error_message := SQLERRM;
+            end if;
     END;
 
 END;
