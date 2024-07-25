@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
 export default function InvoiceTable() {
   const [invoices, setInvoices] = useState([]);
   const [editInvoice, setEditInvoice] = useState(null);
@@ -20,13 +25,12 @@ export default function InvoiceTable() {
     handleViewInvoices();
   }, []);
 
-  // Delete invoice by invoiceNo
+  // Handle delete operation
   const handleDelete = async (invoiceNo) => {
     try {
       const response = await fetch(`http://localhost:3001/api/invoices/${invoiceNo}`, { method: 'DELETE' });
       if (response.ok) {
         setInvoices(invoices.filter((invoice) => invoice.INVOICENO !== invoiceNo));
-        console.log('Invoice deleted successfully');
       } else {
         console.error('Failed to delete invoice');
       }
@@ -50,8 +54,6 @@ export default function InvoiceTable() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Updating invoice:', editInvoice); // Check if editInvoice has the updated values
-
       const response = await fetch(`http://localhost:3001/api/invoices/${editInvoice.INVOICENO}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -59,12 +61,13 @@ export default function InvoiceTable() {
       });
 
       if (response.ok) {
-        const updatedInvoice = await response.json(); // Assuming the API returns the updated invoice
-        console.log('Invoice updated successfully:', updatedInvoice); // Log updated invoice details
-
-        // Update the invoices state to reflect the changes
-        setInvoices(invoices.map((inv) => (inv.INVOICENO === updatedInvoice.INVOICENO ? updatedInvoice : inv)));
-        setEditInvoice(null); // Reset editInvoice state after successful update
+        const updatedInvoice = await response.json();
+        setInvoices(
+          invoices.map((inv) =>
+            inv.INVOICENO === updatedInvoice.INVOICENO ? updatedInvoice : inv
+          )
+        );
+        setEditInvoice(null);
       } else {
         console.error('Failed to update invoice');
       }
@@ -75,81 +78,124 @@ export default function InvoiceTable() {
 
   return (
     <div className="table">
-      <div className="row">
-        <div className="all-startups">
-          <div className="all"><h4>All Invoices</h4></div>
-        </div>
-
-        <section style={{ width: "100%" }}>
-          <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
-
-          <div className="row" style={{ width: "100%" }}>
-            <div className="col-md-1"><b>Invoice Number</b></div>
-            <div className="col-md-1"><b>Date Raised</b></div>
-            <div className="col-md-1"><b>Date Paid</b></div>
-            <div className="col-md-3"><b>Credit Card Number</b></div>
-            <div className="col-md-3"><b>Holders Name</b></div>
-            <div className="col-md-1"><b>Expiry Date</b></div>
-            <div className="col-md-1"><b>Registration Number</b></div>
-            <div className="col-md-1"><b>Payment Method Number</b></div>
-            <div className="col-md-1"><b>Actions</b></div>
-          </div>
-          <hr />
-          <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
+      <div className="all-startups">
+        <div className="all"><h4>All Invoices</h4></div>
+      </div>
+      <section style={{ width: "100%" }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Invoice Number</th>
+              <th>Date Raised</th>
+              <th>Date Paid</th>
+              <th>Credit Card Number</th>
+              <th>Holders Name</th>
+              <th>Expiry Date</th>
+              <th>Registration Number</th>
+              <th>Payment Method Number</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {invoices.map((invoice, index) => (
-              <div key={index} className="row" style={{ width: "100%" }}>
-                <div className="col-md-1">{invoice.INVOICENO}</div>
-                <div className="col-md-1">{invoice.DATERAISED}</div>
-                <div className="col-md-1">{invoice.DATEPAID}</div>
-                <div className="col-md-3">{invoice.CREDITCARDNO}</div>
-                <div className="col-md-3">{invoice.HOLDERSNAME}</div>
-                <div className="col-md-1">{invoice.EXPIRYDATE}</div>
-                <div className="col-md-1">{invoice.REGISTRATIONNO}</div>
-                <div className="col-md-1">{invoice.PMETHODNO}</div>
-                <div className="col-md-1">
+              <tr key={index}>
+                <td>{invoice.INVOICENO}</td>
+                <td>{formatDate(invoice.DATERAISED)}</td>
+                <td>{formatDate(invoice.DATEPAID)}</td>
+                <td>{invoice.CREDITCARDNO}</td>
+                <td>{invoice.HOLDERSNAME}</td>
+                <td>{formatDate(invoice.EXPIRYDATE)}</td>
+                <td>{invoice.REGISTRATIONNO}</td>
+                <td>{invoice.PMETHODNO}</td>
+                <td>
                   <button onClick={() => handleUpdate(invoice)}>Update</button>
                   <button onClick={() => handleDelete(invoice.INVOICENO)}>Delete</button>
-                </div>
-              </div>
+                </td>
+              </tr>
             ))}
-          </div>
-          {editInvoice && (
-            <form onSubmit={handleFormSubmit}>
-              <h3>Edit Invoice</h3>
-              <label>
-                Date Raised:
-                <input type="text" name="DATERAISED" value={editInvoice.DATERAISED} onChange={handleFormChange} />
-              </label>
-              <label>
-                Date Paid:
-                <input type="text" name="DATEPAID" value={editInvoice.DATEPAID} onChange={handleFormChange} />
-              </label>
-              <label>
-                Credit Card Number:
-                <input type="text" name="CREDITCARDNO" value={editInvoice.CREDITCARDNO} onChange={handleFormChange} />
-              </label>
-              <label>
-                Holder's Name:
-                <input type="text" name="HOLDERSNAME" value={editInvoice.HOLDERSNAME} onChange={handleFormChange} />
-              </label>
-              <label>
-                Expiry Date:
-                <input type="text" name="EXPIRYDATE" value={editInvoice.EXPIRYDATE} onChange={handleFormChange} />
-              </label>
-              <label>
-                Registration Number:
-                <input type="text" name="REGISTRATIONNO" value={editInvoice.REGISTRATIONNO} onChange={handleFormChange} />
-              </label>
-              <label>
-                Payment Method Number:
-                <input type="text" name="PMETHODNO" value={editInvoice.PMETHODNO} onChange={handleFormChange} />
-              </label>
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setEditInvoice(null)}>Cancel</button>
-            </form>
-          )}
-        </section>
-      </div>
+          </tbody>
+        </table>
+        {editInvoice && (
+          <form onSubmit={handleFormSubmit}>
+            <h3>Edit Invoice</h3>
+            <label>
+              Invoice Number:
+              <input
+                type="text"
+                name="INVOICENO"
+                value={editInvoice.INVOICENO}
+                onChange={handleFormChange}
+                disabled
+              />
+            </label>
+            <label>
+              Date Raised:
+              <input
+                type="text"
+                name="DATERAISED"
+                value={formatDate(editInvoice.DATERAISED)}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Date Paid:
+              <input
+                type="text"
+                name="DATEPAID"
+                value={formatDate(editInvoice.DATEPAID)}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Credit Card Number:
+              <input
+                type="text"
+                name="CREDITCARDNO"
+                value={editInvoice.CREDITCARDNO}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Holder's Name:
+              <input
+                type="text"
+                name="HOLDERSNAME"
+                value={editInvoice.HOLDERSNAME}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Expiry Date:
+              <input
+                type="text"
+                name="EXPIRYDATE"
+                value={formatDate(editInvoice.EXPIRYDATE)}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Registration Number:
+              <input
+                type="text"
+                name="REGISTRATIONNO"
+                value={editInvoice.REGISTRATIONNO}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Payment Method Number:
+              <input
+                type="text"
+                name="PMETHODNO"
+                value={editInvoice.PMETHODNO}
+                onChange={handleFormChange}
+              />
+            </label>
+            <button type="submit">Update</button>
+            <button type="button" onClick={() => setEditInvoice(null)}>Cancel</button>
+          </form>
+        )}
+      </section>
     </div>
   );
 }

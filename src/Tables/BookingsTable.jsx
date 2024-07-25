@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
 export default function BookingTable() {
   const [bookings, setBookings] = useState([]);
   const [editBooking, setEditBooking] = useState(null);
@@ -20,13 +25,12 @@ export default function BookingTable() {
     handleViewBookings();
   }, []);
 
-  // Delete booking by bookingNo
+  // Handle delete operation
   const handleDelete = async (bookingNo) => {
     try {
       const response = await fetch(`http://localhost:3001/api/bookings/${bookingNo}`, { method: 'DELETE' });
       if (response.ok) {
         setBookings(bookings.filter((booking) => booking.BOOKINGNO !== bookingNo));
-        console.log('Booking deleted successfully');
       } else {
         console.error('Failed to delete booking');
       }
@@ -50,8 +54,6 @@ export default function BookingTable() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Updating booking:', editBooking); // Check if editBooking has the updated values
-
       const response = await fetch(`http://localhost:3001/api/bookings/${editBooking.BOOKINGNO}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -59,12 +61,13 @@ export default function BookingTable() {
       });
 
       if (response.ok) {
-        const updatedBooking = await response.json(); // Assuming the API returns the updated booking
-        console.log('Booking updated successfully:', updatedBooking); // Log updated booking details
-
-        // Update the bookings state to reflect the changes
-        setBookings(bookings.map((bk) => (bk.BOOKINGNO === updatedBooking.BOOKINGNO ? updatedBooking : bk)));
-        setEditBooking(null); // Reset editBooking state after successful update
+        const updatedBooking = await response.json();
+        setBookings(
+          bookings.map((bk) =>
+            bk.BOOKINGNO === updatedBooking.BOOKINGNO ? updatedBooking : bk
+          )
+        );
+        setEditBooking(null);
       } else {
         console.error('Failed to update booking');
       }
@@ -75,63 +78,91 @@ export default function BookingTable() {
 
   return (
     <div className="table">
-      <div className="row">
-        <div className="all-startups">
-          <div className="all"><h4>All Bookings</h4></div>
-        </div>
-
-        <section style={{ width: "100%" }}>
-          <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
-
-          <div className="row" style={{ width: "100%" }}>
-            <div className="col-md-2"><b>Booking Number</b></div>
-            <div className="col-md-4"><b>Booking Date</b></div>
-            <div className="col-md-2"><b>Location Number</b></div>
-            <div className="col-md-2"><b>Course Number</b></div>
-            <div className="col-md-2"><b>Employee Number</b></div>
-            <div className="col-md-1"><b>Actions</b></div>
-          </div>
-          <hr />
-          <div className="row" style={{ width: "100%", marginLeft: "1px" }}>
+      <div className="all-startups">
+        <div className="all"><h4>All Bookings</h4></div>
+      </div>
+      <section style={{ width: "100%" }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Booking Number</th>
+              <th>Booking Date</th>
+              <th>Location Number</th>
+              <th>Course Number</th>
+              <th>Employee Number</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {bookings.map((booking, index) => (
-              <div key={index} className="row" style={{ width: "100%" }}>
-                <div className="col-md-2">{booking.BOOKINGNO}</div>
-                <div className="col-md-4">{booking.BOOKINGDATE}</div>
-                <div className="col-md-2">{booking.LOCATIONNO}</div>
-                <div className="col-md-2">{booking.COURSENO}</div>
-                <div className="col-md-2">{booking.BOOKINGEMPLOYEENO}</div>
-                <div className="col-md-1">
+              <tr key={index}>
+                <td>{booking.BOOKINGNO}</td>
+                <td>{formatDate(booking.BOOKINGDATE)}</td>
+                <td>{booking.LOCATIONNO}</td>
+                <td>{booking.COURSENO}</td>
+                <td>{booking.BOOKINGEMPLOYEENO}</td>
+                <td>
                   <button onClick={() => handleUpdate(booking)}>Update</button>
                   <button onClick={() => handleDelete(booking.BOOKINGNO)}>Delete</button>
-                </div>
-              </div>
+                </td>
+              </tr>
             ))}
-          </div>
-          {editBooking && (
-            <form onSubmit={handleFormSubmit}>
-              <h3>Edit Booking</h3>
-              <label>
-                Booking Date:
-                <input type="text" name="BOOKINGDATE" value={editBooking.BOOKINGDATE} onChange={handleFormChange} />
-              </label>
-              <label>
-                Location Number:
-                <input type="text" name="LOCATIONNO" value={editBooking.LOCATIONNO} onChange={handleFormChange} />
-              </label>
-              <label>
-                Course Number:
-                <input type="text" name="COURSENO" value={editBooking.COURSENO} onChange={handleFormChange} />
-              </label>
-              <label>
-                Employee Number:
-                <input type="text" name="BOOKINGEMPLOYEENO" value={editBooking.BOOKINGEMPLOYEENO} onChange={handleFormChange} />
-              </label>
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setEditBooking(null)}>Cancel</button>
-            </form>
-          )}
-        </section>
-      </div>
+          </tbody>
+        </table>
+        {editBooking && (
+          <form onSubmit={handleFormSubmit}>
+            <h3>Edit Booking</h3>
+            <label>
+              Booking Number:
+              <input
+                type="text"
+                name="BOOKINGNO"
+                value={editBooking.BOOKINGNO}
+                onChange={handleFormChange}
+                disabled
+              />
+            </label>
+            <label>
+              Booking Date:
+              <input
+                type="text"
+                name="BOOKINGDATE"
+                value={formatDate(editBooking.BOOKINGDATE)}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Location Number:
+              <input
+                type="text"
+                name="LOCATIONNO"
+                value={editBooking.LOCATIONNO}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Course Number:
+              <input
+                type="text"
+                name="COURSENO"
+                value={editBooking.COURSENO}
+                onChange={handleFormChange}
+              />
+            </label>
+            <label>
+              Employee Number:
+              <input
+                type="text"
+                name="BOOKINGEMPLOYEENO"
+                value={editBooking.BOOKINGEMPLOYEENO}
+                onChange={handleFormChange}
+              />
+            </label>
+            <button type="submit">Update</button>
+            <button type="button" onClick={() => setEditBooking(null)}>Cancel</button>
+          </form>
+        )}
+      </section>
     </div>
   );
 }
