@@ -618,6 +618,14 @@ CREATE OR REPLACE PROCEDURE new_booking(
     out_newBookingNo OUT Booking.bookingNo%type,
     out_error_message OUT VARCHAR2
 ) IS
+  v_delivererEmployeeNo Course.delivererEmployeeNo%TYPE;
+  v_maxDelegates Course.maxDelegates%TYPE;
+  v_locationMaxSize Location.locationMaxSize%TYPE;
+  v_location_exists Location.locationNo%type;
+  v_course_exists Course.courseNo%type;
+  v_employee_exists Employee.employeeNo%type;
+  v_booking_exists Booking.bookingNo%type;
+
 BEGIN
   -- Initialize the error message to NULL
   out_error_message := NULL;
@@ -631,6 +639,105 @@ BEGIN
     out_error_message := 'Missing required field(s)';
     RETURN;
   END IF;
+
+
+  -- Check if the location number exists
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_location_exists
+        FROM Location
+        WHERE locationNo = in_locationNo;
+
+        IF v_location_exists = 0 THEN
+            out_error_message := 'Location number does not exist. Enter an existing location number.';
+            RETURN;
+        END IF;
+      end;
+
+       -- Check if the course number exists
+    BEGIN
+        SELECT count(*)
+        INTO v_course_exists
+        FROM Course
+        WHERE courseNo = in_courseNo;
+
+        IF v_course_exists = 0 THEN
+            out_error_message := 'Course number does not exist. Enter an existing course number.';
+            RETURN;
+        END IF;
+      end;
+
+       -- Check if the employee number exists
+
+      BEGIN
+        SELECT COUNT(*)
+        INTO v_employee_exists
+        FROM Employee
+        WHERE employeeNo = in_bookingEmployeeNo;
+
+        IF v_employee_exists = 0 THEN
+            out_error_message := 'Employee number does not exist. Enter an existing employee number.';
+            RETURN;
+        END IF;
+      end;
+
+-- Check if the booking employee is the course deliverer
+    BEGIN
+        SELECT delivererEmployeeNo
+        INTO v_delivererEmployeeNo
+        FROM Course
+        WHERE courseNo = in_courseNo;
+
+        IF v_delivererEmployeeNo != in_bookingEmployeeNo THEN
+            out_error_message := 'Booking employee is not the course deliverer';
+            RETURN;
+        END IF;
+      end;
+
+    -- Check if the number of delegates does not exceed the location's maximum size
+    BEGIN
+        SELECT maxDelegates
+        INTO v_maxDelegates
+        FROM Course
+        WHERE courseNo = in_courseNo;
+
+        SELECT locationMaxSize
+        INTO v_locationMaxSize
+        FROM Location
+        WHERE locationNo = in_locationNo;
+
+        IF v_maxDelegates > v_locationMaxSize THEN
+            out_error_message := 'Number of delegates exceeds location capacity';
+            RETURN;
+        END IF;
+    end;
+
+      -- Check if the location is already booked for the specified date
+  BEGIN
+    SELECT COUNT(*)
+    INTO v_booking_exists
+    FROM Booking
+    WHERE bookingDate = in_bookingDate
+      AND locationNo = in_locationNo;
+
+    IF v_booking_exists > 0 THEN
+        out_error_message := 'Location is already booked for the specified date';
+        RETURN;
+    else 
+            BEGIN
+            SELECT COUNT(*)
+            INTO v_booking_exists
+            FROM Booking
+            WHERE bookingDate = in_bookingDate
+              AND courseNo = in_courseNo;
+
+            IF v_booking_exists > 0 THEN
+                out_error_message := 'Course is already booked for a location on the specified date';
+                RETURN;
+            END IF;
+            END;
+    END IF;
+  END;
 
   begin
   -- insert new booking
@@ -666,7 +773,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_employee_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM employee;
+    SELECT * FROM employee order by employeeNo;
 END;
 /
 
@@ -674,7 +781,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_client_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM client;
+    SELECT * FROM client order by clientNo;
 END;
 /
 
@@ -682,7 +789,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_delegate_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM delegate;
+    SELECT * FROM delegate order by delegateNo;
 END;
 /
 
@@ -690,7 +797,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_coursetype_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM coursetype;
+    SELECT * FROM coursetype order by courseTypeNo;
 END;
 /
 
@@ -698,7 +805,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_course_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM course;
+    SELECT * FROM course order by courseNo;
 END;
 /
 
@@ -706,7 +813,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_coursefee_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM coursefee;
+    SELECT * FROM coursefee order by courseFeeNo;
 END;
 /
 
@@ -714,7 +821,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_paymentmethod_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM paymentmethod;
+    SELECT * FROM paymentmethod order by pMethodNo;
 END;
 /
 
@@ -722,7 +829,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_location_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM location;
+    SELECT * FROM location order by locationNo;
 END;
 /
 
@@ -730,7 +837,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_registration_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM registration;
+    SELECT * FROM registration order by registrationNo;
 END;
 /
 
@@ -738,7 +845,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_invoice_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM invoice;
+    SELECT * FROM invoice order by invoiceNo;
 END;
 /
 
@@ -746,7 +853,7 @@ END;
 CREATE OR REPLACE PROCEDURE get_booking_details (p_cursor OUT SYS_REFCURSOR) AS
 BEGIN
   OPEN p_cursor FOR
-    SELECT * FROM booking;
+    SELECT * FROM booking order by bookingNo;
 END;
 /
 
@@ -1418,29 +1525,29 @@ END;
 /
 
 -- BACKING UP
-CREATE OR REPLACE PROCEDURE backup_database_proc AS
-    backup_directory VARCHAR2(100) := 'skill-master-course-management\backups'; -- Update with your backup directory path
-    backup_filename VARCHAR2(100) := 'database_backup.dmp'; -- Adjust filename as needed
-    out_error_message VARCHAR2(100) := 'Error during backup: '
-BEGIN
-    -- Ensure the directory exists
-    EXECUTE IMMEDIATE 'CREATE OR REPLACE DIRECTORY backup_dir AS ''' || backup_directory || '''';
+-- CREATE OR REPLACE PROCEDURE backup_database_proc AS
+--     backup_directory VARCHAR2(100) := 'skill-master-course-management\backups'; -- Update with your backup directory path
+--     backup_filename VARCHAR2(100) := 'database_backup.dmp'; -- Adjust filename as needed
+--     out_error_message VARCHAR2(100) := 'Error during backup: '
+-- BEGIN
+--     -- Ensure the directory exists
+--     EXECUTE IMMEDIATE 'CREATE OR REPLACE DIRECTORY backup_dir AS ''' || backup_directory || '''';
 
-    -- Perform the export using Data Pump
-    DBMS_DATAPUMP.OPEN('EXPORT', 'FULL', NULL, NULL, 'backup_job', 'backup_dir');
-    DBMS_DATAPUMP.ADD_FILE('DUMPFILE', backup_filename, 'backup_dir');
-    DBMS_DATAPUMP.ADD_FILE('LOGFILE', 'export.log', 'backup_dir');
-    DBMS_DATAPUMP.START_JOB('backup_job');
+--     -- Perform the export using Data Pump
+--     DBMS_DATAPUMP.OPEN('EXPORT', 'FULL', NULL, NULL, 'backup_job', 'backup_dir');
+--     DBMS_DATAPUMP.ADD_FILE('DUMPFILE', backup_filename, 'backup_dir');
+--     DBMS_DATAPUMP.ADD_FILE('LOGFILE', 'export.log', 'backup_dir');
+--     DBMS_DATAPUMP.START_JOB('backup_job');
     
-    -- Optional: Commit the transaction
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        -- Handle exceptions (replace with appropriate error handling)
-        RAISE_APPLICATION_ERROR(-20001, out_error_message || SQLERRM);
-        ROLLBACK; -- Rollback the transaction if an error occurs
-END;
-/
+--     -- Optional: Commit the transaction
+--     COMMIT;
+-- EXCEPTION
+--     WHEN OTHERS THEN
+--         -- Handle exceptions (replace with appropriate error handling)
+--         RAISE_APPLICATION_ERROR(-20001, out_error_message || SQLERRM);
+--         ROLLBACK; -- Rollback the transaction if an error occurs
+-- END;
+-- /
 
 
 -- CREATE OR REPLACE TRIGGER credit_card_details_check

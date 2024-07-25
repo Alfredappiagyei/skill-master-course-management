@@ -52,6 +52,8 @@ class BookingForm extends Component {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bookingDate, locationNo, courseNo, bookingEmployeeNo }),
       });
+      const result = await response.json();
+
 
       if (response.ok) {
         toast.success('Booking added successfully');
@@ -63,8 +65,24 @@ class BookingForm extends Component {
           errors: {},
         });
       } else {
-        const errorResponse = await response.json();
-        toast.error(`Failed to add booking: ${errorResponse.message}`);
+        const errorMessage = result.error;
+        if (errorMessage.includes('Booking employee is not the course deliverer')) {
+          toast.error('Booking employee is not the course deliverer. Enter the appropriate employee number for the course.');
+        } else if (errorMessage.includes('Number of delegates exceeds location capacity')) {
+          toast.error('Number of delegates exceeds location capacity. Enter a different location number.');
+        } else if (errorMessage.includes('Course number does not exist')) {
+          toast.error('Course number does not exist. Enter an already existing Course number.');
+        } else if (errorMessage.includes('Location number does not exist')) {
+          toast.error('Location number does not exist. Enter an already existing Location number.');
+        } else if (errorMessage.includes('Employee number does not exist')) {
+          toast.error('Employee number does not exist. Enter an already existing employee number.');
+        }else if (errorMessage.includes('Location is already booked')) {
+          toast.error('Location is already booked for the specified date. Choose a different date or a new location.');
+        }else if (errorMessage.includes('Course is already booked for a location')) {
+          toast.error('Course is already booked for a location on the specified date. Choose a different date to have this course.');
+        } else {
+          toast.error('Failed to add course. Please check the details and try again.');
+        }
       }
     } catch (err) {
       toast.error('Error: ' + err.message);

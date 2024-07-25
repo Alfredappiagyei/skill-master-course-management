@@ -71,7 +71,6 @@ export default function ClientTable() {
         </div>
       </div>
       <section style={{ width: '100%' }}>
-        <input type="text" id="search2" className="form-control" placeholder="Dashboard" />
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>

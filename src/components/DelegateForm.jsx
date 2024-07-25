@@ -138,7 +138,7 @@ class DelegateForm extends Component {
           toast.success('Delegate deleted successfully');
           // Refresh the delegate list or handle the state update accordingly
         } else {
-          toast.error('Failed to delete delegate');
+          toast.error('Failed to delete delegate due to related records');
         }
       } catch (err) {
         toast.error('Error: ' + err.message);
