@@ -1096,6 +1096,7 @@ END;
 
 
 -- updating records
+--update employee
 CREATE OR REPLACE PROCEDURE update_employee(
     in_employeeNo IN employee.employeeNo%type,
     in_employeeFName IN employee.employeeFName%type,
@@ -1114,6 +1115,226 @@ BEGIN
         employeeNo = in_employeeNo;
 END;
 /
+
+--update client
+CREATE OR REPLACE PROCEDURE update_client(
+    in_clientNo IN Client.clientNo%type,
+    in_clientName IN Client.clientName%type,
+    in_clientEmail IN Client.clientEmail%type,
+    in_clientContact IN Client.clientContact%type
+) IS
+BEGIN
+    UPDATE Client
+    SET 
+        clientName = in_clientName,
+        clientEmail = in_clientEmail,
+        clientContact = in_clientContact
+    WHERE 
+        clientNo = in_clientNo;
+END;
+/
+--update delegate table
+CREATE OR REPLACE PROCEDURE update_delegate(
+    in_delegateNo IN Delegate.delegateNo%type,
+    in_delegateTitle IN Delegate.delegateTitle%type,
+    in_delegateFName IN Delegate.delegateFName%type,
+    in_delegateLName IN Delegate.delegateLName%type,
+    in_delegateStreet IN Delegate.delegateStreet%type,
+    in_delegateCity IN Delegate.delegateCity%type,
+    in_delegateState IN Delegate.delegateState%type,
+    in_delegateZipCode IN Delegate.delegateZipCode%type,
+    in_attTelNo IN Delegate.attTelNo%type,
+    in_attFaxNo IN Delegate.attFaxNo%type,
+    in_attEmailAddress IN Delegate.attEmailAddress%type,
+    in_clientNo IN Delegate.clientNo%type
+) IS
+BEGIN
+    UPDATE Delegate
+    SET 
+        delegateTitle = in_delegateTitle,
+        delegateFName = in_delegateFName,
+        delegateLName = in_delegateLName,
+        delegateStreet = in_delegateStreet,
+        delegateCity = in_delegateCity,
+        delegateState = in_delegateState,
+        delegateZipCode = in_delegateZipCode,
+        attTelNo = in_attTelNo,
+        attFaxNo = in_attFaxNo,
+        attEmailAddress = in_attEmailAddress,
+        clientNo = in_clientNo
+    WHERE 
+        delegateNo = in_delegateNo;
+END;
+/
+
+-- update coursetype
+CREATE OR REPLACE PROCEDURE update_course_type(
+    in_courseTypeNo IN CourseType.courseTypeNo%type,
+    in_courseTypeDescription IN CourseType.courseTypeDescription%type
+) IS
+BEGIN
+    UPDATE CourseType
+    SET 
+        courseTypeDescription = in_courseTypeDescription
+    WHERE 
+        courseTypeNo = in_courseTypeNo;
+END;
+/
+
+--update course 
+CREATE OR REPLACE PROCEDURE update_course(
+    in_courseNo IN Course.courseNo%type,
+    in_courseName IN Course.courseName%type,
+    in_courseDescription IN Course.courseDescription%type,
+    in_startDate IN Course.startDate%type,
+    in_startTime IN Course.startTime%type,
+    in_endDate IN Course.endDate%type,
+    in_endTime IN Course.endTime%type,
+    in_maxDelegates IN Course.maxDelegates%type,
+    in_confirmed IN Course.confirmed%type,
+    in_delivererEmployeeNo IN Course.delivererEmployeeNo%type,
+    in_courseTypeNo IN Course.courseTypeNo%type
+) IS
+BEGIN
+    UPDATE Course
+    SET 
+        courseName = in_courseName,
+        courseDescription = in_courseDescription,
+        startDate = in_startDate,
+        startTime = in_startTime,
+        endDate = in_endDate,
+        endTime = in_endTime,
+        maxDelegates = in_maxDelegates,
+        confirmed = in_confirmed,
+        delivererEmployeeNo = in_delivererEmployeeNo,
+        courseTypeNo = in_courseTypeNo
+    WHERE 
+        courseNo = in_courseNo;
+END;
+/
+
+--update course fee
+CREATE OR REPLACE PROCEDURE update_course_fee(
+    in_courseFeeNo IN CourseFee.courseFeeNo%type,
+    in_feeDescription IN CourseFee.feeDescription%type,
+    in_fee IN CourseFee.fee%type,
+    in_courseNo IN CourseFee.courseNo%type
+) IS
+BEGIN
+    UPDATE CourseFee
+    SET 
+        feeDescription = in_feeDescription,
+        fee = in_fee,
+        courseNo = in_courseNo
+    WHERE 
+        courseFeeNo = in_courseFeeNo;
+END;
+/
+
+--update payment method
+CREATE OR REPLACE PROCEDURE update_payment_method(
+    in_pMethodNo IN PaymentMethod.pMethodNo%type,
+    in_pMethodName IN PaymentMethod.pMethodName%type
+) IS
+BEGIN
+    UPDATE PaymentMethod
+    SET 
+        pMethodName = in_pMethodName
+    WHERE 
+        pMethodNo = in_pMethodNo;
+END;
+/
+
+--update location
+CREATE OR REPLACE PROCEDURE update_location(
+    in_locationNo IN Location.locationNo%type,
+    in_locationName IN Location.locationName%type,
+    in_locationMaxSize IN Location.locationMaxSize%type
+) IS
+BEGIN
+    UPDATE Location
+    SET 
+        locationName = in_locationName,
+        locationMaxSize = in_locationMaxSize
+    WHERE 
+        locationNo = in_locationNo;
+END;
+/
+
+--update registration
+CREATE OR REPLACE PROCEDURE update_registration(
+    in_registrationNo IN Registration.registrationNo%type,
+    in_registrationDate IN Registration.registrationDate%type,
+    in_delegateNo IN Registration.delegateNo%type,
+    in_courseFeeNo IN Registration.courseFeeNo%type,
+    in_registerEmployeeNo IN Registration.registerEmployeeNo%type,
+    in_courseNo IN Registration.courseNo%type
+) IS
+BEGIN
+    UPDATE Registration
+    SET 
+        registrationDate = in_registrationDate,
+        delegateNo = in_delegateNo,
+        courseFeeNo = in_courseFeeNo,
+        registerEmployeeNo = in_registerEmployeeNo,
+        courseNo = in_courseNo
+    WHERE 
+        registrationNo = in_registrationNo;
+END;
+/
+
+--update invoice
+CREATE OR REPLACE PROCEDURE update_invoice(
+    in_invoiceNo IN Invoice.invoiceNo%type,
+    in_dateRaised IN Invoice.dateRaised%type,
+    in_datePaid IN Invoice.datePaid%type,
+    in_creditCardNo IN Invoice.creditCardNo%type,
+    in_holdersName IN Invoice.holdersName%type,
+    in_expiryDate IN Invoice.expiryDate%type,
+    in_registrationNo IN Invoice.registrationNo%type,
+    in_pMethodNo IN Invoice.pMethodNo%type,
+    in_amountPaid IN Invoice.amountPaid%type
+) IS
+BEGIN
+    UPDATE Invoice
+    SET 
+        dateRaised = in_dateRaised,
+        datePaid = in_datePaid,
+        creditCardNo = in_creditCardNo,
+        holdersName = in_holdersName,
+        expiryDate = in_expiryDate,
+        registrationNo = in_registrationNo,
+        pMethodNo = in_pMethodNo,
+        amountPaid = in_amountPaid
+    WHERE 
+        invoiceNo = in_invoiceNo;
+END;
+/
+
+--update booking
+CREATE OR REPLACE PROCEDURE update_booking(
+    in_bookingNo IN Booking.bookingNo%type,
+    in_bookingDate IN Booking.bookingDate%type,
+    in_locationNo IN Booking.locationNo%type,
+    in_courseNo IN Booking.courseNo%type,
+    in_bookingEmployeeNo IN Booking.bookingEmployeeNo%type
+) IS
+BEGIN
+    UPDATE Booking
+    SET 
+        bookingDate = in_bookingDate,
+        locationNo = in_locationNo,
+        courseNo = in_courseNo,
+        bookingEmployeeNo = in_bookingEmployeeNo
+    WHERE 
+        bookingNo = in_bookingNo;
+END;
+/
+
+
+
+
+
 
 
 
