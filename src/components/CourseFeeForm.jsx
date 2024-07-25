@@ -51,6 +51,8 @@ class CourseFeeForm extends Component {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feeDescription, fee, courseNo }),
       });
+      const result = await response.json();
+
 
       if (response.ok) {
         toast.success('Course fee added successfully');
@@ -61,8 +63,16 @@ class CourseFeeForm extends Component {
           errors: {},
         });
       } else {
-        const errorResponse = await response.json();
-        toast.error('Failed to add course fee');
+        // Display specific error message from the server
+        const errorMessage = result.errors || 'Error inserting course fee: Course number does not exist. Enter an already existing course number.';
+  
+        if (typeof errorMessage === 'string') {
+          if (errorMessage.includes('Course number does not exist')) {
+            toast.error('Failed to add course fee. Course number does not exist. Enter an already existing course number.');
+          } else {
+            toast.error('Failed to add Employee. Please check the details and try again.');
+          }
+        } 
       }
     } catch (err) {
       toast.error('Error: ' + err.message);

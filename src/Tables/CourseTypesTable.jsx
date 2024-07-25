@@ -54,6 +54,7 @@ export default function CourseTypesTable() {
         const updatedCourseType = await response.json();
         setCoursetypes(coursetypes.map((ct) => (ct.COURSETYPENO === updatedCourseType.COURSETYPENO ? updatedCourseType : ct)));
         setEditCourseType(null);
+        console.log('Course type updated successfully:', updatedCourseType);
       } else {
         console.error('Failed to update course type');
       }
@@ -64,47 +65,43 @@ export default function CourseTypesTable() {
 
   return (
     <div className="table">
-      <div className="row">
-        <div className="all-startups">
-          <div className="all"><h4>All Course Types</h4></div>
-        </div>
-
-        <section style={{ width: '100%' }}>
-          <input type="text" id="search2" className="form-control" placeholder="Search Course Types" />
-
-          <div className="row" style={{ width: '100%' }}>
-            <div className="col-md-4"><b>Course Type Number</b></div>
-            <div className="col-md-4"><b>Course Type Description</b></div>
-            <div className="col-md-4"><b>Actions</b></div>
-          </div>
-          <hr />
-          <div className="row" style={{ width: '100%', marginLeft: '1px' }}>
-            {coursetypes.map((coursetype, index) => (
-              <div key={index} className="row" style={{ width: '100%' }}>
-                <div className="col-md-4">{coursetype.COURSETYPENO}</div>
-                <div className="col-md-4">{coursetype.COURSETYPEDESCRIPTION}</div>
-                <div className="col-md-4">
+      <div className="all-startups">
+        <div className="all"><h4>All Course Types</h4></div>
+      </div>
+      <section style={{ width: '100%' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Course Type Number</th>
+              <th>Course Type Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {coursetypes.map((coursetype) => (
+              <tr key={coursetype.COURSETYPENO}>
+                <td>{coursetype.COURSETYPENO}</td>
+                <td>{coursetype.COURSETYPEDESCRIPTION}</td>
+                <td>
                   <button onClick={() => handleUpdate(coursetype)}>Update</button>
                   <button onClick={() => handleDelete(coursetype.COURSETYPENO)}>Delete</button>
-                </div>
-              </div>
+                </td>
+              </tr>
             ))}
-          </div>
-          {editCourseType && (
-            <form onSubmit={handleFormSubmit} style={{ marginTop: '20px' }}>
-              <h3>Edit Course Type</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label>
-                  Course Type Description:
-                  <input type="text" name="COURSETYPEDESCRIPTION" value={editCourseType.COURSETYPEDESCRIPTION} onChange={handleFormChange} />
-                </label>
-                <button type="submit" style={{ alignSelf: 'flex-start' }}>Update</button>
-                <button type="button" onClick={() => setEditCourseType(null)} style={{ alignSelf: 'flex-start' }}>Cancel</button>
-              </div>
-            </form>
-          )}
-        </section>
-      </div>
+          </tbody>
+        </table>
+        {editCourseType && (
+          <form onSubmit={handleFormSubmit} style={{ marginTop: '20px' }}>
+            <h3>Edit Course Type</h3>
+            <label>
+              Course Type Description:
+              <input type="text" name="COURSETYPEDESCRIPTION" value={editCourseType.COURSETYPEDESCRIPTION} onChange={handleFormChange} />
+            </label>
+            <button type="submit">Update</button>
+            <button type="button" onClick={() => setEditCourseType(null)}>Cancel</button>
+          </form>
+        )}
+      </section>
     </div>
   );
 }

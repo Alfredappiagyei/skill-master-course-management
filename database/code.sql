@@ -369,8 +369,12 @@ BEGIN
 
     EXCEPTION
         WHEN OTHERS THEN
+          IF SQLCODE = -2291 THEN
+              out_error_message := 'Course number does not exist. Enter an already existing course number.';
+          ELSE
             out_error_message := SQLERRM;
-    END;
+          end if;
+            END;
 
 END;
 /
@@ -610,6 +614,8 @@ BEGIN
 
 END;
 /
+
+-- REMEMBER -- might replace with this
 
 CREATE OR REPLACE PROCEDURE NEW_INVOICE (
   in_dateRaised IN Invoice.dateRaised%type,
