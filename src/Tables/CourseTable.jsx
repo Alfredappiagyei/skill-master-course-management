@@ -75,45 +75,44 @@ export default function CourseTable({ onDelete }) {
         </div>
       </div>
       <section style={{ width: '100%' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th>Course Number</th>
-              <th>Course Name</th>
-              <th>Course Description</th>
-              <th>Start Date</th>
-              <th>Start Time</th>
-              <th>End Date</th>
-              <th>End Time</th>
-              <th>Max Delegates</th>
-              <th>Confirmed</th>
-              <th>Employee Number</th>
-              <th>Course Type Number</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map((course, index) => (
-              <tr key={index}>
-                <td>{course.COURSENO}</td>
-                <td>{course.COURSENAME}</td>
-                <td>{course.COURSEDESCRIPTION}</td>
-                <td>{formatDate(course.STARTDATE)}</td>
-                <td>{formatTime(course.STARTTIME)}</td>
-                <td>{formatDate(course.ENDDATE)}</td>
-                <td>{formatTime(course.ENDTIME)}</td>
-                <td>{course.MAXDELEGATES}</td>
-                <td>{course.CONFIRMED}</td>
-                <td>{course.DELIVEREREMPLOYEENO}</td>
-                <td>{course.COURSETYPENO}</td>
-                <td>
-                  <button onClick={() => handleUpdate(course)}>Update</button>
-                  <button onClick={() => onDelete(course.COURSENO)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr>
+      <th style={{ width: '10%' }}>Course Number</th>
+      <th style={{ width: '10%' }}>Course Name</th>
+      <th style={{ width: '15%' }}>Course Description</th>
+      <th style={{ width: '10%' }}>Start Date</th>
+      <th style={{ width: '10%' }}>Start Time</th>
+      <th style={{ width: '10%' }}>End Date</th>
+      <th style={{ width: '10%' }}>End Time</th>
+      <th style={{ width: '10%' }}>Max Delegates</th>
+      <th style={{ width: '10%' }}>Employee Number</th>
+      <th style={{ width: '15%' }}>Course Type Number</th>
+      <th style={{ width: '20%' }}>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {courses.map((course, index) => (
+      <tr key={index}>
+        <td style={{ width: '10%' }}>{course.COURSENO}</td>
+        <td style={{ width: '10%' }}>{course.COURSENAME}</td>
+        <td style={{ width: '15%' }}>{course.COURSEDESCRIPTION}</td>
+        <td style={{ width: '10%' }}>{formatDate(course.STARTDATE)}</td>
+        <td style={{ width: '10%' }}>{formatTime(course.STARTTIME)}</td>
+        <td style={{ width: '10%' }}>{formatDate(course.ENDDATE)}</td>
+        <td style={{ width: '10%' }}>{formatTime(course.ENDTIME)}</td>
+        <td style={{ width: '10%' }}>{course.MAXDELEGATES}</td>
+        <td style={{ width: '10%' }}>{course.DELIVEREREMPLOYEENO}</td>
+        <td style={{ width: '15%' }}>{course.COURSETYPENO}</td>
+        <td style={{ width: '20%' }}>
+          <button onClick={() => handleUpdate(course)}>Update</button>
+          <button onClick={() => onDelete(course.COURSENO)}>Delete</button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
         {editCourse && (
           <form onSubmit={handleFormSubmit}>
             <h3>Edit Course</h3>
