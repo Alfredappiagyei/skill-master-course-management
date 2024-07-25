@@ -89,27 +89,34 @@ class LocationForm extends Component {
         <ToastContainer />
         <div className='col-md-6'>
           <form onSubmit={this.handleSubmit}>
-            <input
-              type='text'
-              className='form-control'
-              name='locationName'
-              placeholder='Location Name'
-              value={locationName}
-              onChange={this.handleChange}
-              style={{ width: '300px' }}
-            />
-            {errors.locationName && <span className='error'>{errors.locationName}</span>}
-            <br />
-            <input
-              type='number'
-              className='form-control'
-              name='locationMaxSize'
-              placeholder='Max Size'
-              value={locationMaxSize}
-              onChange={this.handleChange}
-              style={{ width: '300px' }}
-            />
-            {errors.locationMaxSize && <span className='error'>{errors.locationMaxSize}</span>}
+            <div style={{ marginBottom: '10px' }}>
+              <label htmlFor='locationName' style={{ display: 'block', marginBottom: '5px' }}>Location Name</label>
+              <input
+                type='text'
+                className='form-control'
+                name='locationName'
+                id='locationName'
+                placeholder='Location Name'
+                value={locationName}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.locationName && <span className='error' style={{ color: 'red' }}>{errors.locationName}</span>}
+            </div>
+            <div>
+              <label htmlFor='locationMaxSize' style={{ display: 'block', marginBottom: '5px' }}>Max Size</label>
+              <input
+                type='number'
+                className='form-control'
+                name='locationMaxSize'
+                id='locationMaxSize'
+                placeholder='Max Size'
+                value={locationMaxSize}
+                onChange={this.handleChange}
+                style={{ width: '300px' }}
+              />
+              {errors.locationMaxSize && <span className='error' style={{ color: 'red' }}>{errors.locationMaxSize}</span>}
+            </div>
             <br />
           </form>
         </div>

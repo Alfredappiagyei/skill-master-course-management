@@ -99,6 +99,7 @@ create table Invoice(
     expiryDate date,
     registrationNo number  not null,
     pMethodNo number not null,
+    amountPaid NUMBER NOT NULL,
     foreign key (registrationNo) references Registration(registrationNo),
     foreign key (pMethodNo) references PaymentMethod(pMethodNo));
 

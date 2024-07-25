@@ -601,11 +601,116 @@ BEGIN
 
   EXCEPTION
     WHEN OTHERS THEN
-      out_error_message := SQLERRM;
+      IF SQLCODE = -2291 THEN
+          out_error_message := 'Registration number does not exist. Enter an already existing registration number.';
+      ELSE
+        out_error_message := SQLERRM;
+      end if;
   END;
 
 END;
 /
+
+CREATE OR REPLACE PROCEDURE NEW_INVOICE (
+  in_dateRaised IN Invoice.dateRaised%type,
+  in_datePaid IN Invoice.datePaid%type,
+  in_creditCardNo IN Invoice.creditCardNo%type,
+  in_holdersName IN Invoice.holdersName%type,
+  in_expiryDate IN Invoice.expiryDate%type,
+  in_registrationNo IN Invoice.registrationNo%type,
+  in_pMethodNo IN Invoice.pMethodNo%type,
+  out_newInvoiceNo OUT Invoice.invoiceNo%type,
+  out_newAmountPaid OUT Invoice.amountPaid%type,
+  out_error_message OUT VARCHAR2
+) IS
+  v_delegateNo Registration.delegateNo%type;
+  v_clientNo Delegate.clientNo%type;
+  v_courseNo Registration.courseNo%type;
+  v_delegateCount NUMBER;
+  v_fee NUMBER;
+BEGIN
+  -- Initialize the error message to NULL
+  out_error_message := NULL;
+
+  -- Validate input
+  IF in_dateRaised IS NULL OR
+     in_datePaid IS NULL OR
+     in_registrationNo IS NULL OR
+     in_pMethodNo IS NULL THEN
+     
+    out_error_message := 'Missing required field(s)';
+    RETURN;
+
+  ELSIF in_datePaid < in_dateRaised THEN
+    out_error_message := 'Date paid cannot be earlier than date raised';
+    RETURN;
+  
+  ELSIF in_expiryDate < SYSDATE THEN
+    out_error_message := 'Credit card expiry date cannot be in the past';
+    RETURN;
+
+  END IF;
+
+  BEGIN
+    -- Get the delegate number, client number, and course number from the registration
+    SELECT delegateNo, courseNo
+    INTO v_delegateNo, v_courseNo
+    FROM Registration
+    WHERE registrationNo = in_registrationNo;
+
+    BEGIN
+      -- Get the client number
+      SELECT clientNo
+      INTO v_clientNo
+      FROM Delegate
+      WHERE delegateNo = v_delegateNo;
+
+      -- Count the number of delegates from the same client for the same course
+      SELECT COUNT(*)
+      INTO v_delegateCount
+      FROM Registration r
+      JOIN Delegate d ON r.delegateNo = d.delegateNo
+      WHERE d.clientNo = v_clientNo AND r.courseNo = v_courseNo;
+
+      -- Determine the fee based on the number of delegates
+      SELECT fee
+      INTO v_fee
+      FROM DelegateFee df
+      JOIN CourseFee cf ON df.delegateFeeNo = cf.delegateFeeNo
+      WHERE cf.courseNo = v_courseNo
+      AND v_delegateCount BETWEEN df.minDelegates AND NVL(df.maxDelegates, v_delegateCount);
+
+    EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+        -- If no client or no matching fee structure, use the original course fee
+        SELECT fee
+        INTO v_fee
+        FROM CourseFee
+        WHERE courseNo = v_courseNo
+        AND ROWNUM = 1;
+    END;
+
+    -- Insert new invoice with the determined fee
+    INSERT INTO Invoice (
+      dateRaised, datePaid, creditCardNo, holdersName, expiryDate, registrationNo, pMethodNo
+    ) VALUES (
+      in_dateRaised, in_datePaid, in_creditCardNo, in_holdersName, in_expiryDate, in_registrationNo, in_pMethodNo
+    ) RETURNING invoiceNo INTO out_newInvoiceNo, amountPaid into out_newAmountPaid;
+    
+    COMMIT; -- Commit the transaction to make the insertion permanent
+
+  EXCEPTION
+    WHEN OTHERS THEN
+     IF SQLCODE = -2291 THEN
+          out_error_message := 'Registration number does not exist. Enter an already existing registration number.';
+      ELSE
+        out_error_message := SQLERRM;
+      end if;
+  END;
+
+END;
+/
+
 
 
 
