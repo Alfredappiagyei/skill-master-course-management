@@ -180,6 +180,11 @@ class EmployeeForm extends Component {
               <button className='button' type='button' style={{ width: '200px' }} onClick={this.toggleModal}>
                 View Employees
               </button>
+
+              <button className='button' type='button' style={{ width: '200px' }} onClick={this.toggleModal}>
+                View Employees
+              </button>
+              
             </div>
           </form>
         </div>
